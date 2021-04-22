@@ -3,7 +3,6 @@
 #include "CellulaireAutomaat.h"
 
 
-
 int main(){
     CellulaireAutomaat C(2, 2);
 

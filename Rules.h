@@ -9,6 +9,8 @@
 #include <cmath>
 #include <algorithm>
 #include <random>
+#include <vector>
+#include <iostream>
 #include "Lib.h"
 
 
@@ -17,13 +19,17 @@ class Rules {
 };
 
 namespace GeneticAlgorithm {
+    // https://www.youtube.com/watch?v=nhT56blfRpE&t=76s&ab_channel=KieCodes
+    static std::array<std::string, GENOME_SIZE> variations;
 
-    static std::array<std::string, 390625> variations;
+    using Genome = std::array<EStates, GENOME_SIZE>;
+    using Population = std::array<Genome, POPULATION_SIZE>;
 
-
-    using Genome = std::array<EStates, 390625>;
-
+    void initialize_variations();
     Genome generateGenome();
+    Population generatePopulation();
+    float fitness(Genome& G);
+    void crossover(Genome& G1, Genome& G2);
 }
 
 
