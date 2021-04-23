@@ -55,4 +55,17 @@ namespace GeneticAlgorithm {
             }
         }
     }
+    void pair_selection(Population& P){
+        float total_weight = 0;
+        std::array<float, POPULATION_SIZE> fitnesses;
+        std::array<int, POPULATION_SIZE> genomes;
+        for (int i = 0; i < P.size(); i++){
+            fitnesses[i] = fitness(P[i]);
+            genomes[i] = i;
+        }
+        std::array<std::pair<int, int> , POPULATION_SIZE / 2> parents;
+        std::sort(genomes.begin(), genomes.end(), [&fitnesses](int g1, int g2){return fitnesses[g1] > fitnesses[g2];})
+
+        return element
+    }
 }
