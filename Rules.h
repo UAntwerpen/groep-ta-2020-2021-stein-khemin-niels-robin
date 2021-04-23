@@ -30,7 +30,7 @@ namespace GeneticAlgorithm {
     Population generatePopulation();
     float fitness(Genome& G);
     void crossover(Genome& G1, Genome& G2);
-    void pair_selection(Population& P);
+    std::pair<Genome&, Genome&> pair_selection(Population& P);
 }
 
 

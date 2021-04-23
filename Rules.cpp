@@ -55,17 +55,23 @@ namespace GeneticAlgorithm {
             }
         }
     }
-    void pair_selection(Population& P){
+    std::pair<Genome&, Genome&> pair_selection(Population& P){
         float total_weight = 0;
         std::array<float, POPULATION_SIZE> fitnesses;
         std::array<int, POPULATION_SIZE> genomes;
+        std::random_device rd;
+        std::mt19937 mt(rd());
+        std::poisson_distribution<int> dist(1);
+
         for (int i = 0; i < P.size(); i++){
             fitnesses[i] = fitness(P[i]);
             genomes[i] = i;
         }
         std::array<std::pair<int, int> , POPULATION_SIZE / 2> parents;
-        std::sort(genomes.begin(), genomes.end(), [&fitnesses](int g1, int g2){return fitnesses[g1] > fitnesses[g2];})
-
-        return element
+        std::sort(genomes.begin(), genomes.end(), [&fitnesses](int g1, int g2){return fitnesses[g1] > fitnesses[g2];});
+        int first = dist(rd);
+        int second = dist(rd);
+        while (first == second) second = dist(rd);
+        return std::make_pair(P[genomes[first], P[genomes[second]]]);
     }
 }
