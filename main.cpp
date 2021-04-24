@@ -14,6 +14,7 @@ int main(){
 
     // main loop
     for (int _ = 0; _ < GENERATION_LIMIT; _++){
+        std::cout << "Running Generation: " << _ << std::endl;
         for (int i = 0; i < POPULATION_SIZE; i++){
             fitness[i] = GeneticAlgorithm::fitness(*population[i]);
         }

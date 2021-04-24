@@ -39,7 +39,13 @@ namespace GeneticAlgorithm {
 
     float fitness(Genome& G){
         // do simulation
-        return 0.f;
+        int correct = 0;
+        for (int i = 0; i < GENOME_SIZE; i++){
+            if (static_cast<EStates>(i % 5) == static_cast<EStates>(G[i] % 5)){
+                correct++;
+            }
+        }
+        return (float)correct / GENOME_SIZE;
     }
 
     std::pair<Genome, Genome> crossover(Genome G1, Genome G2){
