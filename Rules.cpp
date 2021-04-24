@@ -21,7 +21,7 @@ namespace GeneticAlgorithm {
         std::random_device rd;
         std::mt19937 mt(rd());
         std::uniform_int_distribution<int> dist(0, 5);
-#pragma omp parallel for
+#pragma omp parallel for if (PARALLELISM_ENABLED)
         for (int i = 0; i < GENOME_SIZE; i++){
             output[i] = static_cast<EStates>(input[dist(mt)]);
         }
@@ -30,7 +30,7 @@ namespace GeneticAlgorithm {
 
     Population generatePopulation(){
         Population newpopu;
-#pragma omp parallel for
+#pragma omp parallel for if (PARALLELISM_ENABLED)
         for (int i = 0; i < POPULATION_SIZE; i++){
             newpopu[i] = generateGenome();
         }
@@ -41,37 +41,49 @@ namespace GeneticAlgorithm {
         return 0.f;
     }
 
-    void crossover(Genome& G1, Genome& G2){
+    std::pair<Genome, Genome> crossover(Genome G1, Genome G2){
         int crossover_point = rand() % GENOME_SIZE;
         if(crossover_point < GENOME_SIZE / 2) {
-#pragma omp parallel for
+#pragma omp parallel for if (PARALLELISM_ENABLED)
             for (int i = 0; i < crossover_point; i++) {
                 std::swap(G1[i], G2[i]);
             }
         } else {
-#pragma omp parallel for
+#pragma omp parallel for if (PARALLELISM_ENABLED)
             for (int i = crossover_point; i < GENOME_SIZE; i++) {
                 std::swap(G1[i], G2[i]);
             }
         }
+        return std::make_pair(G1, G2);
     }
-    std::pair<Genome&, Genome&> pair_selection(Population& P){
-        float total_weight = 0;
-        std::array<float, POPULATION_SIZE> fitnesses;
-        std::array<int, POPULATION_SIZE> genomes;
+
+    void mutate(Genome& G){
         std::random_device rd;
         std::mt19937 mt(rd());
-        std::poisson_distribution<int> dist(1);
+        std::uniform_int_distribution<int> dist_pos(0, GENOME_SIZE);
+        std::uniform_int_distribution<int> dist_switch(0, 5);
+        std::uniform_int_distribution<int> dist_times(0, 100);
 
-        for (int i = 0; i < P.size(); i++){
-            fitnesses[i] = fitness(P[i]);
-            genomes[i] = i;
+        for (int _ = 0, end = dist_times(mt); _ < end; _++){
+            G[dist_pos(mt)] = static_cast<EStates>(dist_switch(mt));
         }
-        std::array<std::pair<int, int> , POPULATION_SIZE / 2> parents;
-        std::sort(genomes.begin(), genomes.end(), [&fitnesses](int g1, int g2){return fitnesses[g1] > fitnesses[g2];});
-        int first = dist(rd);
-        int second = dist(rd);
-        while (first == second) second = dist(rd);
-        return std::make_pair(P[genomes[first], P[genomes[second]]]);
+    }
+
+    std::pair<Genome*, Genome*> parent_selection(Population& P, Weights& weights){
+        std::random_device rd;
+        std::mt19937 mt(rd());
+
+        std::array<int, POPULATION_SIZE> indices{};
+        for (int i = 0; i < POPULATION_SIZE;i++) indices[i] = i;
+
+        std::piecewise_constant_distribution<double> dist(indices.begin(),indices.end(),weights.begin());
+        //        std::geometric_distribution<int> dist(0.3);
+
+        std::sort(indices.begin(), indices.end(), [&weights](int first, int second){return weights[first] > weights[second];});
+        int first = static_cast<int>(std::round(dist(mt)));
+        int second = static_cast<int>(std::round(dist(mt)));
+        while (first == second) second = static_cast<int>(std::round(dist(mt)));
+
+        return std::make_pair(P[indices[first]], P[indices[second]]);
     }
 }
