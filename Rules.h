@@ -27,10 +27,10 @@ namespace GeneticAlgorithm {
     using Weights = std::array<float, POPULATION_SIZE>;
 
     void initialize_variations();
-    Genome generateGenome();
+    Genome* generateGenome();
     Population generatePopulation();
     float fitness(Genome& G);
-    std::pair<Genome, Genome> crossover(Genome& G1, Genome& G2);
+    std::pair<Genome, Genome> crossover(Genome G1, Genome G2);
     void mutate(Genome& G);
     std::pair<Genome*, Genome*> parent_selection(Population& P, Weights& weights);
 }

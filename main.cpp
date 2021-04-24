@@ -6,7 +6,7 @@
 
 
 int main(){
-    CellulaireAutomaat C(2, 2);
+//    CellulaireAutomaat C(2, 2);
     GeneticAlgorithm::Population population = GeneticAlgorithm::generatePopulation();
     GeneticAlgorithm::Weights fitness;
     std::array<int, POPULATION_SIZE> indices{};
@@ -15,7 +15,7 @@ int main(){
     // main loop
     for (int _ = 0; _ < GENERATION_LIMIT; _++){
         for (int i = 0; i < POPULATION_SIZE; i++){
-            fitness[i] = GeneticAlgorithm::fitness(reinterpret_cast<GeneticAlgorithm::Genome &>(population[i]));
+            fitness[i] = GeneticAlgorithm::fitness(*population[i]);
         }
         std::sort(indices.begin(), indices.end(), [&fitness](int first, int second){return fitness[first] > fitness[second];});
 

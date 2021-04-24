@@ -15,15 +15,15 @@ namespace GeneticAlgorithm {
         };
     }
 
-    Genome generateGenome(){
+    Genome* generateGenome(){
         std::string input = "01234";
-        Genome output;
+        Genome* output = new Genome;
         std::random_device rd;
         std::mt19937 mt(rd());
         std::uniform_int_distribution<int> dist(0, 5);
 #pragma omp parallel for if (PARALLELISM_ENABLED)
         for (int i = 0; i < GENOME_SIZE; i++){
-            output[i] = static_cast<EStates>(input[dist(mt)]);
+            output->at(i) = static_cast<EStates>(input[dist(mt)]);
         }
         return output;
     }
@@ -34,6 +34,7 @@ namespace GeneticAlgorithm {
         for (int i = 0; i < POPULATION_SIZE; i++){
             newpopu[i] = generateGenome();
         }
+        return newpopu;
     }
 
     float fitness(Genome& G){
