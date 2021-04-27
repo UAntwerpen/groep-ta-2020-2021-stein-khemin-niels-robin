@@ -1,14 +1,11 @@
-#pragma clang diagnostic push
-#pragma ide diagnostic ignored "openmp-use-default-none"
-//
-// Created by nibor on 22/04/2021.
-//
+#include <ctime>
 
 #include "Rules.h"
 #include "Utils.h"
 
 namespace GeneticAlgorithm {
-
+    std::random_device rd;
+    std::mt19937 mt(rd());
     void initialize_variations(){
         for (int b10 = 0; b10 <= GENOME_SIZE; b10++){
             variations[b10] = toBase5(b10);
@@ -16,14 +13,11 @@ namespace GeneticAlgorithm {
     }
 
     Genome* generateGenome(){
-        std::string input = "01234";
         Genome* output = new Genome;
-        std::random_device rd;
-        std::mt19937 mt(rd());
-        std::uniform_int_distribution<int> dist(0, 5);
+        std::uniform_int_distribution<int> dist(0, 4);
 #pragma omp parallel for if (PARALLELISM_ENABLED)
         for (int i = 0; i < GENOME_SIZE; i++){
-            output->at(i) = static_cast<EStates>(input[dist(mt)]);
+            output->at(i) = static_cast<EStates>(dist(mt));
         }
         return output;
     }
@@ -41,35 +35,42 @@ namespace GeneticAlgorithm {
         // do simulation
         int correct = 0;
         for (int i = 0; i < GENOME_SIZE; i++){
-            if (static_cast<EStates>(i % 5) == static_cast<EStates>(G[i] % 5)){
+            if (intToEState(i % 5) == G[i]){
                 correct++;
             }
         }
         return (float)correct / GENOME_SIZE;
     }
 
-    std::pair<Genome, Genome> crossover(Genome G1, Genome G2){
-        int crossover_point = rand() % GENOME_SIZE;
-        if(crossover_point < GENOME_SIZE / 2) {
+    std::pair<Genome*, Genome*> crossover(const Genome& G1, const Genome& G2){
+        Genome* G1_cross = new Genome(G1);
+        Genome* G2_cross = new Genome(G2);
+        std::uniform_int_distribution<int> dist_pos(0, GENOME_SIZE);
+        for (int _ = 0; _ < 2; _++) {
+            int crossover_point = dist_pos(mt);
+            if (crossover_point < GENOME_SIZE / 2) {
 #pragma omp parallel for if (PARALLELISM_ENABLED)
-            for (int i = 0; i < crossover_point; i++) {
-                std::swap(G1[i], G2[i]);
-            }
-        } else {
+                for (int i = 0; i < crossover_point; i++) {
+                    EStates temp = (*G1_cross)[i];
+                    (*G1_cross)[i] = (*G2_cross)[i];
+                    (*G2_cross)[i] = temp;
+                }
+            } else {
 #pragma omp parallel for if (PARALLELISM_ENABLED)
-            for (int i = crossover_point; i < GENOME_SIZE; i++) {
-                std::swap(G1[i], G2[i]);
+                for (int i = crossover_point; i < GENOME_SIZE; i++) {
+                    EStates temp = (*G1_cross)[i];
+                    (*G1_cross)[i] = (*G2_cross)[i];
+                    (*G2_cross)[i] = temp;
+                }
             }
         }
-        return std::make_pair(G1, G2);
+        return std::make_pair(G1_cross, G2_cross);
     }
 
     void mutate(Genome& G){
-        std::random_device rd;
-        std::mt19937 mt(rd());
         std::uniform_int_distribution<int> dist_pos(0, GENOME_SIZE);
-        std::uniform_int_distribution<int> dist_switch(0, 5);
-        std::uniform_int_distribution<int> dist_times(0, 100);
+        std::uniform_int_distribution<int> dist_switch(0, 4);
+        std::uniform_int_distribution<int> dist_times(0, 7);
 
         for (int _ = 0, end = dist_times(mt); _ < end; _++){
             G[dist_pos(mt)] = static_cast<EStates>(dist_switch(mt));
@@ -77,9 +78,6 @@ namespace GeneticAlgorithm {
     }
 
     std::pair<Genome*, Genome*> parent_selection(Population& P, Weights& weights){
-        std::random_device rd;
-        std::mt19937 mt(rd());
-
         std::array<int, POPULATION_SIZE> indices{};
         for (int i = 0; i < POPULATION_SIZE;i++) indices[i] = i;
 

@@ -9,5 +9,5 @@ Cell::Cell() {
 }
 
 EStates Cell::getState() {
-    return cell;
+    return _0;
 }

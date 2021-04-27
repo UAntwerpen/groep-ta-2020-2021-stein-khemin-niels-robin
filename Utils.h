@@ -4,6 +4,7 @@
 
 #include <string>
 #include <cmath>
+#include "Lib.h"
 
 inline std::string toBase5(long int num){
     std::string alphabet = "01234";
@@ -15,4 +16,20 @@ inline std::string toBase5(long int num){
     return converted;
 }
 
+inline EStates intToEState(int x){
+    switch (x) {
+        case 0:
+            return _0;
+        case 1:
+            return _1;
+        case 2:
+            return _2;
+        case 3:
+            return _3;
+        case 4:
+            return _4;
+        default:
+            return _0;
+    }
+}
 #endif //TA_UTILS_H
