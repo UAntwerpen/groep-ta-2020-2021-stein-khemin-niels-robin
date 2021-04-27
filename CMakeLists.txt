@@ -7,4 +7,9 @@ set(CMAKE_CXX_STANDARD 14)
 #set(CMAKE_EXE_LINKER_FLAGS -pthread)
 set(CMAKE_CXX_FLAGS "-fopenmp")
 
-add_executable(TA main.cpp CellulaireAutomaat.cpp CellulaireAutomaat.h Cell.cpp Cell.h Lib.h lib/DesignByContract.h Rules.cpp Rules.h Utils.cpp Utils.h)
+add_executable(TA main.cpp CellulaireAutomaat.cpp CellulaireAutomaat.h
+        Cell.cpp Cell.h
+        Lib.h lib/DesignByContract.h
+        Rules.cpp Rules.h
+        Utils.cpp Utils.h
+        CitySimulation.h)
