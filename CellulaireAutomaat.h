@@ -3,6 +3,12 @@
 
 #include <vector>
 #include <cmath>
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <iostream>
+#include <map>
+
 #include "Cell.h"
 
 class CellulaireAutomaat {
@@ -14,7 +20,9 @@ public:
      * REQUIRE(1 < width, "Width is too small(must be at least 2)!");
      * REQUIRE(1 < height, "Height is too small(must be at least 2)!");
      */
-    CellulaireAutomaat(int width, int height);
+    CellulaireAutomaat(int width, int height, const std::string& rules);
+
+    virtual ~CellulaireAutomaat();
 
     /*!
      * geeft de cell op rij kolom terug
@@ -22,7 +30,7 @@ public:
      * @param column kolom can de cell
      * @return reference van de cell
      */
-    Cell& operator()(int row, int column);
+    Cell& operator()(int row, int column) const;
 
     /*!
      * geeft de neighbourhood van een cell terug
@@ -57,11 +65,15 @@ public:
 
     void update();
 
+    int count(const EStates& state) const;
+
+    std::map<EStates, int> count_all() const;
+
 private:
     int width;
     int height;
     Cell** matrix;
-    EStates* rules;
+    std::string rules;
 };
 
 #endif //TA_CELLULAIREAUTOMAAT_H
