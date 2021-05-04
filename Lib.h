@@ -9,6 +9,6 @@
 #define GENERATION_LIMIT 2500
 
 enum EDirections: char{noord, oost, zuid, west};
-enum EStates: char{_0, _1, _2, _3, _4};
+enum EStates: char{EVegetation, ERoad, EResidentialZone, EIndustrialZone, EStoreZone};
 
 #endif //TA_LIB_H

@@ -5,7 +5,7 @@
 #ifndef TA_TRANSPORT_H
 #define TA_TRANSPORT_H
 
-#include "Cell.h"
+class Cell;
 
 
 class Transport {
@@ -27,6 +27,7 @@ public:
     void setLocation(Cell* cell);
 
 private:
+    // not owner of cell, Don't delete!
     Cell* location;
 
 };

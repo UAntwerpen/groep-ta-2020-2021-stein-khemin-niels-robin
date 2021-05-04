@@ -6,8 +6,27 @@
 #include <random>
 
 Cell::Cell() {
+    row = 0;
+    col = 0;
 }
 
-EStates Cell::getState() {
-    return _0;
+Cell::~Cell() {
+
 }
+
+Cell::Cell(int row, int col) : row(row), col(col) {}
+
+std::pair<int, int> Cell::getPos() const{
+    return std::make_pair(row, col);
+}
+
+void Cell::setPos(int r, int c) {
+    row = r;
+    col = c;
+}
+
+void Cell::setPos(std::pair<int, int> pos) {
+    row = pos.first;
+    col = pos.second;
+}
+
