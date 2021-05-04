@@ -2,14 +2,34 @@
 #include "lib/DesignByContract.h"
 #include "CellulaireAutomaat.h"
 
-CellulaireAutomaat::CellulaireAutomaat(int width, int height) : width(width), height(height) {
+CellulaireAutomaat::CellulaireAutomaat(int width, int height, const std::string& rules) : width(width), height(height), rules(rules) {
     REQUIRE(1 < width, "Width is too small(must be at least 2)!");
     REQUIRE(1 < height, "Height is too small(must be at least 2)!");
     matrix = new Cell *[(width + 2) * (height + 2)];
+
+    const void * address = static_cast<const void*>(this);
+    std::stringstream ss;
+    ss << address;
+    std::string name = ss.str();
+    std::ofstream file(name + ".txt", std::ofstream ::trunc);
+    if (file.is_open()) {
+        file << rules;
+    } else {
+        std::cerr << "couldn't open file!" << std::endl;
+    }
+    file.close();
 }
 
+CellulaireAutomaat::~CellulaireAutomaat() {
+    const void * address = static_cast<const void*>(this);
+    std::stringstream ss;
+    ss << address;
+    std::string filename = ss.str() + ".txt";
 
-Cell &CellulaireAutomaat::operator()(int row, int column) {
+    std::remove(filename.c_str());
+}
+
+Cell &CellulaireAutomaat::operator()(int row, int column) const {
     REQUIRE(0 <= row && row < width, "Row is out of bounds!");
     REQUIRE(0 <= column && column < height, "Column is out of bounds!");
     return *matrix[(row + 1) * height + (column + 1)];
@@ -58,5 +78,40 @@ void CellulaireAutomaat::changeCell(int row, int column, Cell *to) {
 }
 
 void CellulaireAutomaat::update() {
+    CellFactorySingleton& factory = CellFactorySingleton::getInstance();
+    for (int col = 0; col < width; col++){
+        for (int row = 0; row < height; row++){
+            EStates state = static_cast<EStates>(rules[getNeighbourhoodValue(row, col)]);
+            Cell* new_cell = factory.getCell(state);
+            changeCell(row, col, new_cell);
+        }
+    }
+}
 
+int CellulaireAutomaat::count(const EStates &state) const {
+    int counter = 0;
+    for (int col = 0; col < width; col++){
+        for (int row = 0; row < height; row++){
+            if ((*this)(row, col).getState() == state){
+                counter++;
+            }
+        }
+    }
+    return counter;
+}
+
+std::map<EStates, int> CellulaireAutomaat::count_all() const {
+    std::map<EStates, int> counters;
+    counters[_0] = 0;
+    counters[_1] = 0;
+    counters[_2] = 0;
+    counters[_3] = 0;
+    counters[_4] = 0;
+    for (int col = 0; col < width; col++){
+        for (int row = 0; row < height; row++){
+            EStates cell_state = (*this)(row, col).getState();
+            counters[cell_state]++;
+        }
+    }
+    return counters;
 }
