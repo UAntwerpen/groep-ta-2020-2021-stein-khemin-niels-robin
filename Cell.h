@@ -61,16 +61,16 @@ public:
         switch (state) {
             //TODO
             case 1:
-                return new Cell; // moet vervangen worden
+                return new Road; // moet vervangen worden
             case 2:
-                return new Cell; // moet vervangen worden
+                return new ResidentialZone; // moet vervangen worden
             case 3:
-                return new Cell; // moet vervangen worden
+                return new IndustrialZone; // moet vervangen worden
             case 4:
-                return new Cell; // moet vervangen worden
+                return new StoreZone; // moet vervangen worden
             case 0:
             default:
-                return new Cell;
+                return new Vegetation;
         }
     }
 
