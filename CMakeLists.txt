@@ -12,4 +12,4 @@ add_executable(TA main.cpp CellulaireAutomaat.cpp CellulaireAutomaat.h
         Lib.h lib/DesignByContract.h
         Rules.cpp Rules.h
         Utils.cpp Utils.h
-        CitySimulation.h)
+        CitySimulation.h Vehicle.cpp Vehicle.h Pedestrian.cpp Pedestrian.h Transport.cpp Transport.h)
