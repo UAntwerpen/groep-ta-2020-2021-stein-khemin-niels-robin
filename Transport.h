@@ -7,7 +7,6 @@
 
 class Cell;
 
-
 class Transport {
 public:
     /**
