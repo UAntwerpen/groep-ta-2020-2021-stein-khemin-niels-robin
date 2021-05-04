@@ -6,6 +6,11 @@ CellulaireAutomaat::CellulaireAutomaat(int width, int height, const std::string&
     REQUIRE(1 < width, "Width is too small(must be at least 2)!");
     REQUIRE(1 < height, "Height is too small(must be at least 2)!");
     matrix = new Cell *[(width + 2) * (height + 2)];
+    for (int row = 0; row < height; row++){
+        for (int col = 0; col < width; col++){
+            (*this)(row, col).setPos(row, col);
+        }
+    }
 
     const void * address = static_cast<const void*>(this);
     std::stringstream ss;
@@ -82,6 +87,7 @@ void CellulaireAutomaat::update() {
     for (int col = 0; col < width; col++){
         for (int row = 0; row < height; row++){
             EStates state = static_cast<EStates>(rules[getNeighbourhoodValue(row, col)]);
+            if (state == (*this)(row, col).getState()) continue;
             Cell* new_cell = factory.getCell(state);
             changeCell(row, col, new_cell);
         }
@@ -102,11 +108,11 @@ int CellulaireAutomaat::count(const EStates &state) const {
 
 std::map<EStates, int> CellulaireAutomaat::count_all() const {
     std::map<EStates, int> counters;
-    counters[_0] = 0;
-    counters[_1] = 0;
-    counters[_2] = 0;
-    counters[_3] = 0;
-    counters[_4] = 0;
+    counters[static_cast<EStates>(0)] = 0;
+    counters[static_cast<EStates>(1)] = 0;
+    counters[static_cast<EStates>(2)] = 0;
+    counters[static_cast<EStates>(3)] = 0;
+    counters[static_cast<EStates>(4)] = 0;
     for (int col = 0; col < width; col++){
         for (int row = 0; row < height; row++){
             EStates cell_state = (*this)(row, col).getState();

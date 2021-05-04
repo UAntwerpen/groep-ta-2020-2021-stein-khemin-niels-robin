@@ -5,8 +5,8 @@
 #ifndef TA_TRANSPORT_H
 #define TA_TRANSPORT_H
 
-
 class Cell;
+
 class Transport {
 public:
     /**
@@ -26,6 +26,7 @@ public:
     void setLocation(Cell* cell);
 
 private:
+    // not owner of cell, Don't delete!
     Cell* location;
 
 };
