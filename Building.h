@@ -10,7 +10,6 @@
 using namespace std;
 class Building {
 public:
-
     void setPixelArt(string path);
 private:
     int bewoners;
