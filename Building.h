@@ -11,11 +11,14 @@ using namespace std;
 class Building {
 public:
     void setPixelArt(string path);
-private:
+
+protected:
     int bewoners;
+    int maxPeapleAmount;
     int verval;
     string pixelart;
 };
+
 
 class House : public Building{
 public:
