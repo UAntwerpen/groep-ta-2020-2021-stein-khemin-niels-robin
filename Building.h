@@ -7,16 +7,15 @@
 
 #include <string>
 
-using namespace std;
 class Building {
 public:
-    void setPixelArt(string path);
+    void setPixelArt(std::string path);
 
 protected:
     int bewoners;
     int maxPeapleAmount;
     int verval;
-    string pixelart;
+    std::string pixelart;
 };
 
 

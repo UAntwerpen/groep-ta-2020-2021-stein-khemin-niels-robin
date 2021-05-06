@@ -2,25 +2,17 @@
 #include <algorithm>
 #include <iomanip>
 #include <QApplication>
-#include <QGraphicsScene>
-#include <QGraphicsView>
-#include <QGraphicsRectItem>
 
-
+#include "MainWindow.h"
 #include "CellulaireAutomaat.h"
 #include "Rules.h"
 
 
 int main(int argc, char *argv[]){
     QApplication a(argc, argv);
-    QGraphicsScene * scene = new QGraphicsScene();
-    QGraphicsRectItem * rect = new QGraphicsRectItem();
-    rect->setRect(0,0,100,100);
-    scene->addItem(rect);
-    QGraphicsView * view = new QGraphicsView(scene);
-    view->show();
-
-
+    MainWindow w(100,100);
+    w.show();
+    return a.exec();
 
 
     std::string rule;

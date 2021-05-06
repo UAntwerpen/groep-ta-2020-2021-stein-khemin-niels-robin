@@ -31,6 +31,8 @@ add_executable(TA main.cpp CellulaireAutomaat.cpp CellulaireAutomaat.h
         Transport.cpp
         Transport.h
         Building.cpp
-        Building.h)
+        Building.h
+        MainWindow.cpp
+        MainWindow.h)
 
 qt5_use_modules(TA Core Widgets Gui)
