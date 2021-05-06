@@ -78,13 +78,13 @@ class Vegetation : public Cell{
 public:
     EStates getState() const override;
 
-    void update() override;
+    void update() override{};
 
-    float getHappiness() const override;
+    float getHappiness() const override{ return 0; };
 
-    void addPerson(Pedestrian* person) override;
+    void addPerson(Pedestrian* person) override{};
 
-    std::vector<Pedestrian*> getPersons() const override;
+    std::vector<Pedestrian*> getPersons() const override{ return std::vector<Pedestrian *>(); };
 
 private:
     //Building building;
@@ -92,15 +92,15 @@ private:
 
 class Road : public Cell{
 public:
-    EStates getState() const override;
+    EStates getState() const override{ return EVegetation; };
 
-    void update() override;
+    void update() override{};
 
-    float getHappiness() const override;
+    float getHappiness() const override{ return 0; };
 
-    void addPerson(Pedestrian* person) override;
+    void addPerson(Pedestrian* person) override{};
 
-    std::vector<Pedestrian*> getPersons() const override;
+    std::vector<Pedestrian*> getPersons() const override{ return std::vector<Pedestrian *>(); };
 private:
     std::string pixelArt;
     std::vector<Vehicle*> vehicles;
@@ -108,43 +108,43 @@ private:
 
 class ResidentialZone : public Cell{
 public:
-    EStates getState() const override;
+    EStates getState() const override{ return EVegetation; };
 
-    void update() override;
+    void update() override{};
 
-    float getHappiness() const override;
+    float getHappiness() const override{ return 0; };
 
-    void addPerson(Pedestrian* person) override;
+    void addPerson(Pedestrian* person) override{};
 
-    std::vector<Pedestrian*> getPersons() const override;
+    std::vector<Pedestrian*> getPersons() const override{ return std::vector<Pedestrian *>(); };
     //Building building;
 };
 
 class IndustrialZone : public Cell{
 public:
-    EStates getState() const override;
+    EStates getState() const override{ return EVegetation; };
 
-    void update() override;
+    void update() override{};
 
-    float getHappiness() const override;
+    float getHappiness() const override{ return 0; };
 
-    void addPerson(Pedestrian* person) override;
+    void addPerson(Pedestrian* person) override{};
 
-    std::vector<Pedestrian*> getPersons() const override;
+    std::vector<Pedestrian*> getPersons() const override{ return std::vector<Pedestrian *>(); };
     //Building building;
 };
 
 class StoreZone : public Cell{
 public:
-    EStates getState() const override;
+    EStates getState() const override{ return EVegetation; };
 
-    void update() override;
+    void update() override{};
 
-    float getHappiness() const override;
+    float getHappiness() const override{ return 0; };
 
-    void addPerson(Pedestrian* person) override;
+    void addPerson(Pedestrian* person) override{};
 
-    std::vector<Pedestrian*> getPersons() const override;
+    std::vector<Pedestrian*> getPersons() const override{ return std::vector<Pedestrian *>(); };
     //Building building;
 };
 
@@ -159,47 +159,9 @@ public:
         return instance;
     }
 
-    Cell* getCell(const EStates& state){
-        Cell* ret;
-        switch (state) {
-            case 1:
-                ret = new Road;
-            case 2:
-                ret = new ResidentialZone;
-            case 3:
-                ret = new IndustrialZone;
-            case 4:
-                ret = new StoreZone;
-            case 0:
-            default:
-                ret = new Vegetation;
-        }
-//        objects.emplace_back(ret);
-        return ret;
-    }
+    Cell* getCell(EStates state);
 
-    Cell* getCell(const EStates& state, Cell* old){
-        Cell* ret;
-        switch (state) {
-            case 1:
-                ret = new Road;
-            case 2:
-                ret = new ResidentialZone;
-            case 3:
-                ret = new IndustrialZone;
-            case 4:
-                ret = new StoreZone;
-            case 0:
-            default:
-                ret = new Vegetation;
-        }
-        ret->setPos(old->getPos());
-        for (const auto& ped: old->getPersons()){
-            ret->addPerson(ped);
-        }
-//        objects.emplace_back(ret);
-        return ret;
-    }
+    Cell* getCell(EStates state, Cell* old);
 
 //    virtual ~CellFactorySingleton() {
 //        for (const auto& cell: objects){
