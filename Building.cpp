@@ -3,7 +3,7 @@
 //
 
 #include "Building.h"
-void Building::setPixelArt(string path) {
+void Building::setPixelArt(std::string path) {
     pixelart = path;
 }
 
@@ -12,13 +12,13 @@ House::House() {
     this->bewoners = 4;
     this->maxPeapleAmount = 8;
     this->verval = 100;
-    setPixelArt("PixelArt/House.png");
+    setPixelArt("../PixelArt/House.png");
 }
 
 Store::Store() {
-    setPixelArt("PixelArt/Store.png");
+    setPixelArt("../PixelArt/Store.png");
 }
 
 Workplace::Workplace() {
-    setPixelArt("PixelArt/Workplace.png");
+    setPixelArt("../PixelArt/Workplace.png");
 }

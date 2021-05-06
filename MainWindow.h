@@ -14,6 +14,7 @@ public:
     MainWindow(int width, int height);
     void drawTile(int row, int col, std::string pixelart);
     void show();
+    void clearAll();
 private:
     void drawGrid(int width, int height);
     QGraphicsScene *scene;

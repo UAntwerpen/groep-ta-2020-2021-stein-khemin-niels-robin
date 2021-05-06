@@ -41,3 +41,7 @@ void MainWindow::drawGrid(int width, int height) {
 void MainWindow::show(){
     view->show();
 }
+
+void MainWindow::clearAll(){
+    drawGrid(width, height);
+}
