@@ -78,13 +78,13 @@ class Vegetation : public Cell{
 public:
     EStates getState() const override;
 
-    void update() override{};
+    void update() override;
 
-    float getHappiness() const override{ return 0; };
+    float getHappiness() const override;
 
-    void addPerson(Pedestrian* person) override{};
+    void addPerson(Pedestrian* person) override;
 
-    std::vector<Pedestrian*> getPersons() const override{ return std::vector<Pedestrian *>(); };
+    std::vector<Pedestrian*> getPersons() const override;
 
 private:
     //Building building;
@@ -92,15 +92,15 @@ private:
 
 class Road : public Cell{
 public:
-    EStates getState() const override{ return EVegetation; };
+    EStates getState() const override;
 
-    void update() override{};
+    void update() override;
 
-    float getHappiness() const override{ return 0; };
+    float getHappiness() const override;
 
-    void addPerson(Pedestrian* person) override{};
+    void addPerson(Pedestrian* person) override;
 
-    std::vector<Pedestrian*> getPersons() const override{ return std::vector<Pedestrian *>(); };
+    std::vector<Pedestrian*> getPersons() const override;
 private:
     std::string pixelArt;
     std::vector<Vehicle*> vehicles;
@@ -108,43 +108,43 @@ private:
 
 class ResidentialZone : public Cell{
 public:
-    EStates getState() const override{ return EVegetation; };
+    EStates getState() const override;
 
-    void update() override{};
+    void update() override;
 
-    float getHappiness() const override{ return 0; };
+    float getHappiness() const override;
 
-    void addPerson(Pedestrian* person) override{};
+    void addPerson(Pedestrian* person) override;
 
-    std::vector<Pedestrian*> getPersons() const override{ return std::vector<Pedestrian *>(); };
+    std::vector<Pedestrian*> getPersons() const override;
     //Building building;
 };
 
 class IndustrialZone : public Cell{
 public:
-    EStates getState() const override{ return EVegetation; };
+    EStates getState() const override;
 
-    void update() override{};
+    void update() override;
 
-    float getHappiness() const override{ return 0; };
+    float getHappiness() const override;
 
-    void addPerson(Pedestrian* person) override{};
+    void addPerson(Pedestrian* person) override;
 
-    std::vector<Pedestrian*> getPersons() const override{ return std::vector<Pedestrian *>(); };
+    std::vector<Pedestrian*> getPersons() const override;
     //Building building;
 };
 
 class StoreZone : public Cell{
 public:
-    EStates getState() const override{ return EVegetation; };
+    EStates getState() const override;
 
-    void update() override{};
+    void update() override;
 
-    float getHappiness() const override{ return 0; };
+    float getHappiness() const override;
 
-    void addPerson(Pedestrian* person) override{};
+    void addPerson(Pedestrian* person) override;
 
-    std::vector<Pedestrian*> getPersons() const override{ return std::vector<Pedestrian *>(); };
+    std::vector<Pedestrian*> getPersons() const override;
     //Building building;
 };
 
