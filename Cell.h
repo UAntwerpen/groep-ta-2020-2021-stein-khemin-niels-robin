@@ -159,47 +159,9 @@ public:
         return instance;
     }
 
-    Cell* getCell(const EStates& state){
-        Cell* ret;
-        switch (state) {
-            case 1:
-                ret = new Road;
-            case 2:
-                ret = new ResidentialZone;
-            case 3:
-                ret = new IndustrialZone;
-            case 4:
-                ret = new StoreZone;
-            case 0:
-            default:
-                ret = new Vegetation;
-        }
-//        objects.emplace_back(ret);
-        return ret;
-    }
+    Cell* getCell(EStates state);
 
-    Cell* getCell(const EStates& state, Cell* old){
-        Cell* ret;
-        switch (state) {
-            case 1:
-                ret = new Road;
-            case 2:
-                ret = new ResidentialZone;
-            case 3:
-                ret = new IndustrialZone;
-            case 4:
-                ret = new StoreZone;
-            case 0:
-            default:
-                ret = new Vegetation;
-        }
-        ret->setPos(old->getPos());
-        for (const auto& ped: old->getPersons()){
-            ret->addPerson(ped);
-        }
-//        objects.emplace_back(ret);
-        return ret;
-    }
+    Cell* getCell(EStates state, Cell* old);
 
 //    virtual ~CellFactorySingleton() {
 //        for (const auto& cell: objects){

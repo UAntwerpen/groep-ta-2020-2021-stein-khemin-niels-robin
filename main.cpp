@@ -1,10 +1,6 @@
 #include <iostream>
 #include <algorithm>
 #include <iomanip>
-#include <QApplication>
-#include <QGraphicsScene>
-#include <QGraphicsView>
-#include <QGraphicsRectItem>
 
 
 #include "CellulaireAutomaat.h"
@@ -12,22 +8,12 @@
 
 
 int main(int argc, char *argv[]){
-    QApplication a(argc, argv);
-    QGraphicsScene * scene = new QGraphicsScene();
-    QGraphicsRectItem * rect = new QGraphicsRectItem();
-    rect->setRect(0,0,100,100);
-    scene->addItem(rect);
-    QGraphicsView * view = new QGraphicsView(scene);
-    view->show();
 
-
-
-
-    std::string rule;
-    for (const auto& c: *GeneticAlgorithm::generateGenome()){
-        rule += std::to_string(c);
-    }
-    CellulaireAutomaat C(2, 2, rule);
+//    std::string rule;
+//    for (const auto& c: *GeneticAlgorithm::generateGenome()){
+//        rule += std::to_string(c);
+//    }
+//    CellulaireAutomaat C(2, 2, rule);
 //    GeneticAlgorithm::Population population = GeneticAlgorithm::generatePopulation();
 //    GeneticAlgorithm::Weights fitness;
 //    std::array<int, POPULATION_SIZE> indices{};
@@ -72,5 +58,5 @@ int main(int argc, char *argv[]){
 //    for (const auto& s: *(population[0])){
 //        std::cout << s;
 //    }
-    return a.exec();
+    return 0;
 }
