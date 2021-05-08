@@ -17,7 +17,7 @@ MainWindow::MainWindow(int w, int h) {
 
 void MainWindow::drawTile(int row, int col, std::string pixelart){
     QString filename;
-    for(int i = 0; i<pixelart.size(); i++){
+    for(unsigned int i = 0; i<pixelart.size(); i++){
         filename+=pixelart[i];
     }
     QGraphicsPixmapItem* item=new QGraphicsPixmapItem(QPixmap(filename));
@@ -28,12 +28,10 @@ void MainWindow::drawTile(int row, int col, std::string pixelart){
     item->setPos(row*64,col*64);
 }
 
-void MainWindow::drawGrid(int width, int height) {
-    for(int i=0; i<width; i++)
-    {
-        for(int j=0; j<height; j++)
-        {
-            drawTile(i,j, "../PixelArt/Default.png");
+void MainWindow::drawGrid(int _width, int _height) {
+    for (int i = 0; i < _width; i++) {
+        for (int j = 0; j < _height; j++) {
+            drawTile(i, j, "../PixelArt/Default.png");
         }
     }
 }
