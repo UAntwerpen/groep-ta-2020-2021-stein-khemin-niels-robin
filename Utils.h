@@ -17,19 +17,6 @@ inline std::string toBase5(long int num){
 }
 
 inline EStates intToEState(int x){
-    switch (x) {
-        case 0:
-            return _0;
-        case 1:
-            return _1;
-        case 2:
-            return _2;
-        case 3:
-            return _3;
-        case 4:
-            return _4;
-        default:
-            return _0;
-    }
+    return static_cast<EStates>(x);
 }
 #endif //TA_UTILS_H

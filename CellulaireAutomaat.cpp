@@ -1,6 +1,7 @@
 
 #include "lib/DesignByContract.h"
 #include "CellulaireAutomaat.h"
+#include "Lib.h"
 
 CellulaireAutomaat::CellulaireAutomaat(int width, int height, const std::string& rules) : width(width), height(height), rules(rules) {
     REQUIRE(1 < width, "Width is too small(must be at least 2)!");
@@ -87,8 +88,12 @@ void CellulaireAutomaat::update() {
     for (int col = 0; col < width; col++){
         for (int row = 0; row < height; row++){
             EStates state = static_cast<EStates>(rules[getNeighbourhoodValue(row, col)]);
-            if (state == (*this)(row, col).getState()) continue;
+            if (state == (*this)(row, col).getState()) {
+                (*this)(row, col).update();
+                continue;
+            }
             Cell* new_cell = factory.getCell(state);
+            new_cell->update();
             changeCell(row, col, new_cell);
         }
     }
