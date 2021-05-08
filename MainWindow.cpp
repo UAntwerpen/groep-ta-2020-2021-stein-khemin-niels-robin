@@ -5,6 +5,7 @@
 #include "MainWindow.h"
 #include <QtWidgets>
 #include <string>
+
 using namespace std;
 
 MainWindow::MainWindow(int w, int h) {
@@ -15,17 +16,17 @@ MainWindow::MainWindow(int w, int h) {
     view = new QGraphicsView(scene);
 }
 
-void MainWindow::drawTile(int row, int col, std::string pixelart){
+void MainWindow::drawTile(int row, int col, std::string pixelart) {
     QString filename;
-    for(unsigned int i = 0; i<pixelart.size(); i++){
-        filename+=pixelart[i];
+    for (unsigned int i = 0; i < pixelart.size(); i++) {
+        filename += pixelart[i];
     }
-    QGraphicsPixmapItem* item=new QGraphicsPixmapItem(QPixmap(filename));
+    QGraphicsPixmapItem *item = new QGraphicsPixmapItem(QPixmap(filename));
     item->setCacheMode(QGraphicsItem::NoCache);
-    qreal scale = qMax(4,4);
+    qreal scale = qMax(4, 4);
     item->setScale(scale);
     scene->addItem(item);
-    item->setPos(row*64,col*64);
+    item->setPos(row * 64, col * 64);
 }
 
 void MainWindow::drawGrid(int _width, int _height) {
@@ -36,10 +37,10 @@ void MainWindow::drawGrid(int _width, int _height) {
     }
 }
 
-void MainWindow::show(){
+void MainWindow::show() {
     view->show();
 }
 
-void MainWindow::clearAll(){
+void MainWindow::clearAll() {
     drawGrid(width, height);
 }
