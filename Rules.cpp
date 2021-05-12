@@ -69,6 +69,7 @@ Genome<GENOME_SIZE> GeneticAlgorith::run(int max_gen) {
     for (const auto& s: *(population[0])){
         std::cout << s;
     }
+    return *(population[0]);
 }
 
 float GeneticAlgorith::calc_fitness(Genome<GENOME_SIZE> &G) {

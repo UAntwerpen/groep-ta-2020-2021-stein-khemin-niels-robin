@@ -13,7 +13,7 @@ public:
 
 protected:
     int bewoners;
-    int maxPeapleAmount;
+    int maxPeopleAmount;
     int verval;
     std::string pixelart;
 };
