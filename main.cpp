@@ -64,5 +64,5 @@ int main(int argc, char *argv[]){
 //    for (const auto& s: *(population[0])){
 //        std::cout << s;
 //    }
-    return a.exec();
+    return 0;
 }
