@@ -31,6 +31,10 @@ void Cell::setPos(std::pair<int, int> pos) {
     col = pos.second;
 }
 
+bool Cell::isDilapidated() {
+    return false;
+}
+
 EStates Vegetation::getState() const {
     return EResidentialZone;
 }
@@ -49,6 +53,10 @@ void Vegetation::addPerson(Pedestrian *person) {
 
 std::vector<Pedestrian *> Vegetation::getPersons() const {
     return std::vector<Pedestrian *>();
+}
+
+bool Vegetation::isDilapidated() {
+    return Cell::isDilapidated();
 }
 
 EStates Road::getState() const {
@@ -71,6 +79,10 @@ std::vector<Pedestrian *> Road::getPersons() const {
     return std::vector<Pedestrian *>();
 }
 
+bool Road::isDilapidated() {
+    return Cell::isDilapidated();
+}
+
 EStates ResidentialZone::getState() const {
     return EResidentialZone;
 }
@@ -89,6 +101,14 @@ void ResidentialZone::addPerson(Pedestrian *person) {
 
 std::vector<Pedestrian *> ResidentialZone::getPersons() const {
     return std::vector<Pedestrian *>();
+}
+
+bool ResidentialZone::isDilapidated() {
+    return Cell::isDilapidated();
+}
+
+ResidentialZone::ResidentialZone() {
+
 }
 
 EStates IndustrialZone::getState() const {
@@ -111,6 +131,10 @@ std::vector<Pedestrian *> IndustrialZone::getPersons() const {
     return std::vector<Pedestrian *>();
 }
 
+bool IndustrialZone::isDilapidated() {
+    return Cell::isDilapidated();
+}
+
 EStates StoreZone::getState() const {
     return EResidentialZone;
 }
@@ -129,6 +153,10 @@ void StoreZone::addPerson(Pedestrian *person) {
 
 std::vector<Pedestrian *> StoreZone::getPersons() const {
     return std::vector<Pedestrian *>();
+}
+
+bool StoreZone::isDilapidated() {
+    return Cell::isDilapidated();
 }
 
 Cell *CellFactorySingleton::getCell(EStates state) {
