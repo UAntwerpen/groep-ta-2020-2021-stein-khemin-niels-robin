@@ -5,9 +5,11 @@
 #include "Pathfinding.h"
 
 PFMask::PFMask(CellulaireAutomaat& cellAutomaat) : width(), height() {
-    //TODO initialize attributes
+
 }
 
 bool PFMask::update() {
+
+
     return false;
 }
