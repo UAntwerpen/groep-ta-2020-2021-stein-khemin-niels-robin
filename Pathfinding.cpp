@@ -9,7 +9,5 @@ PFMask::PFMask(CellulaireAutomaat& cellAutomaat) : width(), height() {
 }
 
 bool PFMask::update() {
-
-
     return false;
 }
