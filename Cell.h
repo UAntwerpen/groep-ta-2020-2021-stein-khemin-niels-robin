@@ -8,7 +8,7 @@
 
 #include "Lib.h"
 
-class Pedestrian;
+class Citizen;
 class Vehicle;
 
 class Cell {
@@ -40,13 +40,13 @@ public:
      * voegt een persoon toe aan een cell
      * @param person
      */
-    virtual void addPerson(Pedestrian* person) = 0;
+    virtual void addPerson(Citizen* person) = 0;
 
     /*!
      * geeft alle personen terug die op de cell staan
      * @return
      */
-    virtual std::vector<Pedestrian*> getPersons() const = 0;
+    virtual std::vector<Citizen*> getPersons() const = 0;
 
     /*!
      * geeft de postitie van de cell terug
@@ -71,7 +71,7 @@ private:
     int row;
     int col;
 
-    std::vector<Pedestrian*> people;
+    std::vector<Citizen*> people;
 };
 
 class Vegetation : public Cell{
@@ -82,9 +82,9 @@ public:
 
     float getHappiness() const override;
 
-    void addPerson(Pedestrian* person) override;
+    void addPerson(Citizen* person) override;
 
-    std::vector<Pedestrian*> getPersons() const override;
+    std::vector<Citizen*> getPersons() const override;
 
 private:
     //Building building;
@@ -98,9 +98,9 @@ public:
 
     float getHappiness() const override;
 
-    void addPerson(Pedestrian* person) override;
+    void addPerson(Citizen* person) override;
 
-    std::vector<Pedestrian*> getPersons() const override;
+    std::vector<Citizen*> getPersons() const override;
 private:
     std::string pixelArt;
     std::vector<Vehicle*> vehicles;
@@ -114,9 +114,9 @@ public:
 
     float getHappiness() const override;
 
-    void addPerson(Pedestrian* person) override;
+    void addPerson(Citizen* person) override;
 
-    std::vector<Pedestrian*> getPersons() const override;
+    std::vector<Citizen*> getPersons() const override;
     //Building building;
 };
 
@@ -128,9 +128,9 @@ public:
 
     float getHappiness() const override;
 
-    void addPerson(Pedestrian* person) override;
+    void addPerson(Citizen* person) override;
 
-    std::vector<Pedestrian*> getPersons() const override;
+    std::vector<Citizen*> getPersons() const override;
     //Building building;
 };
 
@@ -142,9 +142,9 @@ public:
 
     float getHappiness() const override;
 
-    void addPerson(Pedestrian* person) override;
+    void addPerson(Citizen* person) override;
 
-    std::vector<Pedestrian*> getPersons() const override;
+    std::vector<Citizen*> getPersons() const override;
     //Building building;
 };
 

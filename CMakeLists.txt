@@ -16,5 +16,5 @@ add_executable(TA main.cpp CellulaireAutomaat.cpp CellulaireAutomaat.h
         Utils.cpp Utils.h
         CitySimulation.h
         Vehicle.cpp Vehicle.h
-        Pedestrian.cpp Pedestrian.h
+        Citizen.cpp Citizen.h
         Transport.cpp Transport.h Pathfinding.cpp PathfindingCell.cpp PathfindingCell.h Pathfinding.cpp Pathfinding.h)

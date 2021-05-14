@@ -16,7 +16,7 @@ private:
 
 public:
     /**
-     * Initialiseert de PathfindingCell
+     * Initialiseert de PFCell
      *
      * @param passable : boolean : true als de cell begaanbaar is, anders false
      * @param goal : boolean : true als de cell een goal is, anders false
@@ -25,7 +25,7 @@ public:
     PFCell(bool passable, bool goal, int value = 0);
 
     /**
-     * Geeft terug of de PathfindingCell begaanbaar is, of niet
+     * Geeft terug of de PFCell begaanbaar is, of niet
      *
      * @return boolean: true als de cell begaanbaar is, anders false
      */
@@ -41,7 +41,7 @@ public:
     void setPassable(bool p);
 
     /**
-     * Geeft terug of de PathfindingCell een Goal is, of niet
+     * Geeft terug of de PFCell een Goal is, of niet
      *
      * @return boolean: true de cell een doel is, anders false
      */
@@ -57,11 +57,11 @@ public:
     void setGoal(bool g);
 
     /**
-     * Geeft de integer waarde van de PathfindingCell terug
+     * Geeft de integer waarde van de PFCell terug
      *
      * @return integer
      *
-     * REQUIRE(this->getPassable() == true, "Only passable PathfindingCells have integer values.")
+     * REQUIRE(this->getPassable() == true, "Only passable PFCells have integer values.")
      */
     int getValue() const;
 

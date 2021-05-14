@@ -43,12 +43,12 @@ float Vegetation::getHappiness() const {
     return 0;
 }
 
-void Vegetation::addPerson(Pedestrian *person) {
+void Vegetation::addPerson(Citizen *person) {
 
 }
 
-std::vector<Pedestrian *> Vegetation::getPersons() const {
-    return std::vector<Pedestrian *>();
+std::vector<Citizen *> Vegetation::getPersons() const {
+    return std::vector<Citizen *>();
 }
 
 EStates Road::getState() const {
@@ -63,12 +63,12 @@ float Road::getHappiness() const {
     return 0;
 }
 
-void Road::addPerson(Pedestrian *person) {
+void Road::addPerson(Citizen *person) {
 
 }
 
-std::vector<Pedestrian *> Road::getPersons() const {
-    return std::vector<Pedestrian *>();
+std::vector<Citizen *> Road::getPersons() const {
+    return std::vector<Citizen *>();
 }
 
 EStates ResidentialZone::getState() const {
@@ -83,12 +83,12 @@ float ResidentialZone::getHappiness() const {
     return 0;
 }
 
-void ResidentialZone::addPerson(Pedestrian *person) {
+void ResidentialZone::addPerson(Citizen *person) {
 
 }
 
-std::vector<Pedestrian *> ResidentialZone::getPersons() const {
-    return std::vector<Pedestrian *>();
+std::vector<Citizen *> ResidentialZone::getPersons() const {
+    return std::vector<Citizen *>();
 }
 
 EStates IndustrialZone::getState() const {
@@ -103,12 +103,12 @@ float IndustrialZone::getHappiness() const {
     return 0;
 }
 
-void IndustrialZone::addPerson(Pedestrian *person) {
+void IndustrialZone::addPerson(Citizen *person) {
 
 }
 
-std::vector<Pedestrian *> IndustrialZone::getPersons() const {
-    return std::vector<Pedestrian *>();
+std::vector<Citizen *> IndustrialZone::getPersons() const {
+    return std::vector<Citizen *>();
 }
 
 EStates StoreZone::getState() const {
@@ -123,12 +123,12 @@ float StoreZone::getHappiness() const {
     return 0;
 }
 
-void StoreZone::addPerson(Pedestrian *person) {
+void StoreZone::addPerson(Citizen *person) {
 
 }
 
-std::vector<Pedestrian *> StoreZone::getPersons() const {
-    return std::vector<Pedestrian *>();
+std::vector<Citizen *> StoreZone::getPersons() const {
+    return std::vector<Citizen *>();
 }
 
 Cell *CellFactorySingleton::getCell(EStates state) {
