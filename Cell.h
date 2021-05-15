@@ -34,19 +34,19 @@ public:
      * geeft terug hoeveel happiness een bepaalde cell uitstoot
      * @return
      */
-    virtual float getHappiness() const = 0;
+    virtual float getHappiness() const;
 
     /*!
      * voegt een persoon toe aan een cell
      * @param person
      */
-    virtual void addPerson(Citizen* person) = 0;
+    virtual void addPerson(Citizen* person);
 
     /*!
      * geeft alle personen terug die op de cell staan
      * @return
      */
-    virtual std::vector<Citizen*> getPersons() const = 0;
+    virtual std::vector<Citizen*> getPersons() const;
 
     /*!
      * geeft de postitie van de cell terug
