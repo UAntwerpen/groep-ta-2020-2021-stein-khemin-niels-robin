@@ -2,9 +2,22 @@
 // Created by Khemin on 9-5-2021.
 //
 
-#include "PathfindingCell.h"
+#include "PFCell.h"
 
-PFCell::PFCell(bool passable, bool goal, int value) : passable(passable), goal(goal), value(value) {}
+PFCell::PFCell(bool passable, int row, int col, bool goal) : Cell(row, col), passable(passable), goal(goal) {
+    if (goal) {
+        value = 0;
+    }
+    else if (passable) {
+
+        //Random int tussen 0 en 10000
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_int_distribution<> distr(0, 10000);
+
+        value = distr(gen);
+    }
+}
 
 bool PFCell::getPassable() const { return passable; }
 
@@ -28,4 +41,13 @@ int PFCell::getValue() const {
 void PFCell::setValue(int v) {
     value = v;
     ENSURE(this->getValue() == v, "setValue post condition failure");
+}
+
+bool PFCell::updatePFCell(int min) {
+    if (passable && not goal) {
+        this->value = min + 1;
+        return true;
+    }
+
+    return false;
 }
