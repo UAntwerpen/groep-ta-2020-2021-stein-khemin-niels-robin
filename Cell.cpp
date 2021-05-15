@@ -31,6 +31,18 @@ void Cell::setPos(std::pair<int, int> pos) {
     col = pos.second;
 }
 
+void Cell::addPerson(Citizen *person) {
+
+}
+
+float Cell::getHappiness() const {
+    return 0;
+}
+
+std::vector<Citizen *> Cell::getPersons() const {
+    return std::vector<Citizen *>();
+}
+
 EStates Vegetation::getState() const {
     return EResidentialZone;
 }
