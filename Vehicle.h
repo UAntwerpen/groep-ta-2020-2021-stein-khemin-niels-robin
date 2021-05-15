@@ -37,6 +37,8 @@ public:
      */
     void addPerson(Citizen* person);
 
+    EStates getState() const override;
+
 private:
     vector<Citizen*> people;
 };

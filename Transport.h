@@ -7,6 +7,7 @@
 
 #include <string>
 #include "CellulaireAutomaat.h"
+#include "Lib.h"
 
 using namespace std;
 
@@ -64,6 +65,13 @@ public:
      * @param direction : richting waarin het Transport beweegt
      */
     void update(CellulaireAutomaat& city, char direction);
+
+    /*!
+     * geeft de gepaste enum waarde terug
+     * @return enum waarde
+     */
+    virtual EStates getState() const = 0;
+
 
 private:
     // not owner of cell, Don't delete!

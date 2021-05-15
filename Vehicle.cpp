@@ -19,3 +19,7 @@ Citizen *Vehicle::operator[](unsigned int ind) {
 void Vehicle::addPerson(Citizen *person) {
     people.push_back(person);
 }
+
+EStates Vehicle::getState() const {
+    return EVehicle;
+}

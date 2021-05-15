@@ -12,3 +12,7 @@ void Citizen::setHappiness(float h) {
     happiness = h;
     ENSURE(this->getHappiness() == h, "setHappiness post condition failure");
 }
+
+EStates Citizen::getState() const {
+    return ECitizen;
+}

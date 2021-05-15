@@ -24,6 +24,8 @@ public:
      */
     void setHappiness(float h);
 
+    EStates getState() const override;
+
 private:
     float happiness;
 };
