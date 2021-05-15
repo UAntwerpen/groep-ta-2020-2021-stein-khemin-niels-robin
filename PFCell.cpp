@@ -2,9 +2,9 @@
 // Created by Khemin on 9-5-2021.
 //
 
-#include "PathfindingCell.h"
+#include "PFCell.h"
 
-PFCell::PFCell(bool passable, bool goal, int value) : passable(passable), goal(goal), value(value) {}
+PFCell::PFCell(bool passable, int row, int col, bool goal, int value) : Cell(row, col), passable(passable), goal(goal), value(value) {}
 
 bool PFCell::getPassable() const { return passable; }
 

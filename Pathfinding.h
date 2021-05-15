@@ -5,7 +5,7 @@
 #ifndef TA_PATHFINDING_H
 #define TA_PATHFINDING_H
 
-#include "PathfindingCell.h"
+#include "PFCell.h"
 #include "CellulaireAutomaat.h"
 
 class PFMask {

@@ -2,12 +2,13 @@
 // Created by Khemin on 9-5-2021.
 //
 
-#ifndef TA_PATHFINDINGCELL_H
-#define TA_PATHFINDINGCELL_H
+#ifndef TA_PFCELL_H
+#define TA_PFCELL_H
 
 #include "lib/DesignByContract.h"
+#include "Cell.h"
 
-class PFCell {
+class PFCell : public Cell {
 private:
     bool passable;
     bool goal;
@@ -22,7 +23,7 @@ public:
      * @param goal : boolean : true als de cell een goal is, anders false
      * @param value : integer : de integer waarde van de cell
      */
-    PFCell(bool passable, bool goal, int value = 0);
+    PFCell(bool passable, int row, int col, bool goal = false, int value = 0);
 
     /**
      * Geeft terug of de PFCell begaanbaar is, of niet
@@ -73,7 +74,17 @@ public:
      * ENSURE(this->getValue() == v, "setValue post condition failure")
      */
     void setValue(int v);
+
+    /**
+     * Update de PFCell volgens de transitieregels.
+     * regels:
+     *      Muur (niet begaanbare PFCell) ==> Muur
+     *      Goal (target PFcell) ==> Goal
+     *      Begaanbare PFCell : value ==> min(PFCell.getNeigbourIntegerValues()) + 1
+     * @return bool : true als update een verandering maakt aan de PFCell, anders false
+     */
+    bool updatePFCell();
 };
 
 
-#endif //TA_PATHFINDINGCELL_H
+#endif //TA_PFCELL_H
