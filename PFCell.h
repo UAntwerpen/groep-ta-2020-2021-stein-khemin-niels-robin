@@ -7,13 +7,15 @@
 
 #include "lib/DesignByContract.h"
 #include "Cell.h"
+#include <limits>
+#include <random>
 
 class PFCell : public Cell {
 private:
     bool passable;
     bool goal;
 
-    int value;
+    int value = std::numeric_limits<int>::max();
 
 public:
     /**
@@ -23,7 +25,7 @@ public:
      * @param goal : boolean : true als de cell een goal is, anders false
      * @param value : integer : de integer waarde van de cell
      */
-    PFCell(bool passable, int row, int col, bool goal = false, int value = 0);
+    PFCell(bool passable, int row, int col, bool goal = false);
 
     /**
      * Geeft terug of de PFCell begaanbaar is, of niet
@@ -81,9 +83,10 @@ public:
      *      Muur (niet begaanbare PFCell) ==> Muur
      *      Goal (target PFcell) ==> Goal
      *      Begaanbare PFCell : value ==> min(PFCell.getNeigbourIntegerValues()) + 1
+     *
      * @return bool : true als update een verandering maakt aan de PFCell, anders false
      */
-    bool updatePFCell();
+    bool updatePFCell(int min);
 };
 
 
