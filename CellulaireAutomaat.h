@@ -69,6 +69,10 @@ public:
 
     std::map<EStates, int> count_all() const;
 
+    int getWidth() const;
+
+    int getHeight() const;
+
 private:
     int width;
     int height;
