@@ -13,19 +13,24 @@
 class PFMask {
 public:
     /**
+     * Default constructor
+     */
+    PFMask(int width, int height);
+
+    /**
      * Initialiseert het PFMask.
      *
      * @param cellAutomaat : PFMask wordt geinitialiseerd adv de gegevens van deze CellulaireAutomaat.
      */
     PFMask(CellulaireAutomaat& cellAutomaat, Transport* transport);
 
-    /*!
-     * geeft de PFCell op rij, kolom terug
-     * @param row rij van de PFCell
-     * @param column kolom can de PFCell
-     * @return Pointer naar de PFCell
+    /**
+     * geeft de cell op rij kolom terug
+     * @param row rij van de cell
+     * @param column kolom can de cell
+     * @return reference van de cell
      */
-    PFCell& operator()(int row, int column) const;
+    PFCell& getCell(int row, int col);
 
     /**
      * Geeft de integer waarden van de buur Cellen terug.
@@ -46,7 +51,8 @@ public:
      *
      * @return boolean : true indien er een verandering gemaakt is, anders false.
      */
-    bool update();
+     bool update();
+
 
 private:
     int width;

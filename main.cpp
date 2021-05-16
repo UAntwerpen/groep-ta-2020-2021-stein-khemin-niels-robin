@@ -5,6 +5,7 @@
 
 #include "CellulaireAutomaat.h"
 #include "Rules.h"
+#include "Pathfinding.h"
 
 
 int main(int argc, char *argv[]){
@@ -58,5 +59,10 @@ int main(int argc, char *argv[]){
 //    for (const auto& s: *(population[0])){
 //        std::cout << s;
 //    }
+
+    PFMask mask = PFMask(10,10);
+    PFCell cell = mask.getCell(2,3);
+    cout << cell.getGoal() << cell.getPassable() << cell.getState() << cell.getPos().first << cell.getPos().second << endl;
+
     return 0;
 }
