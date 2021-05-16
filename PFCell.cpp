@@ -19,7 +19,7 @@ PFCell::PFCell(bool passable, int row, int col, bool goal) : Cell(row, col), pas
         //Random int tussen 0 en 10000
         std::random_device rd;
         std::mt19937 gen(rd());
-        std::uniform_int_distribution<> distr(0, 10000);
+        std::uniform_int_distribution<> distr(1, 10000);
 
         value = distr(gen);
     } else {
