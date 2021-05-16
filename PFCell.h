@@ -15,9 +15,14 @@ private:
     bool passable;
     bool goal;
 
-    int value = std::numeric_limits<int>::max();
+    int value;
 
 public:
+    /**
+     * Default Constructor
+     */
+    PFCell();
+
     /**
      * Initialiseert de PFCell
      *
@@ -87,6 +92,15 @@ public:
      * @return bool : true als update een verandering maakt aan de PFCell, anders false
      */
     bool updatePFCell(int min);
+
+    /*!
+     * Geeft de gepaste enum waarde terug
+     *
+     * @return enum waarde
+     */
+    EStates getState() const override;
+
+    void update() override;
 };
 
 

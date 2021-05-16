@@ -4,6 +4,12 @@
 
 #include "PFCell.h"
 
+PFCell::PFCell() : Cell() {
+    passable = false;
+    goal = false;
+    value = std::numeric_limits<int>::max();
+}
+
 PFCell::PFCell(bool passable, int row, int col, bool goal) : Cell(row, col), passable(passable), goal(goal) {
     if (goal) {
         value = 0;
@@ -16,6 +22,8 @@ PFCell::PFCell(bool passable, int row, int col, bool goal) : Cell(row, col), pas
         std::uniform_int_distribution<> distr(0, 10000);
 
         value = distr(gen);
+    } else {
+        value = std::numeric_limits<int>::max();
     }
 }
 
@@ -51,3 +59,13 @@ bool PFCell::updatePFCell(int min) {
 
     return false;
 }
+
+EStates PFCell::getState() const {
+    return EPFCell;
+}
+
+void PFCell::update() {
+    //* Does Nothing *//
+}
+
+

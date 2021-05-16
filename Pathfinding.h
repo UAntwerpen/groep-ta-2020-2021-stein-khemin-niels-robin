@@ -8,13 +8,9 @@
 #include "PFCell.h"
 #include "CellulaireAutomaat.h"
 #include "Transport.h"
+#include <list>
 
 class PFMask {
-private:
-    int width;
-    int height;
-
-    PFCell** mask;
 public:
     /**
      * Initialiseert het PFMask.
@@ -22,6 +18,14 @@ public:
      * @param cellAutomaat : PFMask wordt geinitialiseerd adv de gegevens van deze CellulaireAutomaat.
      */
     PFMask(CellulaireAutomaat& cellAutomaat, Transport* transport);
+
+    /*!
+     * geeft de PFCell op rij, kolom terug
+     * @param row rij van de PFCell
+     * @param column kolom can de PFCell
+     * @return Pointer naar de PFCell
+     */
+    PFCell& operator()(int row, int column) const;
 
     /**
      * Geeft de integer waarden van de buur Cellen terug.
@@ -43,6 +47,12 @@ public:
      * @return boolean : true indien er een verandering gemaakt is, anders false.
      */
     bool update();
+
+private:
+    int width;
+    int height;
+
+    PFCell** mask;
 };
 
 
