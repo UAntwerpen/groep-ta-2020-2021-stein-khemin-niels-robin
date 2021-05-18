@@ -28,7 +28,7 @@ add_executable(TA main.cpp CellulaireAutomaat.cpp CellulaireAutomaat.h
         Citizen.cpp Citizen.h
         Transport.cpp Transport.h 
         PFCell.cpp PFCell.h 
-        Pathfinding.cpp Pathfinding.h)
+        Pathfinding.cpp Pathfinding.h
         Building.cpp Building.h
         MainWindow.cpp MainWindow.h)
 
