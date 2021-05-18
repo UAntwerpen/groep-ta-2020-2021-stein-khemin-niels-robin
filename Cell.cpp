@@ -3,6 +3,7 @@
 //
 
 #include "Cell.h"
+#include "lib/DesignByContract.h"
 #include <random>
 #include <iostream>
 
@@ -22,17 +23,33 @@ std::pair<int, int> Cell::getPos() const{
 }
 
 void Cell::setPos(int r, int c) {
+    REQUIRE(r >= 0, "Row is out of bounds!");
+    REQUIRE(c >= 0, "Column is out of bounds!");
     row = r;
     col = c;
 }
 
 void Cell::setPos(std::pair<int, int> pos) {
+    REQUIRE(pos.first >= 0, "Row is out of bounds!");
+    REQUIRE(pos.second >= 0, "Column is out of bounds!");
     row = pos.first;
     col = pos.second;
 }
 
+void Cell::addPerson(Citizen *person) {
+
+}
+
+float Cell::getHappiness() const {
+    return 0;
+}
+
+std::vector<Citizen *> Cell::getPersons() const {
+    return std::vector<Citizen *>();
+
 bool Cell::isDilapidated() {
     return false;
+
 }
 
 EStates Vegetation::getState() const {
@@ -47,12 +64,12 @@ float Vegetation::getHappiness() const {
     return 0;
 }
 
-void Vegetation::addPerson(Pedestrian *person) {
+void Vegetation::addPerson(Citizen *person) {
 
 }
 
-std::vector<Pedestrian *> Vegetation::getPersons() const {
-    return std::vector<Pedestrian *>();
+std::vector<Citizen *> Vegetation::getPersons() const {
+    return std::vector<Citizen *>();
 }
 
 bool Vegetation::isDilapidated() {
@@ -71,12 +88,12 @@ float Road::getHappiness() const {
     return 0;
 }
 
-void Road::addPerson(Pedestrian *person) {
+void Road::addPerson(Citizen *person) {
 
 }
 
-std::vector<Pedestrian *> Road::getPersons() const {
-    return std::vector<Pedestrian *>();
+std::vector<Citizen *> Road::getPersons() const {
+    return std::vector<Citizen *>();
 }
 
 bool Road::isDilapidated() {
@@ -95,12 +112,12 @@ float ResidentialZone::getHappiness() const {
     return 0;
 }
 
-void ResidentialZone::addPerson(Pedestrian *person) {
+void ResidentialZone::addPerson(Citizen *person) {
 
 }
 
-std::vector<Pedestrian *> ResidentialZone::getPersons() const {
-    return std::vector<Pedestrian *>();
+std::vector<Citizen *> ResidentialZone::getPersons() const {
+    return std::vector<Citizen *>();
 }
 
 bool ResidentialZone::isDilapidated() {
@@ -123,12 +140,12 @@ float IndustrialZone::getHappiness() const {
     return 0;
 }
 
-void IndustrialZone::addPerson(Pedestrian *person) {
+void IndustrialZone::addPerson(Citizen *person) {
 
 }
 
-std::vector<Pedestrian *> IndustrialZone::getPersons() const {
-    return std::vector<Pedestrian *>();
+std::vector<Citizen *> IndustrialZone::getPersons() const {
+    return std::vector<Citizen *>();
 }
 
 bool IndustrialZone::isDilapidated() {
@@ -147,12 +164,12 @@ float StoreZone::getHappiness() const {
     return 0;
 }
 
-void StoreZone::addPerson(Pedestrian *person) {
+void StoreZone::addPerson(Citizen *person) {
 
 }
 
-std::vector<Pedestrian *> StoreZone::getPersons() const {
-    return std::vector<Pedestrian *>();
+std::vector<Citizen *> StoreZone::getPersons() const {
+    return std::vector<Citizen *>();
 }
 
 bool StoreZone::isDilapidated() {

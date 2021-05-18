@@ -5,30 +5,82 @@
 #ifndef TA_TRANSPORT_H
 #define TA_TRANSPORT_H
 
+#include <string>
+#include "CellulaireAutomaat.h"
+#include "Lib.h"
+
+using namespace std;
+
 class Cell;
+class CellulaireAutomaat;
 
 class Transport {
 public:
     /**
-     * Returns a pointer to the cell where the vehicle is currently located.
+     * Geeft een pointer terug naar de huidige locatie van het Transport.
      *
-     * @return Pointer to the Cell containing the Vehicle.
+     * @return Pointer naar de Cell die het Transport bevat.
      */
     Cell* getLocation();
 
     /**
-     * Sets the location attribute of the Vehicle to the given value.
+     * Zet het location attribuut van het Transport gelijk aan de gegeven waarde.
      *
-     * @param cell : new location of the Vehicle
+     * @param cell : nieuwe location van het transport
      *
-     * ENSURE(this->getLocation() == cell, "location not set to given value (post condition failure)")
+     * ENSURE(this->getLocation() == cell, "setLoaction post condition failure")
      */
     void setLocation(Cell* cell);
+
+    /**
+     * Geeft een pointer terug naar de bestemming van het Transport.
+     *
+     * @return Cell Pointer naar bestemming van het Transport.
+     */
+    Cell* getGoal();
+
+    /**
+     * Stelt een nieuwe bestemming in voor het Transport.
+     *
+     * @param cell : nieuwe bestemming van het transport
+     *
+     * ENSURE(this->getGoal() == cell, "setGoal post condition failure")
+     */
+    void setGoal(Cell* cell);
+
+    /**
+     * Geeft de huidige route van het Transport terug.
+     * @return string
+     */
+    string getRoute();
+
+    /**
+     * Stelt een nieuwe route in voor het Transport.
+     * @param r : string : nieuwe route voor het Transport
+     */
+    void setRoute(string r);
+
+    /**
+     * Verplaatst het Transport in de gegeven richting;
+     * @param direction : richting waarin het Transport beweegt
+     */
+    void update(CellulaireAutomaat& city, char direction);
+
+    /*!
+     * geeft de gepaste enum waarde terug
+     * @return enum waarde
+     */
+    virtual EStates getState() const = 0;
+
 
 private:
     // not owner of cell, Don't delete!
     Cell* location;
 
+    Cell* goal;
+    string route;
+
+    int speed;
 };
 
 

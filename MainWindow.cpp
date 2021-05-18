@@ -6,6 +6,7 @@
 #include <QtWidgets>
 #include <iostream>
 #include <string>
+
 using namespace std;
 
 MainWindow::MainWindow(int w, int h) {
@@ -17,11 +18,12 @@ MainWindow::MainWindow(int w, int h) {
 }
 
 void MainWindow::drawTile(int row, int col, int rot, std::string pixelart){
+
     QString filename;
-    for(unsigned int i = 0; i<pixelart.size(); i++){
-        filename+=pixelart[i];
+    for (unsigned int i = 0; i < pixelart.size(); i++) {
+        filename += pixelart[i];
     }
-    QGraphicsPixmapItem* item=new QGraphicsPixmapItem(QPixmap(filename));
+    QGraphicsPixmapItem *item = new QGraphicsPixmapItem(QPixmap(filename));
     item->setCacheMode(QGraphicsItem::NoCache);
     qreal scale = qMax(2,2);
     item->setScale(scale);
@@ -61,10 +63,10 @@ void MainWindow::drawGrid(int _width, int _height) {
     }
 }
 
-void MainWindow::show(){
+void MainWindow::show() {
     view->show();
 }
 
-void MainWindow::clearAll(){
+void MainWindow::clearAll() {
     drawGrid(width, height);
 }
