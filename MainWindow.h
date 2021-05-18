@@ -13,7 +13,7 @@ class MainWindow {
 public:
     MainWindow(int width, int height);
 
-    void drawTile(int row, int col, std::string pixelart);
+    void drawTile(int row, int col, int rotation, std::string pixelart);
 
     void show();
 
