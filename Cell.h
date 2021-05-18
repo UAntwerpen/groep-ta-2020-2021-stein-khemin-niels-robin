@@ -32,7 +32,7 @@ public:
 
     /*!
      * geeft terug hoeveel happiness een bepaalde cell uitstoot
-     * @return
+     * @return float
      */
     virtual float getHappiness() const;
 
@@ -58,6 +58,8 @@ public:
      * verandert de positie van een cel
      * @param r rij
      * @param c kolom
+     * \n REQUIRE(r >= 0, "Row is out of bounds!");
+     * \n REQUIRE(c >= 0, "Column is out of bounds!");
      */
     void setPos(int r, int c);
 

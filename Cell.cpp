@@ -3,6 +3,7 @@
 //
 
 #include "Cell.h"
+#include "lib/DesignByContract.h"
 #include <random>
 #include <iostream>
 
@@ -22,11 +23,15 @@ std::pair<int, int> Cell::getPos() const{
 }
 
 void Cell::setPos(int r, int c) {
+    REQUIRE(r >= 0, "Row is out of bounds!");
+    REQUIRE(c >= 0, "Column is out of bounds!");
     row = r;
     col = c;
 }
 
 void Cell::setPos(std::pair<int, int> pos) {
+    REQUIRE(pos.first >= 0, "Row is out of bounds!");
+    REQUIRE(pos.second >= 0, "Column is out of bounds!");
     row = pos.first;
     col = pos.second;
 }
