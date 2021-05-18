@@ -53,7 +53,7 @@ public:
     int getNeighbourhoodValue(int row, int col);
 
     /*!
-     * veranderd de cell naar een nieuwe cell (TODO blijft Cell data behouden?)
+     * veranderd de cell naar een nieuwe cell
      * @param row rij van de cell
      * @param column kolom van de cell
      * @param to Cell* in wat de cell verandert wordt

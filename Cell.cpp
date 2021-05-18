@@ -46,6 +46,10 @@ float Cell::getHappiness() const {
 
 std::vector<Citizen *> Cell::getPersons() const {
     return std::vector<Citizen *>();
+
+bool Cell::isDilapidated() {
+    return false;
+
 }
 
 EStates Vegetation::getState() const {
@@ -68,6 +72,10 @@ std::vector<Citizen *> Vegetation::getPersons() const {
     return std::vector<Citizen *>();
 }
 
+bool Vegetation::isDilapidated() {
+    return Cell::isDilapidated();
+}
+
 EStates Road::getState() const {
     return EResidentialZone;
 }
@@ -86,6 +94,10 @@ void Road::addPerson(Citizen *person) {
 
 std::vector<Citizen *> Road::getPersons() const {
     return std::vector<Citizen *>();
+}
+
+bool Road::isDilapidated() {
+    return Cell::isDilapidated();
 }
 
 EStates ResidentialZone::getState() const {
@@ -108,6 +120,14 @@ std::vector<Citizen *> ResidentialZone::getPersons() const {
     return std::vector<Citizen *>();
 }
 
+bool ResidentialZone::isDilapidated() {
+    return Cell::isDilapidated();
+}
+
+ResidentialZone::ResidentialZone() {
+
+}
+
 EStates IndustrialZone::getState() const {
     return EResidentialZone;
 }
@@ -128,6 +148,10 @@ std::vector<Citizen *> IndustrialZone::getPersons() const {
     return std::vector<Citizen *>();
 }
 
+bool IndustrialZone::isDilapidated() {
+    return Cell::isDilapidated();
+}
+
 EStates StoreZone::getState() const {
     return EResidentialZone;
 }
@@ -146,6 +170,10 @@ void StoreZone::addPerson(Citizen *person) {
 
 std::vector<Citizen *> StoreZone::getPersons() const {
     return std::vector<Citizen *>();
+}
+
+bool StoreZone::isDilapidated() {
+    return Cell::isDilapidated();
 }
 
 Cell *CellFactorySingleton::getCell(EStates state) {

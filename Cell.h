@@ -5,6 +5,7 @@
 
 #include <string>
 #include <vector>
+#include "Building.h"
 
 #include "Lib.h"
 
@@ -69,6 +70,8 @@ public:
      */
     void setPos(std::pair<int, int> pos);
 
+    virtual bool isDilapidated();
+
 private:
     int row;
     int col;
@@ -88,6 +91,8 @@ public:
 
     std::vector<Citizen*> getPersons() const override;
 
+    bool isDilapidated() override;
+
 private:
     //Building building;
 };
@@ -102,14 +107,22 @@ public:
 
     void addPerson(Citizen* person) override;
 
-    std::vector<Citizen*> getPersons() const override;
+    std::vector<Pedestrian*> getPersons() const override;
+
+    bool isDilapidated() override;
+
 private:
     std::string pixelArt;
     std::vector<Vehicle*> vehicles;
+    int verval;
 };
 
 class ResidentialZone : public Cell{
+private:
+    House building;
 public:
+    ResidentialZone();
+
     EStates getState() const override;
 
     void update() override;
@@ -118,11 +131,14 @@ public:
 
     void addPerson(Citizen* person) override;
 
-    std::vector<Citizen*> getPersons() const override;
-    //Building building;
+    std::vector<Pedestrian*> getPersons() const override;
+
+    bool isDilapidated() override;
 };
 
 class IndustrialZone : public Cell{
+private:
+    Workplace building;
 public:
     EStates getState() const override;
 
@@ -132,11 +148,14 @@ public:
 
     void addPerson(Citizen* person) override;
 
-    std::vector<Citizen*> getPersons() const override;
-    //Building building;
+    std::vector<Pedestrian*> getPersons() const override;
+
+    bool isDilapidated() override;
 };
 
 class StoreZone : public Cell{
+private:
+    Store building;
 public:
     EStates getState() const override;
 
@@ -146,8 +165,9 @@ public:
 
     void addPerson(Citizen* person) override;
 
-    std::vector<Citizen*> getPersons() const override;
-    //Building building;
+    std::vector<Pedestrian*> getPersons() const override;
+
+    bool isDilapidated() override;
 };
 
 class CellFactorySingleton{
