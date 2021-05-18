@@ -9,7 +9,7 @@
 
 #include "Lib.h"
 
-class Pedestrian;
+class Citizen;
 class Vehicle;
 
 class Cell {
@@ -33,21 +33,21 @@ public:
 
     /*!
      * geeft terug hoeveel happiness een bepaalde cell uitstoot
-     * @return
+     * @return float
      */
-    virtual float getHappiness() const = 0;
+    virtual float getHappiness() const;
 
     /*!
      * voegt een persoon toe aan een cell
      * @param person
      */
-    virtual void addPerson(Pedestrian* person) = 0;
+    virtual void addPerson(Citizen* person);
 
     /*!
      * geeft alle personen terug die op de cell staan
      * @return
      */
-    virtual std::vector<Pedestrian*> getPersons() const = 0;
+    virtual std::vector<Citizen*> getPersons() const;
 
     /*!
      * geeft de postitie van de cell terug
@@ -59,6 +59,8 @@ public:
      * verandert de positie van een cel
      * @param r rij
      * @param c kolom
+     * \n REQUIRE(r >= 0, "Row is out of bounds!");
+     * \n REQUIRE(c >= 0, "Column is out of bounds!");
      */
     void setPos(int r, int c);
 
@@ -74,7 +76,7 @@ private:
     int row;
     int col;
 
-    std::vector<Pedestrian*> people;
+    std::vector<Citizen*> people;
 };
 
 class Vegetation : public Cell{
@@ -85,9 +87,9 @@ public:
 
     float getHappiness() const override;
 
-    void addPerson(Pedestrian* person) override;
+    void addPerson(Citizen* person) override;
 
-    std::vector<Pedestrian*> getPersons() const override;
+    std::vector<Citizen*> getPersons() const override;
 
     bool isDilapidated() override;
 
@@ -103,11 +105,12 @@ public:
 
     float getHappiness() const override;
 
-    void addPerson(Pedestrian* person) override;
+    void addPerson(Citizen* person) override;
 
     std::vector<Pedestrian*> getPersons() const override;
 
     bool isDilapidated() override;
+
 private:
     std::string pixelArt;
     std::vector<Vehicle*> vehicles;
@@ -126,7 +129,7 @@ public:
 
     float getHappiness() const override;
 
-    void addPerson(Pedestrian* person) override;
+    void addPerson(Citizen* person) override;
 
     std::vector<Pedestrian*> getPersons() const override;
 
@@ -143,7 +146,7 @@ public:
 
     float getHappiness() const override;
 
-    void addPerson(Pedestrian* person) override;
+    void addPerson(Citizen* person) override;
 
     std::vector<Pedestrian*> getPersons() const override;
 
@@ -160,7 +163,7 @@ public:
 
     float getHappiness() const override;
 
-    void addPerson(Pedestrian* person) override;
+    void addPerson(Citizen* person) override;
 
     std::vector<Pedestrian*> getPersons() const override;
 

@@ -63,11 +63,36 @@ public:
      */
     void changeCell(int row, int column, Cell* to);
 
+    /*!
+     * updates every cell in the automat from top left to bottom right
+     */
     void update();
 
+    /*!
+     * gives back how many states of the given state are in the automat
+     * @param state to be counted
+     * @return int
+     */
     int count(const EStates& state) const;
 
+    /*!
+     * counts every type
+     * @return how many times every type occurs
+     */
     std::map<EStates, int> count_all() const;
+
+    /*!
+     * returns width of the automat
+     * @return int
+     */
+    int getWidth() const;
+
+    /*!
+     * returns height of the automat
+     * @return int
+     * \n ENSURE(height > 0, "Height is less then 0!");
+     */
+    int getHeight() const;
 
 private:
     int width;

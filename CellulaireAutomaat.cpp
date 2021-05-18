@@ -126,3 +126,13 @@ std::map<EStates, int> CellulaireAutomaat::count_all() const {
     }
     return counters;
 }
+
+int CellulaireAutomaat::getWidth() const {
+    ENSURE(width > 0, "Width is less then 0!");
+    return width;
+}
+
+int CellulaireAutomaat::getHeight() const {
+    ENSURE(height > 0, "Height is less then 0!");
+    return height;
+}

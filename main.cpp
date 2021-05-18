@@ -6,6 +6,7 @@
 #include "MainWindow.h"
 #include "CellulaireAutomaat.h"
 #include "Rules.h"
+#include "Pathfinding.h"
 
 
 int main(int argc, char *argv[]){

@@ -24,15 +24,12 @@ add_executable(TA main.cpp CellulaireAutomaat.cpp CellulaireAutomaat.h
         Rules.cpp Rules.h
         Utils.cpp Utils.h
         CitySimulation.h
-        Vehicle.cpp
-        Vehicle.h
-        Pedestrian.cpp
-        Pedestrian.h
-        Transport.cpp
-        Transport.h
-        Building.cpp
-        Building.h
-        MainWindow.cpp
-        MainWindow.h)
+        Vehicle.cpp Vehicle.h
+        Citizen.cpp Citizen.h
+        Transport.cpp Transport.h 
+        PFCell.cpp PFCell.h 
+        Pathfinding.cpp Pathfinding.h)
+        Building.cpp Building.h
+        MainWindow.cpp MainWindow.h)
 
 qt5_use_modules(TA Core Widgets Gui)
