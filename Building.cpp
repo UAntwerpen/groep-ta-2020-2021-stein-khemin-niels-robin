@@ -10,7 +10,7 @@ void Building::setPixelArt(std::string path) {
 
 House::House() {
     this->bewoners = 4;
-    this->maxPeapleAmount = 8;
+    this->maxPeopleAmount = 8;
     this->verval = 100;
     setPixelArt("../PixelArt/House.png");
 }
