@@ -2,19 +2,18 @@
 #include "lib/DesignByContract.h"
 #include "CellulaireAutomaat.h"
 #include "Lib.h"
+#include "Cell.h"
 
 CellulaireAutomaat::CellulaireAutomaat(int width, int height, const std::string& rules) : width(width), height(height), rules(rules) {
     REQUIRE(1 < width, "Width is too small(must be at least 2)!");
     REQUIRE(1 < height, "Height is too small(must be at least 2)!");
-    matrix = new Cell *[(width + 2) * (height + 2)];
+    matrix = std::vector<Cell*>(width * height);
     for (int row = 0; row < height; row++){
         for (int col = 0; col < width; col++){
-            (*this)(row, col).setPos(row, col);
+            changeCell(row, col, new Vegetation(row, col));
         }
     }
 
-    //TODO even gecommend om te testen
-    /*
     const void * address = static_cast<const void*>(this);
     std::stringstream ss;
     ss << address;
@@ -26,7 +25,9 @@ CellulaireAutomaat::CellulaireAutomaat(int width, int height, const std::string&
         std::cerr << "couldn't open file!" << std::endl;
     }
     file.close();
-     */
+//    w = new MainWindow(100, 100);
+//    draw();
+//    w->show();
 }
 
 CellulaireAutomaat::~CellulaireAutomaat() {
@@ -36,6 +37,7 @@ CellulaireAutomaat::~CellulaireAutomaat() {
     std::string filename = ss.str() + ".txt";
 
     std::remove(filename.c_str());
+    delete w;
 }
 
 Cell &CellulaireAutomaat::operator()(int row, int column) const {
@@ -87,7 +89,6 @@ void CellulaireAutomaat::changeCell(int row, int column, Cell *to) {
 }
 
 void CellulaireAutomaat::update() {
-    CellFactorySingleton& factory = CellFactorySingleton::getInstance();
     for (int col = 0; col < width; col++){
         for (int row = 0; row < height; row++){
             EStates state = static_cast<EStates>(rules[getNeighbourhoodValue(row, col)]);
@@ -95,7 +96,7 @@ void CellulaireAutomaat::update() {
                 (*this)(row, col).update();
                 continue;
             }
-            Cell* new_cell = factory.getCell(state);
+            Cell* new_cell = new Vegetation(row, col); //TODO
             new_cell->update();
             changeCell(row, col, new_cell);
         }
@@ -130,7 +131,6 @@ std::map<EStates, int> CellulaireAutomaat::count_all() const {
     return counters;
 }
 
-
 int CellulaireAutomaat::getWidth() const {
     ENSURE(width > 0, "Width is less then 0!");
     return width;
@@ -141,6 +141,10 @@ int CellulaireAutomaat::getHeight() const {
     return height;
 }
 
-Cell *CellulaireAutomaat::getCell(int row, int col) {
-    return &(*this)(row, col);
+void CellulaireAutomaat::draw() {
+//    for (int col = 0; col < width; col++){
+//        for (int row = 0; row < height; row++){
+//            w->drawTile(row, col, 0, (*this)(row, col).getPixelArt());
+//        }
+//    }
 }
