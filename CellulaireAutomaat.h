@@ -10,6 +10,7 @@
 #include <map>
 
 #include "Cell.h"
+#include "MainWindow.h"
 
 class CellulaireAutomaat {
 public:
@@ -95,20 +96,16 @@ public:
     int getHeight() const;
 
     /*!
-     * geeft cel op ocatie row, col teurg
-     * @param row rij van de cell
-     * @param col kolom van de cell
-     * @return geeft de cel terug op locatie rown colr
-     * REQUIRE(0 <= row && row < width, "Row is out of bounds!");
-     * REQUIRE(0 <= column && column < height, "Column is out of bounds!");
+     * tekent de automaat op het scherm
      */
-    Cell* getCell(int row, int col);
+    void draw();
 
 private:
     int width;
     int height;
-    Cell** matrix;
+    std::vector<Cell*> matrix;
     std::string rules;
+    MainWindow* w;
 };
 
 #endif //TA_CELLULAIREAUTOMAAT_H
