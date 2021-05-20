@@ -34,14 +34,14 @@ void MainWindow::drawTile(int row, int col, int rot, std::string pixelart){
     if(rot == 3 || rot == 2){
         ofsety = 64;
     }
-    item->setPos(row*64 + ofsetx ,col*64 + ofsety);
+    item->setPos(col*64 + ofsetx ,row*64 + ofsety);
     scene->addItem(item);
 }
 
 void MainWindow::addCar(int row, int col, int rot, std::string pixelart){
     QString filename = pixelart.c_str();
 
-    QGraphicsPixmapItem *item = new QGraphicsPixmapItem(QPixmap(filename));
+    QGraphicsPixmapItem* item = new QGraphicsPixmapItem(QPixmap(filename));
     item->setCacheMode(QGraphicsItem::NoCache);
     qreal scale = qMax(1,1);
     item->setScale(scale);
@@ -55,7 +55,7 @@ void MainWindow::addCar(int row, int col, int rot, std::string pixelart){
     if(rot == 3 || rot == 2){
         ofsety = 64;
     }
-    item->setPos(row*64 + ofsetx ,col*64 + ofsety);
+    item->setPos(col*64 + ofsetx ,row*64 + ofsety);
     scene->addItem(item);
 }
 
@@ -63,24 +63,25 @@ void MainWindow::drawGrid(int _width, int _height) {
     CellulaireAutomaat* automaat = new CellulaireAutomaat(_width, _height, "");
     for (int i = 0; i < _width; i++) {
         for (int j = 0; j < _height; j++) {
-            int random = rand()%1;
+            int random = rand()%8;
 
             int randomangle = rand()%4;
             if(random == 0){
-                //drawTile(i,j,0, "../PixelArt/Store.png");
+                drawTile(i,j,0, "../PixelArt/Store.png");
                 /*
                 Vegetation* v = new Vegetation(i, j, automaat);
-                v->drawToScreen(this);*/
+                v->drawToScreen(this);
                 Road* r = new Road(i, j, automaat);
                 r->drawToScreen(this);
-            }/*else if(random == 1){
-                //drawTile(i,j,0, "../PixelArt/House.png");
-                Road* r = new Road(i, j, automaat);
-                r->drawToScreen(this);
+                 */
+            }else if(random == 1){
+                drawTile(i,j,0, "../PixelArt/House.png");
+                //Road* r = new Road(i, j, automaat);
+                //r->drawToScreen(this);
             }else if(random == 2){
-                //drawTile(i,j,0, "../PixelArt/Workplace.png");
-                Road* r = new Road(i, j, automaat);
-                r->drawToScreen(this);
+                drawTile(i,j,0, "../PixelArt/Workplace.png");
+                //Road* r = new Road(i, j, automaat);
+                //r->drawToScreen(this);
             }else if(random == 3){
                 drawTile(i,j,randomangle, "../PixelArt/Road_Recht.png");
                 addCar(i,j,randomangle,"../PixelArt/Car1.png");
@@ -96,7 +97,7 @@ void MainWindow::drawGrid(int _width, int _height) {
             }else{
                 drawTile(i,j,randomangle, "../PixelArt/Road_Bocht.png");
                 addCar(i,j,randomangle+2,"../PixelArt/Car2.png");
-            }*/
+            }
         }
     }
 }

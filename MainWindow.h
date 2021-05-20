@@ -26,6 +26,7 @@ public:
 private:
     void drawGrid(int width, int height);
 
+    std::vector<QGraphicsPixmapItem*> cars;
     QGraphicsScene *scene;
     QGraphicsView *view;
     int width;
