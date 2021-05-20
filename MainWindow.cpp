@@ -40,8 +40,8 @@ void MainWindow::drawTile(int row, int col, int rot, std::string pixelart){
 
 void MainWindow::drawGrid(int _width, int _height) {
     CellulaireAutomaat* automaat = new CellulaireAutomaat(_width, _height, "");
-    for (int i = 0; i < _width; i++) {
-        for (int j = 0; j < _height; j++) {
+    for (int i = 2; i < _width - 10; i++) {
+        for (int j = 2; j < _height - 10; j++) {
             int random = rand()%1;
 
             int randomangle = rand()%4;
@@ -49,14 +49,11 @@ void MainWindow::drawGrid(int _width, int _height) {
                 /*
                 Vegetation* v = new Vegetation(i, j, automaat);
                 v->drawToScreen(this);*/
-                Road* r = new Road(i, j, automaat);
-                r->drawToScreen(this);
+                (*automaat)(i,j).drawToScreen(this);
             }else if(random == 1){
-                Road* r = new Road(i, j, automaat);
-                r->drawToScreen(this);
+                (*automaat)(i,j).drawToScreen(this);
             }else if(random == 2){
-                Road* r = new Road(i, j, automaat);
-                r->drawToScreen(this);
+                (*automaat)(i,j).drawToScreen(this);
             }/*else if(random == 3){
                 drawTile(i,j,randomangle, "../PixelArt/Road_Rechte_Lijn.png");
             }else if(random == 4){

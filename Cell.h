@@ -8,6 +8,7 @@
 #include "Building.h"
 #include <map>
 #include "Lib.h"
+#include "iostream"
 
 class Citizen;
 class Vehicle;
@@ -40,7 +41,9 @@ public:
     /*!
      * draw cell to interface
      */
-    virtual void drawToScreen(MainWindow *window){};
+    virtual void drawToScreen(MainWindow *window){
+        std::cout << "fout" << std::endl;
+    };
 
     /*!
      * geeft terug hoeveel happiness een bepaalde cell uitstoot
@@ -144,9 +147,10 @@ private:
 
 class Road : public Cell{
 public:
-    Road();
+    //TODO weg
+    Road(){}
 
-    Road(int row, int col, CellulaireAutomaat* cellulaireAutomaat): Cell(row, col, cellulaireAutomaat){}
+    Road(int row, int col, CellulaireAutomaat* cellulaireAutomaat);
 
     /*
      * Copy constructor
@@ -160,6 +164,8 @@ public:
     void drawToScreen(MainWindow *window) override;
 
     std::pair<int, std::string> getPixelArt() override;
+
+    std::vector<bool> getNeighborsRoads();
 
     float getHappiness() const override;
 
@@ -184,8 +190,8 @@ private:
     /*
      * returns rotatie en string van weg
      */
-    std::pair<int, std::string> getCorrectRoad(bool roadConnectPoints[4]);
-    bool roadConnectPoints[4] = {false, false, false, false};
+    std::pair<int, std::string> getCorrectRoad(std::vector<bool> &roadConnectPoint);
+    std::vector<bool> roadConnectPoints = {false, false, false, false};
     std::vector<Vehicle*> vehicles;
     int verval;
 };

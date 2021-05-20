@@ -40,10 +40,6 @@ void Cell::setPos(std::pair<int, int> pos) {
     col = pos.second;
 }
 
-Road::Road() {
-
-}
-
 ResidentialZone::ResidentialZone() {
     building = House();
 }
@@ -63,6 +59,7 @@ bool IndustrialZone::isDilapidated() {
 StoreZone::StoreZone() {
     building = Store();
 }
+
 void Cell::addPerson(Citizen *person) {
 
 }
@@ -136,34 +133,19 @@ void Road::drawToScreen(MainWindow *window) {
 }
 
 std::pair<int, std::string> Road::getPixelArt() {
-    int row = this->getPos().first;
-    int col = this->getPos().second;
-    CellulaireAutomaat* cellulaireAutomaat = this->getCellulaireAutomaat();
-
-    /*
-     * Geeft aan welke zijde verbonden moet worden;
-     *  [0]: links        [2]
-     *  [1]: rechts      xxxxx
-     *  [2]: boven  [0]  xxxxx  [1]
-     *  [3]: onder       xxxxx
-     *                    [3]
-     */
-    bool road[4] = {false, false, false, false};
-
-    road[1] = cellulaireAutomaat->getCell(row, col + 1)->getRoadConnectPoints()[0];
-    road[0] = cellulaireAutomaat->getCell(row, col - 1)->getRoadConnectPoints()[1];
-    road[3] = cellulaireAutomaat->getCell(row + 1, col)->getRoadConnectPoints()[2];
-    road[2] = cellulaireAutomaat->getCell(row - 1, col)->getRoadConnectPoints()[3];
-
-    return getCorrectRoad(road);
+    std::vector<bool> neighborsRoads = getNeighborsRoads();
+    return getCorrectRoad(neighborsRoads);
 }
 
 std::vector<bool> Road::getRoadConnectPoints() {
     return std::vector<bool>{roadConnectPoints[0], roadConnectPoints[1], roadConnectPoints[2], roadConnectPoints[3]};
 }
 
-std::pair<int, std::string> Road::getCorrectRoad(bool roadConnectPoints[4]) {
-    std::vector<bool> recht{false, false, true, false};
+std::pair<int, std::string> Road::getCorrectRoad(std::vector<bool> &roadConnectPoint) {
+    if(!roadConnectPoints[0] && !roadConnectPoints[1] && !roadConnectPoints[2] && !roadConnectPoints[3]){
+        this->roadConnectPoints = {false, false, true, false};
+        return std::pair<int, std::string>(2, "../PixelArt/Road_Doodlopend.png");
+    }
     std::map<std::string,std::vector<bool>> connectionPointCountImage = {
             {"../PixelArt/Road_Doodlopend.png", {false, false, true, false}},
             {"../PixelArt/Road_Bocht.png", {true, false, true, false}},
@@ -180,6 +162,7 @@ std::pair<int, std::string> Road::getCorrectRoad(bool roadConnectPoints[4]) {
                (*it).second[1] == roadConnectPoints[1] &&
                (*it).second[2] == roadConnectPoints[2] &&
                (*it).second[3] == roadConnectPoints[3]){
+                this->roadConnectPoints = {(*it).second[0], (*it).second[1], (*it).second[2], (*it).second[3]};
                 return std::pair<int, std::string>(rotations, it->first);
             }
             else{
@@ -189,6 +172,34 @@ std::pair<int, std::string> Road::getCorrectRoad(bool roadConnectPoints[4]) {
             }
         }
     }
+}
+
+Road::Road(int row, int col, CellulaireAutomaat *cellulaireAutomaat) : Cell(row, col, cellulaireAutomaat) {
+    //std::vector<bool> neighborsRoads = getNeighborsRoads();
+    //this->getCorrectRoad(neighborsRoads);
+}
+
+std::vector<bool> Road::getNeighborsRoads() {
+    int row = this->getPos().first;
+    int col = this->getPos().second;
+    CellulaireAutomaat* cellulaireAutomaat = this->getCellulaireAutomaat();
+
+    /*
+     * Geeft aan welke zijde verbonden moet worden;
+     *  [0]: links        [2]
+     *  [1]: rechts      xxxxx
+     *  [2]: boven  [0]  xxxxx  [1]
+     *  [3]: onder       xxxxx
+     *                    [3]
+     */
+    std::vector<bool> road = {false, false, false, false};
+
+    road[1] = (*cellulaireAutomaat)(row, col + 1).getRoadConnectPoints()[0];
+    road[0] = (*cellulaireAutomaat)(row, col - 1).getRoadConnectPoints()[1];
+    road[3] = (*cellulaireAutomaat)(row + 1, col).getRoadConnectPoints()[2];
+    road[2] = (*cellulaireAutomaat)(row - 1, col).getRoadConnectPoints()[3];
+
+    return road;
 }
 
 EStates ResidentialZone::getState() const {

@@ -10,7 +10,7 @@ CellulaireAutomaat::CellulaireAutomaat(int width, int height, const std::string&
     matrix = std::vector<Cell*>(width * height);
     for (int row = 0; row < height; row++){
         for (int col = 0; col < width; col++){
-            changeCell(row, col, new Vegetation(row, col));
+            changeCell(row, col, new Road(row, col, this));
         }
     }
 
@@ -96,7 +96,7 @@ void CellulaireAutomaat::update() {
                 (*this)(row, col).update();
                 continue;
             }
-            Cell* new_cell = new Vegetation(row, col); //TODO
+            Cell* new_cell = new Vegetation(row, col, this); //TODO
             new_cell->update();
             changeCell(row, col, new_cell);
         }
