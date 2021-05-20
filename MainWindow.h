@@ -15,18 +15,28 @@ class MainWindow {
 public:
     MainWindow(int width, int height);
 
-    void drawTile(int row, int col, int rotation, std::string pixelart);
+    void UpdateRoadUsers();
 
-    void addCar(int row, int col, int rotation, std::string pixelart);
+    void UpdateAll();
+
+    virtual ~MainWindow();
 
     void show();
 
-    void clearAll();
-
+    //private maken
+    void drawTile(int row, int col, int rotation, const std::string pixelart);
+    void addCar(int row, int col, int rotation, const std::string pixelart);
+    void addPedestrian(int row, int col, int rotation, const std::string pixelart);
 private:
+
+    void clearRoadUsers();
+    void clearBuildings();
+
     void drawGrid(int width, int height);
 
-    std::vector<QGraphicsPixmapItem*> cars;
+    CellulaireAutomaat* c;
+    std::vector<QGraphicsPixmapItem*> RoadUsers;
+    std::vector<QGraphicsPixmapItem*> Buildings;
     QGraphicsScene *scene;
     QGraphicsView *view;
     int width;

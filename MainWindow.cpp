@@ -17,10 +17,52 @@ MainWindow::MainWindow(int w, int h) {
     view = new QGraphicsView(scene);
 }
 
-void MainWindow::drawTile(int row, int col, int rot, std::string pixelart){
+void MainWindow::UpdateRoadUsers() {
+    clearRoadUsers();
+    for (int x = 0; x < width; x++) {
+        for (int y = 0; y < height; y++) {
+            //todo check pixelart for each cell
+        }
+    }
+}
+
+void MainWindow::UpdateAll(){
+    clearBuildings();
+    for (int x = 0; x < width; x++) {
+        for (int y = 0; y < height; y++) {
+            //todo check pixelart for each cell
+        }
+    }
+    UpdateRoadUsers();
+}
+
+
+
+void MainWindow::drawTile(int row, int col, int rot, const std::string pixelart){
     QString filename = pixelart.c_str();
 
     QGraphicsPixmapItem *item = new QGraphicsPixmapItem(QPixmap(filename));
+    item->setCacheMode(QGraphicsItem::NoCache);
+    qreal scale = qMax(4,4);
+    item->setScale(scale);
+    item->setRotation(rot*90);
+    rot = rot%4;
+    int ofsetx = 0;
+    int ofsety = 0;
+    if(rot == 1 || rot == 2) {
+        ofsetx = 128;
+    }
+    if(rot == 3 || rot == 2){
+        ofsety = 128;
+    }
+    item->setPos(col*128 + ofsetx ,row*128 + ofsety);
+    scene->addItem(item);
+}
+
+void MainWindow::addCar(int row, int col, int rot, const std::string pixelart){
+    QString filename = pixelart.c_str();
+
+    QGraphicsPixmapItem* item = new QGraphicsPixmapItem(QPixmap(filename));
     item->setCacheMode(QGraphicsItem::NoCache);
     qreal scale = qMax(2,2);
     item->setScale(scale);
@@ -29,79 +71,106 @@ void MainWindow::drawTile(int row, int col, int rot, std::string pixelart){
     int ofsetx = 0;
     int ofsety = 0;
     if(rot == 1 || rot == 2) {
-        ofsetx = 64;
+        ofsetx = 128;
     }
     if(rot == 3 || rot == 2){
-        ofsety = 64;
+        ofsety = 128;
     }
-    item->setPos(col*64 + ofsetx ,row*64 + ofsety);
+    item->setPos(col*128+ ofsetx ,row*128 + ofsety);
     scene->addItem(item);
 }
 
-void MainWindow::addCar(int row, int col, int rot, std::string pixelart){
+void MainWindow::addPedestrian(int row, int col, int rot, const std::string pixelart) {
     QString filename = pixelart.c_str();
 
     QGraphicsPixmapItem* item = new QGraphicsPixmapItem(QPixmap(filename));
     item->setCacheMode(QGraphicsItem::NoCache);
-    qreal scale = qMax(1,1);
+    qreal scale = qMax(2,2);
     item->setScale(scale);
-    item->setRotation(rot*90);
     rot = rot%4;
     int ofsetx = 0;
     int ofsety = 0;
+    if(rot == 0 || rot == 1){
+        ofsety = -54;
+    }
     if(rot == 1 || rot == 2) {
-        ofsetx = 64;
+        ofsetx = 54;
     }
     if(rot == 3 || rot == 2){
-        ofsety = 64;
+        ofsety = 54;
     }
-    item->setPos(col*64 + ofsetx ,row*64 + ofsety);
+    if(rot == 0 || rot == 3){
+        ofsetx = -54;
+    }
+    item->setPos(col*128+ ofsetx ,row*128 + ofsety);
     scene->addItem(item);
 }
 
 void MainWindow::drawGrid(int _width, int _height) {
     CellulaireAutomaat* automaat = new CellulaireAutomaat(_width, _height, "");
+    for (int i = 0; i < _width; i++) {
+        for (int j = 0; j < _height; j++) {
+            int random = rand()%8;
 
-    for (int i = 2; i < _width - 4; i++) {
-        for (int j = 2; j < _height - 4; j++) {
-            int random = rand()%6;
             int randomangle = rand()%4;
             if(random == 0){
-
+                drawTile(i,j,0, "../PixelArt/Store.png");
+                /*
+                Vegetation* v = new Vegetation(i, j, automaat);
+                v->drawToScreen(this);
+                Road* r = new Road(i, j, automaat);
+                r->drawToScreen(this);
+                 */
             }else if(random == 1){
-                Road* r = new Road(j, i, automaat);
-                automaat->changeCell(j, i, r);
+                drawTile(i,j,0, "../PixelArt/House.png");
+                //Road* r = new Road(i, j, automaat);
+                //r->drawToScreen(this);
             }else if(random == 2){
-
+                drawTile(i,j,0, "../PixelArt/Workplace.png");
+                //Road* r = new Road(i, j, automaat);
+                //r->drawToScreen(this);
             }else if(random == 3){
-
+                drawTile(i,j,randomangle, "../PixelArt/Road_Recht.png");
+                addPedestrian(i,j,randomangle+2,"../PixelArt/Pedestrian1.png");
+                addCar(i,j,randomangle,"../PixelArt/Car1.png");
             }else if(random == 4){
-                Road* r = new Road(j, i, automaat);
-                automaat->changeCell(j, i, r);
+                drawTile(i,j,randomangle, "../PixelArt/Road_T_Kruispunt.png");
+                addPedestrian(i,j,randomangle+2,"../PixelArt/Pedestrian2.png");
+                addCar(i,j,randomangle,"../PixelArt/Car2.png");
+            }else if(random == 5){
+                drawTile(i,j,randomangle, "../PixelArt/Road_Kruispunt.png");
+                addPedestrian(i,j,randomangle+2,"../PixelArt/Pedestrian3.png");
+                addCar(i,j,randomangle,"../PixelArt/Car3.png");
+            }else if(random == 6){
+                drawTile(i,j,randomangle, "../PixelArt/Road_Doodlopend.png");
+                addPedestrian(i,j,randomangle+2,"../PixelArt/Pedestrian1.png");
+                addCar(i,j,randomangle+2,"../PixelArt/Car2.png");
             }else{
-                Road* r = new Road(j, i, automaat);
-                automaat->changeCell(j, i, r);
+                drawTile(i,j,randomangle, "../PixelArt/Road_Bocht.png");
+                addPedestrian(i,j,randomangle+2,"../PixelArt/Pedestrian2.png");
+                addCar(i,j,randomangle+2,"../PixelArt/Car2.png");
             }
         }
     }
-
-    for (int i = 2; i < _width - 10; i++) {
-        for (int j = 2; j < _height - 10; j++) {
-            (*automaat)(i,j)->drawToScreen(this);
-        }
-    }
-
-    this->drawTile(8, 5, 0, "../PixelArt/Road_Doodlopend.png");
-    this->drawTile(8, 6, 1, "../PixelArt/Road_Doodlopend.png");
-    this->drawTile(8, 7, 2, "../PixelArt/Road_Doodlopend.png");
-    this->drawTile(8, 8, 3, "../PixelArt/Road_Doodlopend.png");
-    this->drawTile(8, 9, 4, "../PixelArt/Road_Doodlopend.png");
 }
 
 void MainWindow::show() {
     view->show();
 }
 
-void MainWindow::clearAll() {
-    drawGrid(width, height);
+void MainWindow::clearBuildings() {
+    for(auto it = Buildings.begin(); it != Buildings.end(); it++){
+        delete *it;
+    }
+}
+
+void MainWindow::clearRoadUsers() {
+    for(auto it = RoadUsers.begin(); it != RoadUsers.end(); it++){
+        delete *it;
+    }
+}
+
+MainWindow::~MainWindow() {
+    clearBuildings();
+    clearRoadUsers();
 }
