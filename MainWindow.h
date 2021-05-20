@@ -17,6 +17,8 @@ public:
 
     void drawTile(int row, int col, int rotation, std::string pixelart);
 
+    void addCar(int row, int col, int rotation, std::string pixelart);
+
     void show();
 
     void clearAll();
