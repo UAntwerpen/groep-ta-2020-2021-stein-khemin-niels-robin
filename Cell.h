@@ -31,7 +31,9 @@ public:
      * geeft de gepaste enum waarde terug
      * @return enum waarde
      */
-    virtual EStates getState() const = 0;
+    virtual EStates getState() const{
+        return EPFCell;
+    }
 
     /*!
      * update alle entiteiten van de cell
@@ -174,17 +176,6 @@ public:
     //std::vector<Pedestrian*> getPersons() const override;
 
     bool isDilapidated() override;
-
-    /*!
-     * Geeft voor elke zijde weer of er een weg aan verbonden kan worden;
-     *  [0]: links        [2]
-     *  [1]: rechts      xxxxx
-     *  [2]: boven  [0]  xxxxx  [1]
-     *  [3]: onder       xxxxx
-     *                    [3]
-     * @param person
-     */
-    std::vector<bool> getRoadConnectPoints() override;
 
 private:
     /*

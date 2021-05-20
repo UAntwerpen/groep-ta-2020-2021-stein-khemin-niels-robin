@@ -40,24 +40,25 @@ CellulaireAutomaat::~CellulaireAutomaat() {
     delete w;
 }
 
-Cell &CellulaireAutomaat::operator()(int row, int column) const {
+Cell* CellulaireAutomaat::operator()(int row, int column) const {
     REQUIRE(0 <= row && row < width, "Row is out of bounds!");
     REQUIRE(0 <= column && column < height, "Column is out of bounds!");
-    return *matrix[(row + 1) * height + (column + 1)];
+    //return matrix[(row + 1) * height + (column + 1)];//TODO waarom +1?
+    return matrix[row * height + column];
 }
 
 std::vector<Cell *> CellulaireAutomaat::getNeighbourhood(int row, int col) {
     REQUIRE(0 <= row && row < width, "Row is out of bounds!");
     REQUIRE(0 <= col && col < height, "Column is out of bounds!");
     std::vector<Cell *> neighbourhood(8);
-    neighbourhood[0] = &(*this)(row - 1, col - 1);
-    neighbourhood[1] = &(*this)(row - 1, col);
-    neighbourhood[2] = &(*this)(row - 1, col + 1);
-    neighbourhood[3] = &(*this)(row, col + 1);
-    neighbourhood[4] = &(*this)(row + 1, col + 1);
-    neighbourhood[5] = &(*this)(row + 1, col);
-    neighbourhood[6] = &(*this)(row + 1, col - 1);
-    neighbourhood[7] = &(*this)(row, col - 1);
+    neighbourhood[0] = (*this)(row - 1, col - 1);
+    neighbourhood[1] = (*this)(row - 1, col);
+    neighbourhood[2] = (*this)(row - 1, col + 1);
+    neighbourhood[3] = (*this)(row, col + 1);
+    neighbourhood[4] = (*this)(row + 1, col + 1);
+    neighbourhood[5] = (*this)(row + 1, col);
+    neighbourhood[6] = (*this)(row + 1, col - 1);
+    neighbourhood[7] = (*this)(row, col - 1);
     return neighbourhood;
 }
 
@@ -69,14 +70,14 @@ int CellulaireAutomaat::getNeighbourhoodValue(int row, int col) {
                             static_cast<int>(pow(5, 4)), static_cast<int>(pow(5, 3)),
                             static_cast<int>(pow(5, 2)), 5, 1};
 
-    value += ((*this)(row - 1, col - 1)).getState() * powers[0];
-    value += ((*this)(row - 1, col)).getState() * powers[1];
-    value += ((*this)(row - 1, col + 1)).getState() * powers[2];
-    value += ((*this)(row, col + 1)).getState() * powers[3];
-    value += ((*this)(row + 1, col + 1)).getState() * powers[4];
-    value += ((*this)(row + 1, col)).getState() * powers[5];
-    value += ((*this)(row + 1, col - 1)).getState() * powers[6];
-    value += ((*this)(row, col - 1)).getState() * powers[7];
+    value += ((*this)(row - 1, col - 1))->getState() * powers[0];
+    value += ((*this)(row - 1, col))->getState() * powers[1];
+    value += ((*this)(row - 1, col + 1))->getState() * powers[2];
+    value += ((*this)(row, col + 1))->getState() * powers[3];
+    value += ((*this)(row + 1, col + 1))->getState() * powers[4];
+    value += ((*this)(row + 1, col))->getState() * powers[5];
+    value += ((*this)(row + 1, col - 1))->getState() * powers[6];
+    value += ((*this)(row, col - 1))->getState() * powers[7];
     return value;
 }
 
@@ -92,8 +93,8 @@ void CellulaireAutomaat::update() {
     for (int col = 0; col < width; col++){
         for (int row = 0; row < height; row++){
             EStates state = static_cast<EStates>(rules[getNeighbourhoodValue(row, col)]);
-            if (state == (*this)(row, col).getState()) {
-                (*this)(row, col).update();
+            if (state == (*this)(row, col)->getState()) {
+                (*this)(row, col)->update();
                 continue;
             }
             Cell* new_cell = new Vegetation(row, col, this); //TODO
@@ -107,7 +108,7 @@ int CellulaireAutomaat::count(const EStates &state) const {
     int counter = 0;
     for (int col = 0; col < width; col++){
         for (int row = 0; row < height; row++){
-            if ((*this)(row, col).getState() == state){
+            if ((*this)(row, col)->getState() == state){
                 counter++;
             }
         }
@@ -124,7 +125,7 @@ std::map<EStates, int> CellulaireAutomaat::count_all() const {
     counters[static_cast<EStates>(4)] = 0;
     for (int col = 0; col < width; col++){
         for (int row = 0; row < height; row++){
-            EStates cell_state = (*this)(row, col).getState();
+            EStates cell_state = (*this)(row, col)->getState();
             counters[cell_state]++;
         }
     }

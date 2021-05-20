@@ -31,7 +31,7 @@ public:
      * @param column kolom can de cell
      * @return reference van de cell
      */
-    Cell& operator()(int row, int column) const;
+    Cell* operator()(int row, int column) const;
 
     /*!
      * geeft de neighbourhood van een cell terug

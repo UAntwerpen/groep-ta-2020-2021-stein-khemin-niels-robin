@@ -129,8 +129,8 @@ bool Road::isDilapidated() {
 }
 
 void Road::drawToScreen(MainWindow *window) {
-    std::cout << this->getPixelArt().first << std::endl;
-    window->drawTile(this->getPos().first, this->getPos().second, this->getPixelArt().first, this->getPixelArt().second);
+    std::pair<int, std::string> roadPixArt = this->getPixelArt();
+    window->drawTile(this->getPos().first, this->getPos().second, roadPixArt.first, roadPixArt.second);
 }
 
 std::pair<int, std::string> Road::getPixelArt() {
@@ -138,20 +138,16 @@ std::pair<int, std::string> Road::getPixelArt() {
     return getCorrectRoad(neighborsRoads);
 }
 
-std::vector<bool> Road::getRoadConnectPoints() {
-    return Road::getNeighborsRoads();
-}
-
 std::pair<int, std::string> Road::getCorrectRoad(std::vector<bool> &roadConnectPoint1) {
     if(!roadConnectPoint1[0] && !roadConnectPoint1[1] && !roadConnectPoint1[2] && !roadConnectPoint1[3]){
         return std::pair<int, std::string>(2, "../PixelArt/Road_Doodlopend.png");
     }
     std::map<std::string,std::vector<bool>> connectionPointCountImage = {
-            {"../PixelArt/Road_Doodlopend.png", {false, false, true, false}},
-            {"../PixelArt/Road_Bocht.png", {true, false, true, false}},
-            {"../PixelArt/Road_Rechte_Lijn.png", {true, true, false, false}},
+            {"../PixelArt/Road_Doodlopend.png", {true, false, false, false}},
+            {"../PixelArt/Road_Bocht.png", {true, true, false, false}},
+            {"../PixelArt/Road_Recht.png", {true, false, true, false}},
             {"../PixelArt/Road_Kruispunt.png", {true, true, true, true}},
-            {"../PixelArt/Road_T_Kruispunt.png", {true, true, false, true}},
+            {"../PixelArt/Road_T_Kruispunt.png", {true, true, true, false}},
     };
 
     int rotations = 0;
@@ -161,17 +157,13 @@ std::pair<int, std::string> Road::getCorrectRoad(std::vector<bool> &roadConnectP
                (*it).second[1] == roadConnectPoint1[1] &&
                (*it).second[2] == roadConnectPoint1[2] &&
                (*it).second[3] == roadConnectPoint1[3]){
-                return std::pair<int, std::string>(rotations%4, it->first);
+                return std::pair<int, std::string>(rotations, it->first);
             }
             else{
-                //roteer road
-                rotations++;
-                //std::cout << "before" << (*it).second[0] << ", " << (*it).second[1] << ", " << (*it).second[2] << ", " << (*it).second[3] << ", " << std::endl;
                 (*it).second = {(*it).second[3], (*it).second[0],(*it).second[1],(*it).second[2]};
-                //std::cout << "after" << (*it).second[0] << ", " << (*it).second[1] << ", " << (*it).second[2] << ", " << (*it).second[3] << ", " << std::endl;
-                //std::cout << "-----------------" << std::endl;
             }
         }
+        rotations++;
     }
 }
 
@@ -185,11 +177,11 @@ std::vector<bool> Road::getNeighborsRoads() {
 
     /*
      * Geeft aan welke zijde verbonden moet worden;
-     *  [0]: links        [2]
+     *  [0]: links        [0]
      *  [1]: rechts      xxxxx
-     *  [2]: boven  [0]  xxxxx  [1]
+     *  [2]: boven  [3]  xxxxx  [1]
      *  [3]: onder       xxxxx
-     *                    [3]
+     *                    [2]
      */
     std::vector<bool> road = {false, false, false, false};
 /*
@@ -197,10 +189,12 @@ std::vector<bool> Road::getNeighborsRoads() {
     road[0] = (*cellulaireAutomaat)(row, col - 1).getRoadConnectPoints()[1];
     road[3] = (*cellulaireAutomaat)(row + 1, col).getRoadConnectPoints()[2];
     road[2] = (*cellulaireAutomaat)(row - 1, col).getRoadConnectPoints()[3];*/
-    road[1] = (*cellulaireAutomaat)(row, col + 1).getState() == ERoad;
-    road[0] = (*cellulaireAutomaat)(row, col - 1).getState() == ERoad;
-    road[3] = (*cellulaireAutomaat)(row + 1, col).getState() == ERoad;
-    road[2] = (*cellulaireAutomaat)(row - 1, col).getState() == ERoad;
+
+    road[1] = (*cellulaireAutomaat)(row, col + 1)->getState() == ERoad;
+    road[3] = (*cellulaireAutomaat)(row, col - 1)->getState() == ERoad;
+    road[2] = (*cellulaireAutomaat)(row + 1, col)->getState() == ERoad;
+    road[0] = (*cellulaireAutomaat)(row - 1, col)->getState() == ERoad;
+
     return road;
 }
 

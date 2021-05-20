@@ -62,21 +62,40 @@ void MainWindow::addCar(int row, int col, int rot, std::string pixelart){
 void MainWindow::drawGrid(int _width, int _height) {
     CellulaireAutomaat* automaat = new CellulaireAutomaat(_width, _height, "");
 
-    Road* r = new Road(10, 10, automaat);
-    automaat->changeCell(10, 10, r);
+    for (int i = 2; i < _width - 4; i++) {
+        for (int j = 2; j < _height - 4; j++) {
+            int random = rand()%6;
+            int randomangle = rand()%4;
+            if(random == 0){
 
-    Road* r2 = new Road(10, 11, automaat);
-    automaat->changeCell(10, 11, r2);
+            }else if(random == 1){
+                Road* r = new Road(j, i, automaat);
+                automaat->changeCell(j, i, r);
+            }else if(random == 2){
 
-    Road* r3 = new Road(10, 12, automaat);
-    automaat->changeCell(10, 12, r3);
+            }else if(random == 3){
 
+            }else if(random == 4){
+                Road* r = new Road(j, i, automaat);
+                automaat->changeCell(j, i, r);
+            }else{
+                Road* r = new Road(j, i, automaat);
+                automaat->changeCell(j, i, r);
+            }
+        }
+    }
 
     for (int i = 2; i < _width - 10; i++) {
         for (int j = 2; j < _height - 10; j++) {
-            (*automaat)(i,j).drawToScreen(this);
+            (*automaat)(i,j)->drawToScreen(this);
         }
     }
+
+    this->drawTile(8, 5, 0, "../PixelArt/Road_Doodlopend.png");
+    this->drawTile(8, 6, 1, "../PixelArt/Road_Doodlopend.png");
+    this->drawTile(8, 7, 2, "../PixelArt/Road_Doodlopend.png");
+    this->drawTile(8, 8, 3, "../PixelArt/Road_Doodlopend.png");
+    this->drawTile(8, 9, 4, "../PixelArt/Road_Doodlopend.png");
 }
 
 void MainWindow::show() {
