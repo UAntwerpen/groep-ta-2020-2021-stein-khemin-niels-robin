@@ -6,88 +6,54 @@
 #include <string>
 #include <vector>
 #include "Building.h"
-#include <map>
+
 #include "Lib.h"
-#include "iostream"
 
 class Citizen;
 class Vehicle;
-class CellulaireAutomaat;
 
 class Cell {
 public:
-    /*!
-     * copy contructor
-     * @param p2: cell om te kopieren
-     */
-    Cell(const Cell &p2);
+    Cell();
 
-    /*!
-     * contructor voor cell
-     * @param row: rij van de cell
-     * @param col: col van de cell
-     * @param cellulaireAutomaat: de cellulaireAutomaat waar de cell een deel van uitmaakt
-     */
-    Cell(int row, int col, CellulaireAutomaat* cellulaireAutomaat);
+    Cell(int row, int col);
 
-    /*!
-     * desctructor cell
-     */
     virtual ~Cell();
 
     /*!
      * geeft de gepaste enum waarde terug
      * @return enum waarde
      */
-    virtual EStates getState() const{
-        return EPFCell;
-    }
+    virtual EStates getState() const = 0;
 
     /*!
-     * updateRules alle entiteiten van de cell
+     * update alle entiteiten van de cell
      */
     virtual void update() = 0;
 
-
     /*!
-     * geeft terug hoeveel happiness een bepaalde cell uitstoot (tussen -1 en 1)
+     * geeft terug hoeveel happiness een bepaalde cell uitstoot
      * @return float
      */
-    virtual float getHappiness() const {return 0;};
+    virtual float getHappiness() const;
 
     /*!
-     * Geeft voor elke zijde weer of er een weg aan verbonden kan worden;
-     *  [0]: boven        [0]
-     *  [1]: links      xxxxx
-     *  [2]: onder  [3]  xxxxx  [1]
-     *  [3]: rechts       xxxxx
-     *                    [2]
+     * voegt een persoon toe aan een cell
+     * @param person
      */
-    virtual std::vector<bool> getRoadConnectPoints();
-
-    /*!
-    * voegt een persoon toe aan een cell
-    * @param person
-    */
-    void addPerson(Citizen* person);
+    virtual void addPerson(Citizen* person);
 
     /*!
      * geeft alle personen terug die op de cell staan
      * @return
      */
-    std::vector<Citizen*> getPersons() const;
+    virtual std::vector<Citizen*> getPersons() const;
 
     /*!
      * geeft de postitie van de cell terug
      * @return std::pair<int, int> -> (row, col)
      */
     std::pair<int, int> getPos() const;
-
-    /*!
-     * geeft de CellulaireAutomaat terug waar de huidige cell een deel van uitmaakt
-     * @return CellulaireAutomaat
-     */
-    CellulaireAutomaat* getCellulaireAutomaat() const;
 
     /*!
      * verandert de positie van een cel
@@ -104,318 +70,164 @@ public:
      */
     void setPos(std::pair<int, int> pos);
 
-    /*!
-     * functie dat true terug geeft indien de grond in verval is geraakt
-     * @return true/false : vervallen/niet vervalen
-     */
-    bool isExpired();
+    virtual bool isDilapidated() {return false;};
 
-    /*!
-     * functie die het beste alternatief geeft voor de huidige cell locatie
-     * @return best cell alternatief
-     */
-    Cell* bestAlternativeCell();
+private:
+    int row;
+    int col;
 
-    /*!
-     * Controleert of huidige cell is verbonden met de weg op locatie row, col
-     * @param row: rij van cell om te controleren
-     * @param col: col van cell om te controleren
-     * @param roads: wegen die al gecontroleerd zijn
-     * @param main: is de eerste road om te controleren
-     * @return
-     */
-    bool isConnectedTo(int row, int col,  std::vector<std::pair<int,int>>* roads = nullptr, bool main = true);
-
-    /*!
-     * geeft in een vetor weer welke cellen er wegen zijn
-     *  [0]: boven        [0]
-     *  [1]: links      xxxxx
-     *  [2]: onder  [3]  xxxxx  [1]
-     *  [3]: rechts       xxxxx
-     *                    [2]
-     * @return vector volgens bovenstaande indeling
-     */
-    std::vector<bool> getNeighborsRoads();
-
-    /*!
-     * geeft pixel art terug
-     * @return int: rotation, string: pad to pixel art
-     */
-    virtual std::pair<int, std::string> getPixelArt(){return std::pair<int, std::string>(0, "../PixelArt/Default.png");};
-
-    /*!
-     * geeft auto op cel terug
-     * @return pointer to car
-     */
-    virtual Vehicle* getCar();
-
-    /*!
-     * zet auto op cell
-     */
-    virtual void setCar(Vehicle* vehicle);
-
-protected:
-    int row = 0;
-    int col = 0;
-    double daysUntilExpired = 0;
-
-    CellulaireAutomaat* cellulaireAutomaat;
     std::vector<Citizen*> people;
-    virtual void updateDaysUntilExpired();
 };
 
 class Vegetation : public Cell{
 public:
-    /*!
-     * constructor Vegetation
-     * @param row: rij van de cell
-     * @param col: col van de cell
-     * @param cellulaireAutomaat: de cellulaireAutomaat waar de cell een deel van uitmaakt
-     */
-    Vegetation(int row, int col, CellulaireAutomaat* cellulaireAutomaat): Cell(row, col, cellulaireAutomaat) {  }
+    Vegetation();
 
-    /*!
-    * copy contructor
-    * @param p2: cell om te kopieren
-    */
-    Vegetation(const Cell &p2);
-
-    /*!
-     * geeft Estate van soort cell terug
-     * @return
+    /*
+     * Copy constructor
      */
+    Vegetation(const Vegetation &V1);
+
     EStates getState() const override;
 
-    /*!
-     * update de cell
-     */
     void update() override;
 
-    /*!
-     * geeft pixel art terug
-     * @return int: rotation, string: pad to pixel art
-     */
-    std::pair<int, std::string> getPixelArt() override;
+    float getHappiness() const override;
 
-    /*!
-     * geeft terug hoeveel happiness een bepaalde cell uitstoot (tussen -1 en 1)
-     * @return float
-     */
-    float getHappiness()  const override;
+    void addPerson(Citizen* person) override;
+
+    std::vector<Citizen*> getPersons() const override;
+
 private:
-    std::string pixelArt = "../PixelArt/Park.png";
-    std::string pixelArtVervallen = "../PixelArt/Park_Broken.png";
+    //Building building;
 };
 
 class Road : public Cell{
 public:
-    /*!
-    * copy contructor
-    * @param p2: cell om te kopieren
-    */
-    Road(const Cell &p2);
+    Road();
 
-    /*!
-     * constructor Vegetation
-     * @param row: rij van de cell
-     * @param col: col van de cell
-     * @param cellulaireAutomaat: de cellulaireAutomaat waar de cell een deel van uitmaakt
+    /*
+     * Copy constructor
      */
-    Road(int row, int col, CellulaireAutomaat *cellulaireAutomaat) : Cell(row, col, cellulaireAutomaat){};
+    Road(const Road &R1);
 
-    /*!
-     * geeft Estate van soort cell terug
-     * @return
-     */
     EStates getState() const override;
 
-    /*!
-     * update de cell
-     */
     void update() override;
 
-    /*!
-    * geeft pixel art terug
-    * @return int: rotation, string: pad to pixel art
-    */
-    std::pair<int, std::string> getPixelArt() override;
-
-    /*!
-     * geeft terug hoeveel happiness een bepaalde cell terug
-     * @return float
-     */
     float getHappiness() const override;
 
-    /*!
-     * voeg auto toe aan cell
-     * @return
-     */
-    void addVehicle(Vehicle*);
+    void addPerson(Citizen* person) override;
 
-    /*!
-     * update het aantal dagen tot verval
-     */
-    void updateDaysUntilExpired() override;
+    //std::vector<Pedestrian*> getPersons() const override;
+
+    bool isDilapidated() override;
 
 private:
-    /*!
-     * geeft corecte pixel art van road terug
-     * @param roadConnectPoint: vector volgend formaat:
-     *  [0]: boven        [0]
-     *  [1]: links      xxxxx
-     *  [2]: onder  [3]  xxxxx  [1]
-     *  [3]: rechts       xxxxx
-     *                    [2]
-     * @return int: rotatie pixel art, pad naar pixel art
-     */
-    std::pair<int, std::string> getCorrectRoad(std::vector<bool> &roadConnectPoint);
-    std::string pixelArtVervallen = "../PixelArt/Road_Broken.png";
+    std::string pixelArt;
     std::vector<Vehicle*> vehicles;
-    std::vector<Citizen*> citizen;
+    int verval;
 };
 
 class ResidentialZone : public Cell{
 private:
     House building;
-    Vehicle* car = nullptr;
 public:
-    /*!
-     * desctructor cell
-     */
-    ~ResidentialZone();
+    ResidentialZone();
 
-    /*!
-    * copy contructor
-    * @param p2: cell om te kopieren
-    */
-    ResidentialZone(const Cell &p2);
-
-    /*!
-     * contructor voor cell
-     * @param row: rij van de cell
-     * @param col: col van de cell
-     * @param cellulaireAutomaat: de cellulaireAutomaat waar de cell een deel van uitmaakt
+    /*
+     * Copy constructor
      */
-    ResidentialZone(int row, int col, CellulaireAutomaat *cellulaireAutomaat);
+    ResidentialZone(const ResidentialZone &R1);
 
-    /*!
-     * geeft Estate van soort cell terug
-     * @return
-     */
     EStates getState() const override;
 
-    /*!
-     * update de cell
-     */
     void update() override;
 
-    /*!
-     * geeft terug hoeveel happiness een bepaalde cell terug
-     * @return float
-     */
     float getHappiness() const override;
 
-    /*!
-     * geeft pixel art terug
-     * @return int: rotation, string: pad to pixel art
-     */
-    std::pair<int, std::string> getPixelArt() override;
+    void addPerson(Citizen* person) override;
 
-    /*!
-     * geeft auto op cel terug
-     * @return pointer to car
-     */
-    Vehicle* getCar() override;
+    //std::vector<Pedestrian*> getPersons() const override;
 
-    /*!
-     * zet auto op cell
-     * @param vehicle
-     */
-    void setCar(Vehicle* vehicle) override;
+    bool isDilapidated() override;
 };
 
 class IndustrialZone : public Cell{
 private:
     Workplace building;
 public:
-    /*!
-    * copy contructor
-    * @param p2: cell om te kopieren
-    */
-    IndustrialZone(const Cell &p2);
+    IndustrialZone();
 
-    /*!
-     * contructor voor cell
-     * @param row: rij van de cell
-     * @param col: col van de cell
-     * @param cellulaireAutomaat: de cellulaireAutomaat waar de cell een deel van uitmaakt
+    /*
+     * Copy constructor
      */
-    IndustrialZone(int row, int col, CellulaireAutomaat *cellulaireAutomaat);
+    IndustrialZone(const IndustrialZone &I1);
 
-    /*!
-     * geeft Estate van soort cell terug
-     * @return
-     */
     EStates getState() const override;
 
-    /*!
-     * update de cell
-     */
     void update() override;
 
-    /*!
-    * geeft terug hoeveel happiness een bepaalde cell terug
-    * @return float
-    */
     float getHappiness() const override;
 
-    /*!
-     * geeft pixel art terug
-     * @return int: rotation, string: pad to pixel art
-     */
-    std::pair<int, std::string> getPixelArt() override;
+    void addPerson(Citizen* person) override;
+
+    //std::vector<Pedestrian*> getPersons() const override;
+
+    bool isDilapidated() override;
 };
 
 class StoreZone : public Cell{
 private:
     Store building;
 public:
-    /*!
-    * copy contructor
-    * @param p2: cell om te kopieren
-    */
-    StoreZone(const Cell &p2);
+    StoreZone();
 
-    /*!
-     * contructor voor cell
-     * @param row: rij van de cell
-     * @param col: col van de cell
-     * @param cellulaireAutomaat: de cellulaireAutomaat waar de cell een deel van uitmaakt
+    /*
+     * Copy constructor
      */
-    StoreZone(int row, int col, CellulaireAutomaat *cellulaireAutomaat);
+    StoreZone(const StoreZone &S1);
 
-    /*!
-     * geeft Estate van soort cell terug
-     * @return
-     */
     EStates getState() const override;
 
-    /*!
-     * update de cell
-     */
     void update() override;
 
-    /*!
-     * geeft terug hoeveel happiness een bepaalde cell terug
-     * @return float
-     */
     float getHappiness() const override;
 
+    void addPerson(Citizen* person) override;
+
+    //std::vector<Pedestrian*> getPersons() const override;
+
+    bool isDilapidated() override;
+};
+
+class CellFactorySingleton{
+public:
     /*!
-     * geeft pixel art terug
-     * @return int: rotation, string: pad to pixel art
+     * geeft de enige instance van CellFactorySingleton terug
+     * @return reference naar de enige instance van het object
      */
-    std::pair<int, std::string> getPixelArt() override;
+    static CellFactorySingleton &getInstance() {
+        static CellFactorySingleton instance;
+        return instance;
+    }
+
+    Cell* getCell(EStates state);
+
+    Cell* getCell(EStates state, Cell* old);
+
+//    virtual ~CellFactorySingleton() {
+//        for (const auto& cell: objects){
+//            delete cell;
+//        }
+//    }
+
+    CellFactorySingleton(CellFactorySingleton const &) = delete;
+    void operator=(CellFactorySingleton const &) = delete;
+
+private:
+    CellFactorySingleton() = default;
+//    std::vector<Cell*> objects;
 };
 
 #endif //TA_CELL_H
