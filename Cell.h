@@ -191,7 +191,6 @@ private:
      * returns rotatie en string van weg
      */
     std::pair<int, std::string> getCorrectRoad(std::vector<bool> &roadConnectPoint);
-    std::vector<bool> roadConnectPoints = {false, false, false, false};
     std::vector<Vehicle*> vehicles;
     int verval;
 };

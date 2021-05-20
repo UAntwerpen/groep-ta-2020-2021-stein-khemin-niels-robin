@@ -81,7 +81,7 @@ std::vector<bool> Cell::getRoadConnectPoints() {
 }
 
 EStates Vegetation::getState() const {
-    return EResidentialZone;
+    return EVegetation;
 }
 
 void Vegetation::update() {
@@ -109,7 +109,7 @@ std::pair<int, std::string> Vegetation::getPixelArt() {
 }
 
 EStates Road::getState() const {
-    return EResidentialZone;
+    return ERoad;
 }
 
 void Road::update() {
@@ -129,6 +129,7 @@ bool Road::isDilapidated() {
 }
 
 void Road::drawToScreen(MainWindow *window) {
+    std::cout << this->getPixelArt().first << std::endl;
     window->drawTile(this->getPos().first, this->getPos().second, this->getPixelArt().first, this->getPixelArt().second);
 }
 
@@ -138,12 +139,11 @@ std::pair<int, std::string> Road::getPixelArt() {
 }
 
 std::vector<bool> Road::getRoadConnectPoints() {
-    return std::vector<bool>{roadConnectPoints[0], roadConnectPoints[1], roadConnectPoints[2], roadConnectPoints[3]};
+    return Road::getNeighborsRoads();
 }
 
-std::pair<int, std::string> Road::getCorrectRoad(std::vector<bool> &roadConnectPoint) {
-    if(!roadConnectPoints[0] && !roadConnectPoints[1] && !roadConnectPoints[2] && !roadConnectPoints[3]){
-        this->roadConnectPoints = {false, false, true, false};
+std::pair<int, std::string> Road::getCorrectRoad(std::vector<bool> &roadConnectPoint1) {
+    if(!roadConnectPoint1[0] && !roadConnectPoint1[1] && !roadConnectPoint1[2] && !roadConnectPoint1[3]){
         return std::pair<int, std::string>(2, "../PixelArt/Road_Doodlopend.png");
     }
     std::map<std::string,std::vector<bool>> connectionPointCountImage = {
@@ -155,28 +155,27 @@ std::pair<int, std::string> Road::getCorrectRoad(std::vector<bool> &roadConnectP
     };
 
     int rotations = 0;
-
     while(true){
         for(auto it = connectionPointCountImage.begin(); it != connectionPointCountImage.end(); it++){
-            if((*it).second[0] == roadConnectPoints[0] &&
-               (*it).second[1] == roadConnectPoints[1] &&
-               (*it).second[2] == roadConnectPoints[2] &&
-               (*it).second[3] == roadConnectPoints[3]){
-                this->roadConnectPoints = {(*it).second[0], (*it).second[1], (*it).second[2], (*it).second[3]};
-                return std::pair<int, std::string>(rotations, it->first);
+            if((*it).second[0] == roadConnectPoint1[0] &&
+               (*it).second[1] == roadConnectPoint1[1] &&
+               (*it).second[2] == roadConnectPoint1[2] &&
+               (*it).second[3] == roadConnectPoint1[3]){
+                return std::pair<int, std::string>(rotations%4, it->first);
             }
             else{
                 //roteer road
                 rotations++;
+                //std::cout << "before" << (*it).second[0] << ", " << (*it).second[1] << ", " << (*it).second[2] << ", " << (*it).second[3] << ", " << std::endl;
                 (*it).second = {(*it).second[3], (*it).second[0],(*it).second[1],(*it).second[2]};
+                //std::cout << "after" << (*it).second[0] << ", " << (*it).second[1] << ", " << (*it).second[2] << ", " << (*it).second[3] << ", " << std::endl;
+                //std::cout << "-----------------" << std::endl;
             }
         }
     }
 }
 
 Road::Road(int row, int col, CellulaireAutomaat *cellulaireAutomaat) : Cell(row, col, cellulaireAutomaat) {
-    //std::vector<bool> neighborsRoads = getNeighborsRoads();
-    //this->getCorrectRoad(neighborsRoads);
 }
 
 std::vector<bool> Road::getNeighborsRoads() {
@@ -193,12 +192,15 @@ std::vector<bool> Road::getNeighborsRoads() {
      *                    [3]
      */
     std::vector<bool> road = {false, false, false, false};
-
+/*
     road[1] = (*cellulaireAutomaat)(row, col + 1).getRoadConnectPoints()[0];
     road[0] = (*cellulaireAutomaat)(row, col - 1).getRoadConnectPoints()[1];
     road[3] = (*cellulaireAutomaat)(row + 1, col).getRoadConnectPoints()[2];
-    road[2] = (*cellulaireAutomaat)(row - 1, col).getRoadConnectPoints()[3];
-
+    road[2] = (*cellulaireAutomaat)(row - 1, col).getRoadConnectPoints()[3];*/
+    road[1] = (*cellulaireAutomaat)(row, col + 1).getState() == ERoad;
+    road[0] = (*cellulaireAutomaat)(row, col - 1).getState() == ERoad;
+    road[3] = (*cellulaireAutomaat)(row + 1, col).getState() == ERoad;
+    road[2] = (*cellulaireAutomaat)(row - 1, col).getState() == ERoad;
     return road;
 }
 
@@ -219,7 +221,7 @@ void ResidentialZone::addPerson(Citizen *person) {
 }
 
 EStates IndustrialZone::getState() const {
-    return EResidentialZone;
+    return EIndustrialZone;
 }
 
 void IndustrialZone::update() {
@@ -235,7 +237,7 @@ void IndustrialZone::addPerson(Citizen *person) {
 }
 
 EStates StoreZone::getState() const {
-    return EResidentialZone;
+    return EStoreZone;
 }
 
 void StoreZone::update() {
