@@ -44,7 +44,10 @@ void Transport::update(CellulaireAutomaat& city, char direction) {
 
     pair<int, int> currPos = this->getLocation()->getPos();
     pair<int, int> newPos = pair<int, int>(currPos.first + dy, currPos.second + dx);
+    //TODO werkt niet (geeft error)
+    /*
     Cell& newLoc = city(newPos.first, newPos.second);
 
     this->setLocation(&newLoc);
+    */
 }

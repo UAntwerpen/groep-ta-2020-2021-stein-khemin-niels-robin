@@ -7,6 +7,10 @@ void Building::setPixelArt(std::string path) {
     pixelart = path;
 }
 
+int Building::getVerval() {
+    return verval;
+}
+
 
 House::House() {
     bewoners = 4;

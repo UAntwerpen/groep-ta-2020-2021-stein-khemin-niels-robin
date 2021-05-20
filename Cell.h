@@ -70,7 +70,7 @@ public:
      */
     void setPos(std::pair<int, int> pos);
 
-    virtual bool isDilapidated();
+    virtual bool isDilapidated() {return false;};
 
 private:
     int row;
@@ -81,6 +81,13 @@ private:
 
 class Vegetation : public Cell{
 public:
+    Vegetation();
+
+    /*
+     * Copy constructor
+     */
+    Vegetation(const Vegetation &V1);
+
     EStates getState() const override;
 
     void update() override;
@@ -91,14 +98,19 @@ public:
 
     std::vector<Citizen*> getPersons() const override;
 
-    bool isDilapidated() override;
-
 private:
     //Building building;
 };
 
 class Road : public Cell{
 public:
+    Road();
+
+    /*
+     * Copy constructor
+     */
+    Road(const Road &R1);
+
     EStates getState() const override;
 
     void update() override;
@@ -107,7 +119,7 @@ public:
 
     void addPerson(Citizen* person) override;
 
-    std::vector<Pedestrian*> getPersons() const override;
+    //std::vector<Pedestrian*> getPersons() const override;
 
     bool isDilapidated() override;
 
@@ -123,6 +135,11 @@ private:
 public:
     ResidentialZone();
 
+    /*
+     * Copy constructor
+     */
+    ResidentialZone(const ResidentialZone &R1);
+
     EStates getState() const override;
 
     void update() override;
@@ -131,7 +148,7 @@ public:
 
     void addPerson(Citizen* person) override;
 
-    std::vector<Pedestrian*> getPersons() const override;
+    //std::vector<Pedestrian*> getPersons() const override;
 
     bool isDilapidated() override;
 };
@@ -140,6 +157,13 @@ class IndustrialZone : public Cell{
 private:
     Workplace building;
 public:
+    IndustrialZone();
+
+    /*
+     * Copy constructor
+     */
+    IndustrialZone(const IndustrialZone &I1);
+
     EStates getState() const override;
 
     void update() override;
@@ -148,7 +172,7 @@ public:
 
     void addPerson(Citizen* person) override;
 
-    std::vector<Pedestrian*> getPersons() const override;
+    //std::vector<Pedestrian*> getPersons() const override;
 
     bool isDilapidated() override;
 };
@@ -157,6 +181,13 @@ class StoreZone : public Cell{
 private:
     Store building;
 public:
+    StoreZone();
+
+    /*
+     * Copy constructor
+     */
+    StoreZone(const StoreZone &S1);
+
     EStates getState() const override;
 
     void update() override;
@@ -165,7 +196,7 @@ public:
 
     void addPerson(Citizen* person) override;
 
-    std::vector<Pedestrian*> getPersons() const override;
+    //std::vector<Pedestrian*> getPersons() const override;
 
     bool isDilapidated() override;
 };

@@ -36,6 +36,33 @@ void Cell::setPos(std::pair<int, int> pos) {
     col = pos.second;
 }
 
+Vegetation::Vegetation() {
+
+}
+
+Road::Road() {
+
+}
+
+ResidentialZone::ResidentialZone() {
+    building = House();
+}
+
+bool ResidentialZone::isDilapidated() {
+    return building.getVerval() > 0;
+}
+
+IndustrialZone::IndustrialZone() {
+    building = Workplace();
+}
+
+bool IndustrialZone::isDilapidated() {
+    return building.getVerval() > 0;
+}
+
+StoreZone::StoreZone() {
+    building = Store();
+}
 void Cell::addPerson(Citizen *person) {
 
 }
@@ -46,10 +73,6 @@ float Cell::getHappiness() const {
 
 std::vector<Citizen *> Cell::getPersons() const {
     return std::vector<Citizen *>();
-
-bool Cell::isDilapidated() {
-    return false;
-
 }
 
 EStates Vegetation::getState() const {
@@ -72,10 +95,6 @@ std::vector<Citizen *> Vegetation::getPersons() const {
     return std::vector<Citizen *>();
 }
 
-bool Vegetation::isDilapidated() {
-    return Cell::isDilapidated();
-}
-
 EStates Road::getState() const {
     return EResidentialZone;
 }
@@ -90,10 +109,6 @@ float Road::getHappiness() const {
 
 void Road::addPerson(Citizen *person) {
 
-}
-
-std::vector<Citizen *> Road::getPersons() const {
-    return std::vector<Citizen *>();
 }
 
 bool Road::isDilapidated() {
@@ -116,18 +131,6 @@ void ResidentialZone::addPerson(Citizen *person) {
 
 }
 
-std::vector<Citizen *> ResidentialZone::getPersons() const {
-    return std::vector<Citizen *>();
-}
-
-bool ResidentialZone::isDilapidated() {
-    return Cell::isDilapidated();
-}
-
-ResidentialZone::ResidentialZone() {
-
-}
-
 EStates IndustrialZone::getState() const {
     return EResidentialZone;
 }
@@ -144,14 +147,6 @@ void IndustrialZone::addPerson(Citizen *person) {
 
 }
 
-std::vector<Citizen *> IndustrialZone::getPersons() const {
-    return std::vector<Citizen *>();
-}
-
-bool IndustrialZone::isDilapidated() {
-    return Cell::isDilapidated();
-}
-
 EStates StoreZone::getState() const {
     return EResidentialZone;
 }
@@ -166,10 +161,6 @@ float StoreZone::getHappiness() const {
 
 void StoreZone::addPerson(Citizen *person) {
 
-}
-
-std::vector<Citizen *> StoreZone::getPersons() const {
-    return std::vector<Citizen *>();
 }
 
 bool StoreZone::isDilapidated() {

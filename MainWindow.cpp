@@ -18,7 +18,6 @@ MainWindow::MainWindow(int w, int h) {
 }
 
 void MainWindow::drawTile(int row, int col, int rot, std::string pixelart){
-
     QString filename;
     for (unsigned int i = 0; i < pixelart.size(); i++) {
         filename += pixelart[i];
@@ -35,6 +34,26 @@ void MainWindow::drawTile(int row, int col, int rot, std::string pixelart){
         ofsetx = 64;
     }
     if(rot == 3 || rot == 2){
+        ofsety = 64;
+    }
+    item->setPos(row*64 + ofsetx ,col*64 + ofsety);
+    scene->addItem(item);
+}
+
+void MainWindow::drawTile(int row, int col, int rotation, Cell* zone) {
+    QString filename;
+    QGraphicsPixmapItem *item = new QGraphicsPixmapItem(QPixmap(filename));
+    item->setCacheMode(QGraphicsItem::NoCache);
+    qreal scale = qMax(2,2);
+    item->setScale(scale);
+    //std::cout<<rot<<std::endl;
+    item->setRotation(rotation*90);
+    int ofsetx = 0;
+    int ofsety = 0;
+    if(rotation == 1 || rotation == 2) {
+        ofsetx = 64;
+    }
+    if(rotation == 3 || rotation == 2){
         ofsety = 64;
     }
     item->setPos(row*64 + ofsetx ,col*64 + ofsety);

@@ -2,7 +2,7 @@
 #include "lib/DesignByContract.h"
 #include "CellulaireAutomaat.h"
 #include "Lib.h"
-
+/*
 CellulaireAutomaat::CellulaireAutomaat(int width, int height, const std::string& rules) : width(width), height(height), rules(rules) {
     REQUIRE(1 < width, "Width is too small(must be at least 2)!");
     REQUIRE(1 < height, "Height is too small(must be at least 2)!");
@@ -126,6 +126,7 @@ std::map<EStates, int> CellulaireAutomaat::count_all() const {
     }
     return counters;
 }
+*/
 
 int CellulaireAutomaat::getWidth() const {
     ENSURE(width > 0, "Width is less then 0!");

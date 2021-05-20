@@ -31,11 +31,13 @@ PFMask::PFMask(CellulaireAutomaat& cellAutomaat, Transport* transport) : width(c
         for (int col = 0; col < width; col++) {
             bool passable;
 
+            //TODO geeft error
+            /*
             if (cellAutomaat(row, col).getState() == ERoad || (cellAutomaat(row, col).getState() == EVegetation && transport->getState() == ECitizen)) {
                 passable = true;
             } else {
                 passable = false;
-            }
+            }*/
             bool goal = transport->getGoal()->getPos() == pair<int, int>(row, col);
 
             this->getCell(row, col) = PFCell(passable, row, col, goal);

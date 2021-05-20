@@ -10,7 +10,7 @@
 class Building {
 public:
     void setPixelArt(std::string path);
-
+    int getVerval();
 protected:
     int bewoners;
     int maxPeopleAmount;
