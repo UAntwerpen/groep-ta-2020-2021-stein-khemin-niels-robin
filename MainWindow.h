@@ -17,6 +17,8 @@ public:
 
     void drawTile(int row, int col, int rotation, std::string pixelart);
 
+    void addCar(int row, int col, int rotation, std::string pixelart);
+
     void show();
 
     void clearAll();
@@ -24,6 +26,7 @@ public:
 private:
     void drawGrid(int width, int height);
 
+    std::vector<QGraphicsPixmapItem*> cars;
     QGraphicsScene *scene;
     QGraphicsView *view;
     int width;

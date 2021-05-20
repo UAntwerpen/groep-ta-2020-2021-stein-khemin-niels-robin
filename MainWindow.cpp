@@ -24,8 +24,8 @@ void MainWindow::drawTile(int row, int col, int rot, std::string pixelart){
     item->setCacheMode(QGraphicsItem::NoCache);
     qreal scale = qMax(2,2);
     item->setScale(scale);
-    //std::cout<<rot<<std::endl;
     item->setRotation(rot*90);
+    rot = rot%4;
     int ofsetx = 0;
     int ofsety = 0;
     if(rot == 1 || rot == 2) {
@@ -34,7 +34,28 @@ void MainWindow::drawTile(int row, int col, int rot, std::string pixelart){
     if(rot == 3 || rot == 2){
         ofsety = 64;
     }
-    item->setPos(row*64 + ofsetx ,col*64 + ofsety);
+    item->setPos(col*64 + ofsetx ,row*64 + ofsety);
+    scene->addItem(item);
+}
+
+void MainWindow::addCar(int row, int col, int rot, std::string pixelart){
+    QString filename = pixelart.c_str();
+
+    QGraphicsPixmapItem* item = new QGraphicsPixmapItem(QPixmap(filename));
+    item->setCacheMode(QGraphicsItem::NoCache);
+    qreal scale = qMax(1,1);
+    item->setScale(scale);
+    item->setRotation(rot*90);
+    rot = rot%4;
+    int ofsetx = 0;
+    int ofsety = 0;
+    if(rot == 1 || rot == 2) {
+        ofsetx = 64;
+    }
+    if(rot == 3 || rot == 2){
+        ofsety = 64;
+    }
+    item->setPos(col*64 + ofsetx ,row*64 + ofsety);
     scene->addItem(item);
 }
 
