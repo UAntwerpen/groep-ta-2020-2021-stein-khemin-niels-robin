@@ -11,7 +11,6 @@ int Building::getVerval() {
     return verval;
 }
 
-
 House::House() {
     bewoners = 4;
     maxPeopleAmount = 8;

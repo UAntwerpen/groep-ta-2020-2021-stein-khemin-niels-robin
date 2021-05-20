@@ -17,10 +17,28 @@ MainWindow::MainWindow(int w, int h) {
     view = new QGraphicsView(scene);
 }
 
+void MainWindow::UpdateRoadUsers() {
+    clearRoadUsers();
+    for (int x = 0; x < width; x++) {
+        for (int y = 0; y < height; y++) {
+            //todo check pixelart for each cell
+        }
+    }
+}
+
+void MainWindow::UpdateAll(){
+    clearBuildings();
+    for (int x = 0; x < width; x++) {
+        for (int y = 0; y < height; y++) {
+            //todo check pixelart for each cell
+        }
+    }
+    UpdateRoadUsers();
+}
 
 
 
-void MainWindow::drawTile(int row, int col, int rot, std::string pixelart){
+void MainWindow::drawTile(int row, int col, int rot, const std::string pixelart){
     QString filename = pixelart.c_str();
 
     QGraphicsPixmapItem *item = new QGraphicsPixmapItem(QPixmap(filename));
@@ -41,7 +59,7 @@ void MainWindow::drawTile(int row, int col, int rot, std::string pixelart){
     scene->addItem(item);
 }
 
-void MainWindow::addCar(int row, int col, int rot, std::string pixelart){
+void MainWindow::addCar(int row, int col, int rot, const std::string pixelart){
     QString filename = pixelart.c_str();
 
     QGraphicsPixmapItem* item = new QGraphicsPixmapItem(QPixmap(filename));
@@ -62,7 +80,7 @@ void MainWindow::addCar(int row, int col, int rot, std::string pixelart){
     scene->addItem(item);
 }
 
-void MainWindow::addPedestrian(int row, int col, int rot, std::string pixelart) {
+void MainWindow::addPedestrian(int row, int col, int rot, const std::string pixelart) {
     QString filename = pixelart.c_str();
 
     QGraphicsPixmapItem* item = new QGraphicsPixmapItem(QPixmap(filename));
@@ -141,6 +159,19 @@ void MainWindow::show() {
     view->show();
 }
 
-void MainWindow::clearAll() {
-    drawGrid(width, height);
+void MainWindow::clearBuildings() {
+    for(auto it = Buildings.begin(); it != Buildings.end(); it++){
+        delete *it;
+    }
+}
+
+void MainWindow::clearRoadUsers() {
+    for(auto it = RoadUsers.begin(); it != RoadUsers.end(); it++){
+        delete *it;
+    }
+}
+
+MainWindow::~MainWindow() {
+    clearBuildings();
+    clearRoadUsers();
 }
