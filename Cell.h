@@ -6,17 +6,23 @@
 #include <string>
 #include <vector>
 #include "Building.h"
-
+#include <map>
 #include "Lib.h"
 
 class Citizen;
 class Vehicle;
+class MainWindow;
+class CellulaireAutomaat;
 
 class Cell {
 public:
     Cell();
 
+    //TODO weg
     Cell(int row, int col);
+
+    //Cel moet omgeving kunnen bepalen
+    Cell(int row, int col, CellulaireAutomaat* cellulaireAutomaat);
 
     virtual ~Cell();
 
@@ -32,6 +38,11 @@ public:
     virtual void update() = 0;
 
     /*!
+     * draw cell to interface
+     */
+    virtual void drawToScreen(MainWindow *window){};
+
+    /*!
      * geeft terug hoeveel happiness een bepaalde cell uitstoot
      * @return float
      */
@@ -44,6 +55,16 @@ public:
     virtual void addPerson(Citizen* person);
 
     /*!
+     * Geeft voor elke zijde weer of er een weg aan verbonden kan worden;
+     *  [0]: links        [2]
+     *  [1]: rechts      xxxxx
+     *  [2]: boven  [0]  xxxxx  [1]
+     *  [3]: onder       xxxxx
+     *                    [3]
+     */
+    virtual std::vector<bool> getRoadConnectPoints();
+
+    /*!
      * geeft alle personen terug die op de cell staan
      * @return
      */
@@ -54,6 +75,12 @@ public:
      * @return std::pair<int, int> -> (row, col)
      */
     std::pair<int, int> getPos() const;
+
+    /*!
+     * geeft de CellulaireAutomaat terug waar de huidige cell een deel van uitmaakt
+     * @return CellulaireAutomaat
+     */
+    CellulaireAutomaat* getCellulaireAutomaat() const;
 
     /*!
      * verandert de positie van een cel
@@ -72,16 +99,25 @@ public:
 
     virtual bool isDilapidated() {return false;};
 
-private:
-    int row;
-    int col;
+    /*
+     * int: rotation, string: pad to pixel art
+     */
+    virtual std::pair<int, std::string> getPixelArt(){return std::pair<int, std::string>(0, "");};
 
+private:
+    int row = 0;
+    int col = 0;
+
+    CellulaireAutomaat* cellulaireAutomaat;
     std::vector<Citizen*> people;
 };
 
 class Vegetation : public Cell{
 public:
-    Vegetation();
+    Vegetation(int row, int col, CellulaireAutomaat* cellulaireAutomaat): Cell(row, col, cellulaireAutomaat){}
+
+    //TODO Weg
+    Vegetation(){}
 
     /*
      * Copy constructor
@@ -92,6 +128,10 @@ public:
 
     void update() override;
 
+    void drawToScreen(MainWindow *window) override;
+
+    std::pair<int, std::string> getPixelArt() override;
+
     float getHappiness() const override;
 
     void addPerson(Citizen* person) override;
@@ -99,12 +139,14 @@ public:
     std::vector<Citizen*> getPersons() const override;
 
 private:
-    //Building building;
+    std::string pixelArt = "../PixelArt/Default.png";
 };
 
 class Road : public Cell{
 public:
     Road();
+
+    Road(int row, int col, CellulaireAutomaat* cellulaireAutomaat): Cell(row, col, cellulaireAutomaat){}
 
     /*
      * Copy constructor
@@ -115,6 +157,10 @@ public:
 
     void update() override;
 
+    void drawToScreen(MainWindow *window) override;
+
+    std::pair<int, std::string> getPixelArt() override;
+
     float getHappiness() const override;
 
     void addPerson(Citizen* person) override;
@@ -123,8 +169,23 @@ public:
 
     bool isDilapidated() override;
 
+    /*!
+     * Geeft voor elke zijde weer of er een weg aan verbonden kan worden;
+     *  [0]: links        [2]
+     *  [1]: rechts      xxxxx
+     *  [2]: boven  [0]  xxxxx  [1]
+     *  [3]: onder       xxxxx
+     *                    [3]
+     * @param person
+     */
+    std::vector<bool> getRoadConnectPoints() override;
+
 private:
-    std::string pixelArt;
+    /*
+     * returns rotatie en string van weg
+     */
+    std::pair<int, std::string> getCorrectRoad(bool roadConnectPoints[4]);
+    bool roadConnectPoints[4] = {false, false, false, false};
     std::vector<Vehicle*> vehicles;
     int verval;
 };

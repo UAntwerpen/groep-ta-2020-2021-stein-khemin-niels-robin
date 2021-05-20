@@ -2,7 +2,7 @@
 #include "lib/DesignByContract.h"
 #include "CellulaireAutomaat.h"
 #include "Lib.h"
-/*
+
 CellulaireAutomaat::CellulaireAutomaat(int width, int height, const std::string& rules) : width(width), height(height), rules(rules) {
     REQUIRE(1 < width, "Width is too small(must be at least 2)!");
     REQUIRE(1 < height, "Height is too small(must be at least 2)!");
@@ -13,6 +13,8 @@ CellulaireAutomaat::CellulaireAutomaat(int width, int height, const std::string&
         }
     }
 
+    //TODO even gecommend om te testen
+    /*
     const void * address = static_cast<const void*>(this);
     std::stringstream ss;
     ss << address;
@@ -24,6 +26,7 @@ CellulaireAutomaat::CellulaireAutomaat(int width, int height, const std::string&
         std::cerr << "couldn't open file!" << std::endl;
     }
     file.close();
+     */
 }
 
 CellulaireAutomaat::~CellulaireAutomaat() {
@@ -126,7 +129,7 @@ std::map<EStates, int> CellulaireAutomaat::count_all() const {
     }
     return counters;
 }
-*/
+
 
 int CellulaireAutomaat::getWidth() const {
     ENSURE(width > 0, "Width is less then 0!");
@@ -136,4 +139,8 @@ int CellulaireAutomaat::getWidth() const {
 int CellulaireAutomaat::getHeight() const {
     ENSURE(height > 0, "Height is less then 0!");
     return height;
+}
+
+Cell *CellulaireAutomaat::getCell(int row, int col) {
+    return &(*this)(row, col);
 }

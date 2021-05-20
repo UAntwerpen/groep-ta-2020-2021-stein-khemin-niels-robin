@@ -94,6 +94,16 @@ public:
      */
     int getHeight() const;
 
+    /*!
+     * geeft cel op ocatie row, col teurg
+     * @param row rij van de cell
+     * @param col kolom van de cell
+     * @return geeft de cel terug op locatie rown colr
+     * REQUIRE(0 <= row && row < width, "Row is out of bounds!");
+     * REQUIRE(0 <= column && column < height, "Column is out of bounds!");
+     */
+    Cell* getCell(int row, int col);
+
 private:
     int width;
     int height;

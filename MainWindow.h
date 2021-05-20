@@ -9,17 +9,13 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include "Cell.h"
+#include "CellulaireAutomaat.h"
 
 class MainWindow {
 public:
     MainWindow(int width, int height);
 
     void drawTile(int row, int col, int rotation, std::string pixelart);
-
-    /*
-     * Draw zone on interface
-     */
-    void drawTile(int row, int col, int rotation, Cell* zone);
 
     void show();
 

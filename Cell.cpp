@@ -6,6 +6,8 @@
 #include "lib/DesignByContract.h"
 #include <random>
 #include <iostream>
+#include "MainWindow.h"
+#include "CellulaireAutomaat.h"
 
 Cell::Cell() {
     row = 0;
@@ -16,7 +18,9 @@ Cell::~Cell() {
 
 }
 
-Cell::Cell(int row, int col) : row(row), col(col) {}
+Cell::Cell(int row, int col) : row(row), col(col){}
+
+Cell::Cell(int row, int col, CellulaireAutomaat* cellulaireAutomaat) : row(row), col(col), cellulaireAutomaat(cellulaireAutomaat) {}
 
 std::pair<int, int> Cell::getPos() const{
     return std::make_pair(row, col);
@@ -34,10 +38,6 @@ void Cell::setPos(std::pair<int, int> pos) {
     REQUIRE(pos.second >= 0, "Column is out of bounds!");
     row = pos.first;
     col = pos.second;
-}
-
-Vegetation::Vegetation() {
-
 }
 
 Road::Road() {
@@ -75,6 +75,14 @@ std::vector<Citizen *> Cell::getPersons() const {
     return std::vector<Citizen *>();
 }
 
+CellulaireAutomaat* Cell::getCellulaireAutomaat() const {
+    return cellulaireAutomaat;
+}
+
+std::vector<bool> Cell::getRoadConnectPoints() {
+    return std::vector<bool>{false,false,false,false};
+}
+
 EStates Vegetation::getState() const {
     return EResidentialZone;
 }
@@ -95,6 +103,14 @@ std::vector<Citizen *> Vegetation::getPersons() const {
     return std::vector<Citizen *>();
 }
 
+void Vegetation::drawToScreen(MainWindow *window) {
+    window->drawTile(this->getPos().first, this->getPos().second, this->getPixelArt().first, this->getPixelArt().second);
+}
+
+std::pair<int, std::string> Vegetation::getPixelArt() {
+    return std::pair<int, std::string>(0, pixelArt);
+}
+
 EStates Road::getState() const {
     return EResidentialZone;
 }
@@ -113,6 +129,66 @@ void Road::addPerson(Citizen *person) {
 
 bool Road::isDilapidated() {
     return Cell::isDilapidated();
+}
+
+void Road::drawToScreen(MainWindow *window) {
+    window->drawTile(this->getPos().first, this->getPos().second, this->getPixelArt().first, this->getPixelArt().second);
+}
+
+std::pair<int, std::string> Road::getPixelArt() {
+    int row = this->getPos().first;
+    int col = this->getPos().second;
+    CellulaireAutomaat* cellulaireAutomaat = this->getCellulaireAutomaat();
+
+    /*
+     * Geeft aan welke zijde verbonden moet worden;
+     *  [0]: links        [2]
+     *  [1]: rechts      xxxxx
+     *  [2]: boven  [0]  xxxxx  [1]
+     *  [3]: onder       xxxxx
+     *                    [3]
+     */
+    bool road[4] = {false, false, false, false};
+
+    road[1] = cellulaireAutomaat->getCell(row, col + 1)->getRoadConnectPoints()[0];
+    road[0] = cellulaireAutomaat->getCell(row, col - 1)->getRoadConnectPoints()[1];
+    road[3] = cellulaireAutomaat->getCell(row + 1, col)->getRoadConnectPoints()[2];
+    road[2] = cellulaireAutomaat->getCell(row - 1, col)->getRoadConnectPoints()[3];
+
+    return getCorrectRoad(road);
+}
+
+std::vector<bool> Road::getRoadConnectPoints() {
+    return std::vector<bool>{roadConnectPoints[0], roadConnectPoints[1], roadConnectPoints[2], roadConnectPoints[3]};
+}
+
+std::pair<int, std::string> Road::getCorrectRoad(bool roadConnectPoints[4]) {
+    std::vector<bool> recht{false, false, true, false};
+    std::map<std::string,std::vector<bool>> connectionPointCountImage = {
+            {"../PixelArt/Road_Doodlopend.png", {false, false, true, false}},
+            {"../PixelArt/Road_Bocht.png", {true, false, true, false}},
+            {"../PixelArt/Road_Rechte_Lijn.png", {true, true, false, false}},
+            {"../PixelArt/Road_Kruispunt.png", {true, true, true, true}},
+            {"../PixelArt/Road_T_Kruispunt.png", {true, true, false, true}},
+    };
+
+    int rotations = 0;
+
+    while(true){
+        for(auto it = connectionPointCountImage.begin(); it != connectionPointCountImage.end(); it++){
+            if((*it).second[0] == roadConnectPoints[0] &&
+               (*it).second[1] == roadConnectPoints[1] &&
+               (*it).second[2] == roadConnectPoints[2] &&
+               (*it).second[3] == roadConnectPoints[3]){
+                return std::pair<int, std::string>(rotations, it->first);
+            }
+            else{
+                //roteer road
+                rotations++;
+                (*it).second = {(*it).second[3], (*it).second[0],(*it).second[1],(*it).second[2]};
+            }
+        }
+    }
 }
 
 EStates ResidentialZone::getState() const {
