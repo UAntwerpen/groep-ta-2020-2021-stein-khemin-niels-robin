@@ -17,24 +17,27 @@ MainWindow::MainWindow(int w, int h) {
     view = new QGraphicsView(scene);
 }
 
+
+
+
 void MainWindow::drawTile(int row, int col, int rot, std::string pixelart){
     QString filename = pixelart.c_str();
 
     QGraphicsPixmapItem *item = new QGraphicsPixmapItem(QPixmap(filename));
     item->setCacheMode(QGraphicsItem::NoCache);
-    qreal scale = qMax(2,2);
+    qreal scale = qMax(4,4);
     item->setScale(scale);
     item->setRotation(rot*90);
     rot = rot%4;
     int ofsetx = 0;
     int ofsety = 0;
     if(rot == 1 || rot == 2) {
-        ofsetx = 64;
+        ofsetx = 128;
     }
     if(rot == 3 || rot == 2){
-        ofsety = 64;
+        ofsety = 128;
     }
-    item->setPos(col*64 + ofsetx ,row*64 + ofsety);
+    item->setPos(col*128 + ofsetx ,row*128 + ofsety);
     scene->addItem(item);
 }
 
@@ -43,21 +46,48 @@ void MainWindow::addCar(int row, int col, int rot, std::string pixelart){
 
     QGraphicsPixmapItem* item = new QGraphicsPixmapItem(QPixmap(filename));
     item->setCacheMode(QGraphicsItem::NoCache);
-    qreal scale = qMax(1,1);
+    qreal scale = qMax(2,2);
     item->setScale(scale);
     item->setRotation(rot*90);
     rot = rot%4;
     int ofsetx = 0;
     int ofsety = 0;
     if(rot == 1 || rot == 2) {
-        ofsetx = 64;
+        ofsetx = 128;
     }
     if(rot == 3 || rot == 2){
-        ofsety = 64;
+        ofsety = 128;
     }
-    item->setPos(col*64 + ofsetx ,row*64 + ofsety);
+    item->setPos(col*128+ ofsetx ,row*128 + ofsety);
     scene->addItem(item);
 }
+
+void MainWindow::addPedestrian(int row, int col, int rot, std::string pixelart) {
+    QString filename = pixelart.c_str();
+
+    QGraphicsPixmapItem* item = new QGraphicsPixmapItem(QPixmap(filename));
+    item->setCacheMode(QGraphicsItem::NoCache);
+    qreal scale = qMax(2,2);
+    item->setScale(scale);
+    rot = rot%4;
+    int ofsetx = 0;
+    int ofsety = 0;
+    if(rot == 0 || rot == 1){
+        ofsety = -54;
+    }
+    if(rot == 1 || rot == 2) {
+        ofsetx = 54;
+    }
+    if(rot == 3 || rot == 2){
+        ofsety = 54;
+    }
+    if(rot == 0 || rot == 3){
+        ofsetx = -54;
+    }
+    item->setPos(col*128+ ofsetx ,row*128 + ofsety);
+    scene->addItem(item);
+}
+
 
 void MainWindow::drawGrid(int _width, int _height) {
     CellulaireAutomaat* automaat = new CellulaireAutomaat(_width, _height, "");
@@ -84,18 +114,23 @@ void MainWindow::drawGrid(int _width, int _height) {
                 //r->drawToScreen(this);
             }else if(random == 3){
                 drawTile(i,j,randomangle, "../PixelArt/Road_Recht.png");
+                addPedestrian(i,j,randomangle+2,"../PixelArt/Pedestrian1.png");
                 addCar(i,j,randomangle,"../PixelArt/Car1.png");
             }else if(random == 4){
                 drawTile(i,j,randomangle, "../PixelArt/Road_T_Kruispunt.png");
+                addPedestrian(i,j,randomangle+2,"../PixelArt/Pedestrian2.png");
                 addCar(i,j,randomangle,"../PixelArt/Car2.png");
             }else if(random == 5){
                 drawTile(i,j,randomangle, "../PixelArt/Road_Kruispunt.png");
+                addPedestrian(i,j,randomangle+2,"../PixelArt/Pedestrian3.png");
                 addCar(i,j,randomangle,"../PixelArt/Car3.png");
             }else if(random == 6){
                 drawTile(i,j,randomangle, "../PixelArt/Road_Doodlopend.png");
-                addCar(i,j,randomangle+2,"../PixelArt/Car1.png");
+                addPedestrian(i,j,randomangle+2,"../PixelArt/Pedestrian1.png");
+                addCar(i,j,randomangle+2,"../PixelArt/Car2.png");
             }else{
                 drawTile(i,j,randomangle, "../PixelArt/Road_Bocht.png");
+                addPedestrian(i,j,randomangle+2,"../PixelArt/Pedestrian2.png");
                 addCar(i,j,randomangle+2,"../PixelArt/Car2.png");
             }
         }
