@@ -10,7 +10,7 @@ CellulaireAutomaat::CellulaireAutomaat(int width, int height, const std::string&
     matrix = std::vector<Cell*>(width * height);
     for (int row = 0; row < height; row++){
         for (int col = 0; col < width; col++){
-            changeCell(row, col, new Road(row, col, this));
+            changeCell(row, col, new Vegetation(row, col, this));
         }
     }
 
@@ -25,9 +25,60 @@ CellulaireAutomaat::CellulaireAutomaat(int width, int height, const std::string&
         std::cerr << "couldn't open file!" << std::endl;
     }
     file.close();
+    w = nullptr;
 //    w = new MainWindow(100, 100);
 //    draw();
 //    w->show();
+}
+
+CellulaireAutomaat::CellulaireAutomaat(const std::string &filename) {
+    w = nullptr;
+    std::ifstream file(filename);
+    std::string line;
+    bool map = false;
+    int row = 0;
+    while(file.good()) {
+        std::getline(file, line);
+        if (line.find("DIM=") != std::string::npos){
+            size_t xpos = line.find('x');
+            int wi = std::stoi(line.substr(4, xpos - 4));
+            int he = std::stoi(line.substr(7, line.length()));
+            width = wi;
+            height = he;
+            matrix = std::vector<Cell*>(width * height);
+        }
+        else if(line.find("MAP:") != std::string::npos){
+            map = true;
+        }
+        else if (map){
+            int col = 0;
+            for (char c: line){
+                switch (c) {
+                    case 'r':
+                        changeCell(row, col, new Road(row, col, this));
+                        break;
+                    case 'R':
+                        changeCell(row, col, new ResidentialZone(row, col, this));
+                        break;
+                    case 'I':
+                        changeCell(row, col, new IndustrialZone(row, col, this));
+                        break;
+                    case 'S':
+                        changeCell(row, col, new StoreZone(row, col, this));
+                        break;
+                    case 'V':
+                    default:
+                        changeCell(row, col, new Vegetation(row, col, this));
+                        break;
+                }
+                ++col;
+            }
+            ++row;
+        }
+        std::cout << line << std::endl;
+    }
+
+    file.close();
 }
 
 CellulaireAutomaat::~CellulaireAutomaat() {
@@ -88,17 +139,23 @@ void CellulaireAutomaat::changeCell(int row, int column, Cell *to) {
     matrix[row * height + column] = to;
 }
 
-void CellulaireAutomaat::update() {
+void CellulaireAutomaat::updateRules() {
     for (int col = 0; col < width; col++){
         for (int row = 0; row < height; row++){
             EStates state = static_cast<EStates>(rules[getNeighbourhoodValue(row, col)]);
             if (state == (*this)(row, col).getState()) {
-                (*this)(row, col).update();
                 continue;
             }
             Cell* new_cell = new Vegetation(row, col, this); //TODO
-            new_cell->update();
             changeCell(row, col, new_cell);
+        }
+    }
+}
+
+void CellulaireAutomaat::updateCells() {
+    for (int col = 0; col < width; col++){
+        for (int row = 0; row < height; row++){
+            (*this)(row, col).update();
         }
     }
 }

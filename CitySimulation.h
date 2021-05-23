@@ -12,7 +12,7 @@ float runSimulation(const string& rules){
     CellulaireAutomaat automaat(50, 50, rules);
     automaat.changeCell(0, 25, new Cell)
     while (it < max){
-        automaat.update();
+        automaat.updateRules();
         it++;
     }
 }

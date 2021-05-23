@@ -89,7 +89,7 @@ public:
      *      Goal (target PFcell) ==> Goal
      *      Begaanbare PFCell : value ==> min(PFCell.getNeigbourIntegerValues()) + 1
      *
-     * @return bool : true als update een verandering maakt aan de PFCell, anders false
+     * @return bool : true als updateRules een verandering maakt aan de PFCell, anders false
      */
     bool updatePFCell(int min);
 

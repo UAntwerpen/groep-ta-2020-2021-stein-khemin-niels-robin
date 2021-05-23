@@ -34,7 +34,7 @@ public:
     virtual EStates getState() const = 0;
 
     /*!
-     * update alle entiteiten van de cell
+     * updateRules alle entiteiten van de cell
      */
     virtual void update() = 0;
 
