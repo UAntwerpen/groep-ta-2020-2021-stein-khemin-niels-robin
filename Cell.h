@@ -48,7 +48,7 @@ public:
     };
 
     /*!
-     * geeft terug hoeveel happiness een bepaalde cell uitstoot
+     * geeft terug hoeveel happiness een bepaalde cell uitstoot (tussen -1 en 1)
      * @return float
      */
     virtual float getHappiness() const;
@@ -102,23 +102,19 @@ public:
      */
     void setPos(std::pair<int, int> pos);
 
-    double getDilapidated() {return 0;};
+    virtual bool isDilapidated() {return false;};
 
     /*
      * int: rotation, string: pad to pixel art
      */
     virtual std::pair<int, std::string> getPixelArt(){return std::pair<int, std::string>(0, "");};
 
-private:
+protected:
     int row = 0;
     int col = 0;
-    int days = 0;
-    double verval = 0;
 
-    CellulaireAutomaat* cellulaireAutomaat;
     std::vector<Citizen*> people;
-
-    void updateDilapidated();
+    CellulaireAutomaat* cellulaireAutomaat;
 };
 
 class Vegetation : public Cell{
@@ -126,7 +122,7 @@ public:
     Vegetation(int row, int col, CellulaireAutomaat* cellulaireAutomaat): Cell(row, col, cellulaireAutomaat){}
 
     //TODO Weg
-    Vegetation(){ std::cout << "FOUT!" << std::endl;}
+    Vegetation(){}
 
     /*
      * Copy constructor
@@ -143,6 +139,10 @@ public:
 
     float getHappiness() const override;
 
+    void addPerson(Citizen* person) override;
+
+    std::vector<Citizen*> getPersons() const override;
+
 private:
     std::string pixelArt = "../PixelArt/Default.png";
 };
@@ -150,7 +150,7 @@ private:
 class Road : public Cell{
 public:
     //TODO weg
-    Road(){std::cout << "FOUT!" << std::endl;}
+    Road(){}
 
     Road(int row, int col, CellulaireAutomaat *cellulaireAutomaat) : Cell(row, col, cellulaireAutomaat){};
 
@@ -175,13 +175,15 @@ public:
 
     //std::vector<Pedestrian*> getPersons() const override;
 
+    bool isDilapidated() override;
+
 private:
     /*
      * returns rotatie en string van weg
      */
-
     std::pair<int, std::string> getCorrectRoad(std::vector<bool> &roadConnectPoint);
     std::vector<Vehicle*> vehicles;
+    int verval;
 };
 
 class ResidentialZone : public Cell{
@@ -209,6 +211,8 @@ public:
     void addPerson(Citizen* person) override;
 
     //std::vector<Pedestrian*> getPersons() const override;
+
+    bool isDilapidated() override;
 };
 
 class IndustrialZone : public Cell{
@@ -236,6 +240,8 @@ public:
     void addPerson(Citizen* person) override;
 
     //std::vector<Pedestrian*> getPersons() const override;
+
+    bool isDilapidated() override;
 };
 
 class StoreZone : public Cell{
@@ -263,6 +269,8 @@ public:
     void addPerson(Citizen* person) override;
 
     //std::vector<Pedestrian*> getPersons() const override;
+
+    bool isDilapidated() override;
 };
 
 class CellFactorySingleton{
