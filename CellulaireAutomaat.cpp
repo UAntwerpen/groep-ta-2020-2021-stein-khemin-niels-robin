@@ -153,6 +153,7 @@ void CellulaireAutomaat::updateRules() {
             }
         }
     }
+    w->UpdateAll();
 }
 
 int CellulaireAutomaat::count(const EStates &state) const {

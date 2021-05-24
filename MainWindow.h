@@ -27,6 +27,7 @@ public:
     void drawTile(int row, int col, int rotation, const std::string pixelart);
     void addCar(int row, int col, int rotation, const std::string pixelart);
     void addPedestrian(int row, int col, int rotation, const std::string pixelart);
+    void handleButton();
 private slots:
     void clicked();
 private:
