@@ -56,6 +56,20 @@ std::vector<bool> Cell::getRoadConnectPoints() {
     return std::vector<bool>{false,false,false,false};
 }
 
+void Cell::updateDaysUntilExpired() {
+    std::vector<Cell *>neighbors = this->getCellulaireAutomaat()->getNeighbourhood(this->col, this->row);
+    int neighborsExpired = 0;
+    for(auto it = neighbors.begin(); it != neighbors.end(); it++){
+        if((*it)->isExpired())
+            neighborsExpired++;
+    }
+    this->daysUntilExpired = 1.2 + (0.2 * neighborsExpired) - this->getHappiness();
+}
+
+double Cell::isExpired() {
+    return this->daysUntilExpired < 0;
+}
+
 EStates Vegetation::getState() const {
     return EVegetation;
 }

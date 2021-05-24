@@ -102,7 +102,7 @@ public:
      */
     void setPos(std::pair<int, int> pos);
 
-    double getDilapidated() {return 0;};
+    double isExpired();
 
     /*
      * int: rotation, string: pad to pixel art
@@ -112,13 +112,12 @@ public:
 protected:
     int row = 0;
     int col = 0;
-    int days = 0;
-    double verval = 0;
+    double daysUntilExpired = 0;
 
     CellulaireAutomaat* cellulaireAutomaat;
     std::vector<Citizen*> people;
 
-    void updateDilapidated();
+    void updateDaysUntilExpired();
 };
 
 class Vegetation : public Cell{
