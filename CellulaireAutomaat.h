@@ -23,6 +23,8 @@ public:
      */
     CellulaireAutomaat(int width, int height, const std::string& rules);
 
+    CellulaireAutomaat(const std::string& filename);
+
     virtual ~CellulaireAutomaat();
 
     /*!
@@ -65,9 +67,14 @@ public:
     void changeCell(int row, int column, Cell* to);
 
     /*!
+     * applies the rules in the automat from top left to bottom right
+     */
+    void updateRules();
+
+    /*!
      * updates every cell in the automat from top left to bottom right
      */
-    void update();
+    void updateCells();
 
     /*!
      * gives back how many states of the given state are in the automat

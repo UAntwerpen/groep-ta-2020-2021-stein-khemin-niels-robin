@@ -25,9 +25,60 @@ CellulaireAutomaat::CellulaireAutomaat(int width, int height, const std::string&
         std::cerr << "couldn't open file!" << std::endl;
     }
     file.close();
+    w = nullptr;
 //    w = new MainWindow(100, 100);
 //    draw();
 //    w->show();
+}
+
+CellulaireAutomaat::CellulaireAutomaat(const std::string &filename) {
+    w = nullptr;
+    std::ifstream file(filename);
+    std::string line;
+    bool map = false;
+    int row = 0;
+    while(file.good()) {
+        std::getline(file, line);
+        if (line.find("DIM=") != std::string::npos){
+            size_t xpos = line.find('x');
+            int wi = std::stoi(line.substr(4, xpos - 4));
+            int he = std::stoi(line.substr(7, line.length()));
+            width = wi;
+            height = he;
+            matrix = std::vector<Cell*>(width * height);
+        }
+        else if(line.find("MAP:") != std::string::npos){
+            map = true;
+        }
+        else if (map){
+            int col = 0;
+            for (char c: line){
+                switch (c) {
+                    case 'r':
+                        changeCell(row, col, new Road(row, col, this));
+                        break;
+                    case 'R':
+                        changeCell(row, col, new ResidentialZone(row, col, this));
+                        break;
+                    case 'I':
+                        changeCell(row, col, new IndustrialZone(row, col, this));
+                        break;
+                    case 'S':
+                        changeCell(row, col, new StoreZone(row, col, this));
+                        break;
+                    case 'V':
+                    default:
+                        changeCell(row, col, new Vegetation(row, col, this));
+                        break;
+                }
+                ++col;
+            }
+            ++row;
+        }
+        std::cout << line << std::endl;
+    }
+
+    file.close();
 }
 
 CellulaireAutomaat::~CellulaireAutomaat() {
@@ -43,8 +94,7 @@ CellulaireAutomaat::~CellulaireAutomaat() {
 Cell* CellulaireAutomaat::operator()(int row, int column) const {
     REQUIRE(0 <= row && row < width, "Row is out of bounds!");
     REQUIRE(0 <= column && column < height, "Column is out of bounds!");
-    //return matrix[(row + 1) * height + (column + 1)];//TODO waarom +1?
-    return matrix[row * height + column];
+    return matrix[(row + 1) * height + (column + 1)];//TODO waarom +1?
 }
 
 std::vector<Cell *> CellulaireAutomaat::getNeighbourhood(int row, int col) {
@@ -89,63 +139,64 @@ void CellulaireAutomaat::changeCell(int row, int column, Cell *to) {
     matrix[row * height + column] = to;
 }
 
-void CellulaireAutomaat::update() {
-    for (int col = 0; col < width; col++){
-        for (int row = 0; row < height; row++){
-            EStates state = static_cast<EStates>(rules[getNeighbourhoodValue(row, col)]);
-            if (state == (*this)(row, col)->getState()) {
-                (*this)(row, col)->update();
-                continue;
-            }
-            Cell* new_cell = new Vegetation(row, col, this); //TODO
-            new_cell->update();
-            changeCell(row, col, new_cell);
-        }
-    }
-}
-
-int CellulaireAutomaat::count(const EStates &state) const {
-    int counter = 0;
-    for (int col = 0; col < width; col++){
-        for (int row = 0; row < height; row++){
-            if ((*this)(row, col)->getState() == state){
-                counter++;
+    void CellulaireAutomaat::updateRules() {
+        for (int col = 0; col < width; col++) {
+            for (int row = 0; row < height; row++) {
+                EStates state = static_cast<EStates>(rules[getNeighbourhoodValue(row, col)]);
+                if (state == (*this)(row, col)->getState()) {
+                    (*this)(row, col)->update();
+                    if (state == (*this)(row, col)->getState()) {
+                        continue;
+                    }
+                    Cell *new_cell = new Vegetation(row, col, this); //TODO
+                    changeCell(row, col, new_cell);
+                }
             }
         }
     }
-    return counter;
-}
 
-std::map<EStates, int> CellulaireAutomaat::count_all() const {
-    std::map<EStates, int> counters;
-    counters[static_cast<EStates>(0)] = 0;
-    counters[static_cast<EStates>(1)] = 0;
-    counters[static_cast<EStates>(2)] = 0;
-    counters[static_cast<EStates>(3)] = 0;
-    counters[static_cast<EStates>(4)] = 0;
-    for (int col = 0; col < width; col++){
-        for (int row = 0; row < height; row++){
-            EStates cell_state = (*this)(row, col)->getState();
-            counters[cell_state]++;
+    int CellulaireAutomaat::count(const EStates &state) const {
+        int counter = 0;
+        for (int col = 0; col < width; col++) {
+            for (int row = 0; row < height; row++) {
+                if ((*this)(row, col)->getState() == state) {
+                    counter++;
+                }
+            }
         }
+        return counter;
     }
-    return counters;
-}
 
-int CellulaireAutomaat::getWidth() const {
-    ENSURE(width > 0, "Width is less then 0!");
-    return width;
-}
+    std::map<EStates, int> CellulaireAutomaat::count_all() const {
+        std::map<EStates, int> counters;
+        counters[static_cast<EStates>(0)] = 0;
+        counters[static_cast<EStates>(1)] = 0;
+        counters[static_cast<EStates>(2)] = 0;
+        counters[static_cast<EStates>(3)] = 0;
+        counters[static_cast<EStates>(4)] = 0;
+        for (int col = 0; col < width; col++) {
+            for (int row = 0; row < height; row++) {
+                EStates cell_state = (*this)(row, col)->getState();
+                counters[cell_state]++;
+            }
+        }
+        return counters;
+    }
 
-int CellulaireAutomaat::getHeight() const {
-    ENSURE(height > 0, "Height is less then 0!");
-    return height;
-}
+    int CellulaireAutomaat::getWidth() const {
+        ENSURE(width > 0, "Width is less then 0!");
+        return width;
+    }
 
-void CellulaireAutomaat::draw() {
+    int CellulaireAutomaat::getHeight() const {
+        ENSURE(height > 0, "Height is less then 0!");
+        return height;
+    }
+
+    void CellulaireAutomaat::draw() {
 //    for (int col = 0; col < width; col++){
 //        for (int row = 0; row < height; row++){
 //            w->drawTile(row, col, 0, (*this)(row, col).getPixelArt());
 //        }
 //    }
-}
+    }
