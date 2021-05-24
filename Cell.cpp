@@ -26,6 +26,10 @@ std::pair<int, int> Cell::getPos() const{
     return std::make_pair(row, col);
 }
 
+float Cell::getHappiness() const {
+    return 0;
+}
+
 void Cell::setPos(int r, int c) {
     REQUIRE(r >= 0, "Row is out of bounds!");
     REQUIRE(c >= 0, "Column is out of bounds!");
@@ -56,6 +60,20 @@ std::vector<bool> Cell::getRoadConnectPoints() {
     return std::vector<bool>{false,false,false,false};
 }
 
+void Cell::updateDaysUntilExpired() {
+    std::vector<Cell *>neighbors = this->getCellulaireAutomaat()->getNeighbourhood(this->col, this->row);
+    int neighborsExpired = 0;
+    for(auto it = neighbors.begin(); it != neighbors.end(); it++){
+        if((*it)->isExpired())
+            neighborsExpired++;
+    }
+    this->daysUntilExpired = 1.2 + (0.2 * neighborsExpired) - this->getHappiness();
+}
+
+double Cell::isExpired() {
+    return this->daysUntilExpired < 0;
+}
+
 EStates Vegetation::getState() const {
     return EVegetation;
 }
@@ -64,7 +82,7 @@ void Vegetation::update() {
 
 }
 
-float Vegetation::getHappiness() const {
+float StoreZone::getHappiness() const {
     float value = 0;
 
     //check for houses and other stores in radius
@@ -92,6 +110,28 @@ float Vegetation::getHappiness() const {
 
 void Vegetation::drawToScreen(MainWindow *window) {
     window->drawTile(this->getPos().first, this->getPos().second, this->getPixelArt().first, this->getPixelArt().second);
+}
+
+float Vegetation::getHappiness() const {
+    float value = 0;
+    //check for workplaces in radius
+    int workplaces = this->getCellulaireAutomaat()->count(EIndustrialZone, row, col, 10);
+    value -= workplaces*0.2;
+    if(workplaces == 0) value += 0.4;
+    //check for road in neighbourhood
+    std::vector<Cell*> neighbourhood = this->getCellulaireAutomaat()->getNeighbourhood(row,col);
+    bool road = false;
+    for(auto it = neighbourhood.begin(); it != neighbourhood.end(); it++){
+        if((*it)->getState() == ERoad){
+            road = true;
+            break;
+        }
+    }
+    if(!road) value -= 0.5;
+
+    if(value < -1) value = -1;
+    if(value > 1) value = 1;
+    return value;
 }
 
 std::pair<int, std::string> Vegetation::getPixelArt() {
