@@ -147,6 +147,10 @@ std::pair<int, std::string> Vegetation::getPixelArt() {
     return std::pair<int, std::string>(0, pixelArt);
 }
 
+Vegetation::Vegetation(const Cell &p2) : Cell(p2.getPos().first, p2.getPos().second, p2.getCellulaireAutomaat()) {
+    this->people = p2.getPersons();
+}
+
 EStates Road::getState() const {
     return ERoad;
 }
@@ -242,6 +246,10 @@ void Road::updateDaysUntilExpired() {
     }
 }
 
+Road::Road(const Cell &p2): Cell(p2.getPos().first, p2.getPos().second, p2.getCellulaireAutomaat()) {
+    this->people = p2.getPersons();
+}
+
 EStates ResidentialZone::getState() const {
     return EResidentialZone;
 }
@@ -288,6 +296,10 @@ std::pair<int, std::string> ResidentialZone::getPixelArt() {
     return std::pair<int, std::string>(0, this->building.getPixelArt());
 }
 
+ResidentialZone::ResidentialZone(const Cell &p2): Cell(p2.getPos().first, p2.getPos().second, p2.getCellulaireAutomaat()) {
+    this->people = p2.getPersons();
+}
+
 EStates IndustrialZone::getState() const {
     return EIndustrialZone;
 }
@@ -332,6 +344,10 @@ std::pair<int, std::string> IndustrialZone::getPixelArt() {
     return std::pair<int, std::string>(0, this->building.getPixelArt());
 }
 
+IndustrialZone::IndustrialZone(const Cell &p2): Cell(p2.getPos().first, p2.getPos().second, p2.getCellulaireAutomaat()) {
+    this->people = p2.getPersons();
+}
+
 EStates StoreZone::getState() const {
     return EStoreZone;
 }
@@ -348,6 +364,10 @@ std::pair<int, std::string> StoreZone::getPixelArt() {
     if(this->isExpired())
         return std::pair<int, std::string>(0, this->building.getExpiredPixelArt());
     return std::pair<int, std::string>(0, this->building.getPixelArt());
+}
+
+StoreZone::StoreZone(const Cell &p2): Cell(p2.getPos().first, p2.getPos().second, p2.getCellulaireAutomaat()) {
+    this->people = p2.getPersons();
 }
 
 Cell *CellFactorySingleton::getCell(EStates state) {

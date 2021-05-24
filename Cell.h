@@ -125,6 +125,8 @@ class Vegetation : public Cell{
 public:
     Vegetation(int row, int col, CellulaireAutomaat* cellulaireAutomaat): Cell(row, col, cellulaireAutomaat){}
 
+    Vegetation(const Cell &p2);
+
     //TODO Weg
     Vegetation(){}
 
@@ -147,6 +149,8 @@ class Road : public Cell{
 public:
     //TODO weg
     Road(){std::cout << "FOUT!" << std::endl;}
+
+    Road(const Cell &p2);
 
     Road(int row, int col, CellulaireAutomaat *cellulaireAutomaat) : Cell(row, col, cellulaireAutomaat){};
 
@@ -192,6 +196,8 @@ public:
         building = House();
     }
 
+    ResidentialZone(const Cell &p2);
+
     ResidentialZone(int row, int col, CellulaireAutomaat *cellulaireAutomaat);
 
     EStates getState() const override;
@@ -210,6 +216,8 @@ public:
     //TODO weg
     IndustrialZone(){std::cout << "FOUT" << std::endl;}
 
+    IndustrialZone(const Cell &p2);
+
     IndustrialZone(int row, int col, CellulaireAutomaat *cellulaireAutomaat);
 
     EStates getState() const override;
@@ -227,6 +235,8 @@ private:
 public:
     //TODO weg
     StoreZone(){std::cout << "FOUT" << std::endl;}
+
+    StoreZone(const Cell &p2);
 
     StoreZone(int row, int col, CellulaireAutomaat *cellulaireAutomaat);
 
