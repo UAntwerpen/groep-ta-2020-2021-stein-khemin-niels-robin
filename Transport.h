@@ -8,6 +8,7 @@
 #include <string>
 #include "CellulaireAutomaat.h"
 #include "Lib.h"
+#include "Pathfinding.h"
 
 using namespace std;
 
@@ -71,6 +72,14 @@ public:
      * @param r : string : nieuwe route voor het Transport
      */
     void setRoute(string r);
+
+    /**
+     * Berekent de route voor het Transport adv het gegeven PFMask.
+     * @param mask : Pathfinding mask om de route mee te berekenen.
+     *
+     * REQUIRE(mask.getCell(goalPoss.first, goalPoss.second).getValue() == 0, "incompatible PFMask for this Transport.")
+     */
+    void calculateRoute(PFMask mask);
 
     /**
      * Geeft de huidige progress doorheen de route terug.

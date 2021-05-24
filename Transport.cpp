@@ -54,6 +54,12 @@ void Transport::setRoute(string r) {
     this->changeDirection();
 }
 
+void Transport::calculateRoute(PFMask mask) {
+    pair<int, int> goalPoss = this->getGoal()->getPos();
+    REQUIRE(mask.getCell(goalPoss.first, goalPoss.second).getValue() == 0, "incompatible PFMask for this Transport.");
+    //TODO implementatie
+}
+
 int Transport::getProgress() {
     return progress;
 }
@@ -119,5 +125,3 @@ void Transport::update(CellulaireAutomaat& city) {
         this->setRoute("");
     }
 }
-
-

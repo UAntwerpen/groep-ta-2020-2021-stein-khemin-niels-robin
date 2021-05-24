@@ -22,6 +22,9 @@ PFMask::PFMask(int width, int height) : width(width), height(height) {
 PFMask::PFMask(CellulaireAutomaat& cellAutomaat, Transport* transport) : width(cellAutomaat.getWidth()), height(cellAutomaat.getHeight()) {
     REQUIRE(1 < width, "Width is too small(must be at least 2)!");
     REQUIRE(1 < height, "Height is too small(must be at least 2)!");
+    REQUIRE(transport->getLocation() != nullptr, "transport must exist in a loaction.");
+    REQUIRE(transport->getGoal() != nullptr, "transport must have a goal.");
+
     mask = new PFCell *[height];
     for (int i = 0; i < height; i++){
         mask[i] = new PFCell[width];
