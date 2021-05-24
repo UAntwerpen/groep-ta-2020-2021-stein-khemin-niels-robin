@@ -18,7 +18,6 @@ MainWindow::MainWindow(int w, int h) {
     drawGrid(w, h);
     view = new QGraphicsView(scene);
 
-    QDockWidget *cityDock;
     cityDock = new QDockWidget(tr("City"), this);
     cityDock->setAllowedAreas(Qt::LeftDockWidgetArea |
                                 Qt::RightDockWidgetArea);
@@ -32,18 +31,12 @@ MainWindow::MainWindow(int w, int h) {
     addDockWidget(Qt::LeftDockWidgetArea, settingsDock);
     settingsDock->setFixedWidth(260);
 
-    QVBoxLayout* boxLayout = new QVBoxLayout();
-    QPushButton* button = new QPushButton();
+    boxLayout = new QVBoxLayout();
+    button = new QPushButton();
     button->setText("Start");
     button->setGeometry(30,30,200,50);
 
-
-    QAction* action = new QAction();
-    QActionEvent* actionEvent1 = new QActionEvent();
-    actionEvent1.
-    action->activate()
-
-    button->addAction(action);
+    this->connect(button, &QAction::triggered, this, &MainWindow::clicked);
 
 
     QPushButton* button1 = new QPushButton();

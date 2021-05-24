@@ -46,6 +46,9 @@ private:
     std::vector<QGraphicsPixmapItem*> Walls;
     QGraphicsScene *scene;
     QGraphicsView *view;
+    QVBoxLayout* boxLayout;
+    QPushButton* button;
+    QDockWidget* cityDock;
     int height;
     int width;
 };
