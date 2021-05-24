@@ -40,32 +40,16 @@ void Cell::setPos(std::pair<int, int> pos) {
     col = pos.second;
 }
 
-ResidentialZone::ResidentialZone() {
-    building = House();
-}
-
 bool ResidentialZone::isDilapidated() {
     return building.getVerval() > 0;
-}
-
-IndustrialZone::IndustrialZone() {
-    building = Workplace();
 }
 
 bool IndustrialZone::isDilapidated() {
     return building.getVerval() > 0;
 }
 
-StoreZone::StoreZone() {
-    building = Store();
-}
-
 void Cell::addPerson(Citizen *person) {
 
-}
-
-float Cell::getHappiness() const {
-    return 0;
 }
 
 std::vector<Citizen *> Cell::getPersons() const {
@@ -116,10 +100,6 @@ void Road::update() {
 
 }
 
-float Road::getHappiness() const {
-    return 0;
-}
-
 void Road::addPerson(Citizen *person) {
 
 }
@@ -167,9 +147,6 @@ std::pair<int, std::string> Road::getCorrectRoad(std::vector<bool> &roadConnectP
     }
 }
 
-Road::Road(int row, int col, CellulaireAutomaat *cellulaireAutomaat) : Cell(row, col, cellulaireAutomaat) {
-}
-
 std::vector<bool> Road::getNeighborsRoads() {
     int row = this->getPos().first;
     int col = this->getPos().second;
@@ -214,6 +191,10 @@ void ResidentialZone::addPerson(Citizen *person) {
 
 }
 
+ResidentialZone::ResidentialZone(int row, int col, CellulaireAutomaat *cellulaireAutomaat) : Cell(row, col, cellulaireAutomaat) {
+    building = House();
+}
+
 EStates IndustrialZone::getState() const {
     return EIndustrialZone;
 }
@@ -230,6 +211,10 @@ void IndustrialZone::addPerson(Citizen *person) {
 
 }
 
+IndustrialZone::IndustrialZone(int row, int col, CellulaireAutomaat *cellulaireAutomaat) : Cell(row, col, cellulaireAutomaat) {
+    building = Workplace();
+}
+
 EStates StoreZone::getState() const {
     return EStoreZone;
 }
@@ -238,16 +223,16 @@ void StoreZone::update() {
 
 }
 
-float StoreZone::getHappiness() const {
-    return 0;
-}
-
 void StoreZone::addPerson(Citizen *person) {
 
 }
 
 bool StoreZone::isDilapidated() {
     return Cell::isDilapidated();
+}
+
+StoreZone::StoreZone(int row, int col, CellulaireAutomaat *cellulaireAutomaat) : Cell(row, col, cellulaireAutomaat) {
+    building = Store();
 }
 
 Cell *CellFactorySingleton::getCell(EStates state) {

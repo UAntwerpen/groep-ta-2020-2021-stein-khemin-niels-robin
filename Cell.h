@@ -152,7 +152,7 @@ public:
     //TODO weg
     Road(){}
 
-    Road(int row, int col, CellulaireAutomaat* cellulaireAutomaat);
+    Road(int row, int col, CellulaireAutomaat *cellulaireAutomaat) : Cell(row, col, cellulaireAutomaat){};
 
     /*
      * Copy constructor
@@ -190,7 +190,12 @@ class ResidentialZone : public Cell{
 private:
     House building;
 public:
-    ResidentialZone();
+    //TODO weg
+    ResidentialZone(){
+        building = House();
+    }
+
+    ResidentialZone(int row, int col, CellulaireAutomaat *cellulaireAutomaat);
 
     /*
      * Copy constructor
@@ -214,7 +219,12 @@ class IndustrialZone : public Cell{
 private:
     Workplace building;
 public:
-    IndustrialZone();
+    //TODO weg
+    IndustrialZone(){
+        building = Workplace();
+    }
+
+    IndustrialZone(int row, int col, CellulaireAutomaat *cellulaireAutomaat);
 
     /*
      * Copy constructor
@@ -238,7 +248,12 @@ class StoreZone : public Cell{
 private:
     Store building;
 public:
-    StoreZone();
+    //TODO weg
+    StoreZone(){
+        building = Store();
+    }
+
+    StoreZone(int row, int col, CellulaireAutomaat *cellulaireAutomaat);
 
     /*
      * Copy constructor
