@@ -102,7 +102,7 @@ public:
      */
     void setPos(std::pair<int, int> pos);
 
-    virtual bool isDilapidated() {return false;};
+    double getDilapidated() {return 0;};
 
     /*
      * int: rotation, string: pad to pixel art
@@ -112,9 +112,13 @@ public:
 private:
     int row = 0;
     int col = 0;
+    int days = 0;
+    double verval = 0;
 
     CellulaireAutomaat* cellulaireAutomaat;
     std::vector<Citizen*> people;
+
+    void updateDilapidated();
 };
 
 class Vegetation : public Cell{
@@ -122,7 +126,7 @@ public:
     Vegetation(int row, int col, CellulaireAutomaat* cellulaireAutomaat): Cell(row, col, cellulaireAutomaat){}
 
     //TODO Weg
-    Vegetation(){}
+    Vegetation(){ std::cout << "FOUT!" << std::endl;}
 
     /*
      * Copy constructor
@@ -139,10 +143,6 @@ public:
 
     float getHappiness() const override;
 
-    void addPerson(Citizen* person) override;
-
-    std::vector<Citizen*> getPersons() const override;
-
 private:
     std::string pixelArt = "../PixelArt/Default.png";
 };
@@ -150,7 +150,7 @@ private:
 class Road : public Cell{
 public:
     //TODO weg
-    Road(){}
+    Road(){std::cout << "FOUT!" << std::endl;}
 
     Road(int row, int col, CellulaireAutomaat *cellulaireAutomaat) : Cell(row, col, cellulaireAutomaat){};
 
@@ -175,15 +175,13 @@ public:
 
     //std::vector<Pedestrian*> getPersons() const override;
 
-    bool isDilapidated() override;
-
 private:
     /*
      * returns rotatie en string van weg
      */
+
     std::pair<int, std::string> getCorrectRoad(std::vector<bool> &roadConnectPoint);
     std::vector<Vehicle*> vehicles;
-    int verval;
 };
 
 class ResidentialZone : public Cell{
@@ -211,8 +209,6 @@ public:
     void addPerson(Citizen* person) override;
 
     //std::vector<Pedestrian*> getPersons() const override;
-
-    bool isDilapidated() override;
 };
 
 class IndustrialZone : public Cell{
@@ -240,8 +236,6 @@ public:
     void addPerson(Citizen* person) override;
 
     //std::vector<Pedestrian*> getPersons() const override;
-
-    bool isDilapidated() override;
 };
 
 class StoreZone : public Cell{
@@ -269,8 +263,6 @@ public:
     void addPerson(Citizen* person) override;
 
     //std::vector<Pedestrian*> getPersons() const override;
-
-    bool isDilapidated() override;
 };
 
 class CellFactorySingleton{
