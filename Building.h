@@ -13,6 +13,8 @@ class Citizen;
 class Building {
 public:
     void setPixelArt(std::string path);
+    std::string getPixelArt();
+    std::string getExpiredPixelArt();
     int getVerval();
 
 protected:

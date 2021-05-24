@@ -11,6 +11,14 @@ int Building::getVerval() {
     return verval;
 }
 
+std::string Building::getPixelArt() {
+    return this->pixelart;
+}
+
+std::string Building::getExpiredPixelArt() {
+    return this->pixelart.substr(0, this->pixelart.size()-4) + "_Broken.png";
+}
+
 House::House() {
     bewoners = 4;
     maxPeopleAmount = 8;

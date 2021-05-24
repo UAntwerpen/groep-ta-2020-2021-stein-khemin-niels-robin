@@ -19,6 +19,8 @@ class Cell {
 public:
     Cell();
 
+    Cell(const Cell &p2);
+
     //TODO weg
     Cell(int row, int col);
 
@@ -54,12 +56,6 @@ public:
     virtual float getHappiness() const;
 
     /*!
-     * voegt een persoon toe aan een cell
-     * @param person
-     */
-    virtual void addPerson(Citizen* person);
-
-    /*!
      * Geeft voor elke zijde weer of er een weg aan verbonden kan worden;
      *  [0]: links        [2]
      *  [1]: rechts      xxxxx
@@ -70,10 +66,16 @@ public:
     virtual std::vector<bool> getRoadConnectPoints();
 
     /*!
+    * voegt een persoon toe aan een cell
+    * @param person
+    */
+    void addPerson(Citizen* person);
+
+    /*!
      * geeft alle personen terug die op de cell staan
      * @return
      */
-    virtual std::vector<Citizen*> getPersons() const;
+    std::vector<Citizen*> getPersons() const;
 
     /*!
      * geeft de postitie van de cell terug
@@ -102,7 +104,7 @@ public:
      */
     void setPos(std::pair<int, int> pos);
 
-    double isExpired();
+    bool isExpired();
 
     /*
      * int: rotation, string: pad to pixel art
@@ -116,7 +118,6 @@ protected:
 
     CellulaireAutomaat* cellulaireAutomaat;
     std::vector<Citizen*> people;
-
     void updateDaysUntilExpired();
 };
 
@@ -126,11 +127,6 @@ public:
 
     //TODO Weg
     Vegetation(){}
-
-    /*
-     * Copy constructor
-     */
-    Vegetation(const Vegetation &V1);
 
     EStates getState() const override;
 
@@ -144,6 +140,7 @@ public:
 
 private:
     std::string pixelArt = "../PixelArt/Park.png";
+    std::string pixelArtVervallen = "../PixelArt/Park_Broken.png";
 };
 
 class Road : public Cell{
@@ -152,11 +149,6 @@ public:
     Road(){std::cout << "FOUT!" << std::endl;}
 
     Road(int row, int col, CellulaireAutomaat *cellulaireAutomaat) : Cell(row, col, cellulaireAutomaat){};
-
-    /*
-     * Copy constructor
-     */
-    Road(const Road &R1);
 
     EStates getState() const override;
 
@@ -168,18 +160,24 @@ public:
 
     std::vector<bool> getNeighborsRoads();
 
-    //float getHappiness() const override;
+    /*!
+     * geeft alle auto's terug die op de cell staan
+     * @return
+     */
+    std::vector<Vehicle*> getVehicles() const;
 
-    void addPerson(Citizen* person) override;
-
-    //std::vector<Pedestrian*> getPersons() const override;
+    /*!
+    * voeg auto toe aan cell
+    * @return
+    */
+    void addVehicle(Vehicle*);
 
 private:
     /*
      * returns rotatie en string van weg
      */
-
     std::pair<int, std::string> getCorrectRoad(std::vector<bool> &roadConnectPoint);
+    std::string pixelArtVervallen = "../PixelArt/Road_Broken.png";
     std::vector<Vehicle*> vehicles;
 };
 
@@ -194,20 +192,13 @@ public:
 
     ResidentialZone(int row, int col, CellulaireAutomaat *cellulaireAutomaat);
 
-    /*
-     * Copy constructor
-     */
-    ResidentialZone(const ResidentialZone &R1);
-
     EStates getState() const override;
 
     void update() override;
 
     float getHappiness() const override;
 
-    void addPerson(Citizen* person) override;
-
-    //std::vector<Pedestrian*> getPersons() const override;
+    std::pair<int, std::string> getPixelArt() override;
 };
 
 class IndustrialZone : public Cell{
@@ -215,16 +206,9 @@ private:
     Workplace building;
 public:
     //TODO weg
-    IndustrialZone(){
-        building = Workplace();
-    }
+    IndustrialZone(){std::cout << "FOUT" << std::endl;}
 
     IndustrialZone(int row, int col, CellulaireAutomaat *cellulaireAutomaat);
-
-    /*
-     * Copy constructor
-     */
-    IndustrialZone(const IndustrialZone &I1);
 
     EStates getState() const override;
 
@@ -232,9 +216,7 @@ public:
 
     float getHappiness() const override;
 
-    void addPerson(Citizen* person) override;
-
-    //std::vector<Pedestrian*> getPersons() const override;
+    std::pair<int, std::string> getPixelArt() override;
 };
 
 class StoreZone : public Cell{
@@ -242,16 +224,9 @@ private:
     Store building;
 public:
     //TODO weg
-    StoreZone(){
-        building = Store();
-    }
+    StoreZone(){std::cout << "FOUT" << std::endl;}
 
     StoreZone(int row, int col, CellulaireAutomaat *cellulaireAutomaat);
-
-    /*
-     * Copy constructor
-     */
-    StoreZone(const StoreZone &S1);
 
     EStates getState() const override;
 
@@ -259,9 +234,7 @@ public:
 
     float getHappiness() const override;
 
-    void addPerson(Citizen* person) override;
-
-    //std::vector<Pedestrian*> getPersons() const override;
+    std::pair<int, std::string> getPixelArt() override;
 };
 
 class CellFactorySingleton{
