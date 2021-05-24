@@ -17,6 +17,18 @@ class CellulaireAutomaat;
 class Transport {
 public:
     /**
+     * Default Constructor
+     */
+    Transport();
+
+    /**
+     * Initialiseert een Transport object met gegeven locatie en optioneel een gegeven goal.
+     * @param location : Cell pointer : Locatie waar transport geinitialiseerd wordt.
+     * @param goal : Cell pointer : De goal van het transport. Het transport zal naar deze cel verplaatsen met het Pathfinding algoritme.
+     */
+    Transport(Cell* location, Cell* goal = nullptr);
+
+    /**
      * Geeft een pointer terug naar de huidige locatie van het Transport.
      *
      * @return Pointer naar de Cell die het Transport bevat.
@@ -61,10 +73,51 @@ public:
     void setRoute(string r);
 
     /**
-     * Verplaatst het Transport in de gegeven richting;
-     * @param direction : richting waarin het Transport beweegt
+     * Geeft de huidige progress doorheen de route terug.
+     * @return integer : index van de route string waar het transport zich momenteel bevindt.
      */
-    void update(CellulaireAutomaat& city, char direction);
+    int getProgress();
+
+    /**
+     * Stelt de progress van het transport in op de gegeven index.
+     * @param i : integer : nieuwe progress index van het Transport.
+     *
+     * ENSURE(this->getProgress() == i, "setProgress post condition failure")
+     */
+    void setProgress(int i);
+
+    /**
+     * Verhoogt de progress van het Transport met 1.
+     */
+    void increaseProgress();
+
+    /**
+     * Geeft de huidige richting van het Transport terug.
+     * @return : character : Richting waarin het Transport momenteel beweegt.
+     */
+    char getDirection();
+
+    /**
+     * Stelt de richting van het Transport in op het gegeven character.
+     * @param c : character : nieuwe richting van het Transport.
+     *
+     * ENSURE(this->getDirection() == c, "setDirection post condition failure")
+     */
+    void setDirection(char c);
+
+    /**
+     * Verandert de richting van het Transport adv de volgende stap die het Transport zet.
+     *
+     * REQUIRE(not this->getRoute().empty(), "Route is empty when calling changeDirection")
+     * ENSURE(this->getDirection() == this->getRoute()[next], "chanceDirection did not change direction correctly.")
+     */
+    void changeDirection();
+
+    /**
+     * Verplaatst het Transport 1 stap vooruit volgens zijn pad.
+     * @param city : De cellulaire automaat waardoor het Tranport zich beweegt.
+     */
+    virtual void update(CellulaireAutomaat& city);
 
     /*!
      * geeft de gepaste enum waarde terug
@@ -80,7 +133,10 @@ private:
     Cell* goal;
     string route;
 
-    int speed;
+    int progress;
+    char direction;
+
+//    int speed;
 };
 
 
