@@ -28,6 +28,7 @@ void MainWindow::UpdateRoadUsers() {
 
 void MainWindow::UpdateAll() {
     clearBuildings();
+    drawGrid(width,height);
     for (int x = 0; x < width; x++) {
         for (int y = 0; y < height; y++) {
             //todo check pixelart for each cell

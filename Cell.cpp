@@ -49,25 +49,11 @@ std::vector<Citizen *> Cell::getPersons() const {
 }
 
 CellulaireAutomaat* Cell::getCellulaireAutomaat() const {
-    return cellulaireAutomaat;
+    return this->getCellulaireAutomaat();
 }
 
 std::vector<bool> Cell::getRoadConnectPoints() {
     return std::vector<bool>{false,false,false,false};
-}
-
-float Cell::getHappiness() const {
-    return 0;
-}
-
-void Cell::updateDilapidated() {
-    double neighborsDecline = 0;
-    std::vector<Cell *> neighbors = this->getCellulaireAutomaat()->getNeighbourhood(this->getPos().first, this->getPos().second);
-    for(auto it = neighbors.begin(); it != neighbors.end(); it++){
-        neighborsDecline += (*it)->getDilapidated();
-    }
-
-    this->verval = this->days + (neighborsDecline/neighbors.size());
 }
 
 EStates Vegetation::getState() const {
@@ -79,7 +65,29 @@ void Vegetation::update() {
 }
 
 float Vegetation::getHappiness() const {
-    return 0;
+    float value = 0;
+
+    //check for houses and other stores in radius
+    int stores = this->getCellulaireAutomaat()->count(EStoreZone, row, col, 10)-1;
+    int houses = this->getCellulaireAutomaat()->count(EResidentialZone, row, col, 10);
+    value -= stores*0.2;
+    value += houses*0.2;
+    if(houses == 0) value -= 0.5;
+    if(stores == 0) value += 0.5;
+    //check for road in neighbourhood
+    std::vector<Cell*> neighbourhood = this->getCellulaireAutomaat()->getNeighbourhood(row,col);
+    bool road = false;
+    for(auto it = neighbourhood.begin(); it != neighbourhood.end(); it++){
+        if((*it)->getState() == ERoad){
+            road = true;
+            break;
+        }
+    }
+    if(!road) value -= 2;
+
+    if(value < -1) value = -1;
+    if(value > 1) value = 1;
+    return value;
 }
 
 void Vegetation::drawToScreen(MainWindow *window) {
@@ -169,10 +177,6 @@ std::vector<bool> Road::getNeighborsRoads() {
     return road;
 }
 
-float Road::getHappiness() const {
-    return Cell::getHappiness();
-}
-
 EStates ResidentialZone::getState() const {
     return EResidentialZone;
 }
@@ -182,7 +186,31 @@ void ResidentialZone::update() {
 }
 
 float ResidentialZone::getHappiness() const {
-    return 0;
+    float value = -1;
+
+    //check for store zones and industrial zones
+    int stores = this->getCellulaireAutomaat()->count(EStoreZone, row, col, 10);
+    int workplaces = this->getCellulaireAutomaat()->count(EIndustrialZone, row, col, 10);
+    int parks = this->getCellulaireAutomaat()->count(EVegetation, row, col, 10);
+    value += stores*0.2 + workplaces*0.2 + parks*0.1;
+    if(stores == 0) value -= 1;
+    if(workplaces == 0) value -= 1;
+    if(parks == 0) value -= 0.5;
+
+    //check for road in neighbourhood
+    std::vector<Cell*> neighbourhood = this->getCellulaireAutomaat()->getNeighbourhood(row,col);
+    bool road = false;
+    for(auto it = neighbourhood.begin(); it != neighbourhood.end(); it++){
+        if((*it)->getState() == ERoad){
+            road = true;
+            break;
+        }
+    }
+    if(!road) value -= 1;
+
+    if(value < -1) value = -1;
+    if(value > 1) value = 1;
+    return value;
 }
 
 void ResidentialZone::addPerson(Citizen *person) {
@@ -202,7 +230,29 @@ void IndustrialZone::update() {
 }
 
 float IndustrialZone::getHappiness() const {
-    return 0;
+    float value = 0;
+
+    //check for houses and other Industrial zones in radius
+    int workplaces = this->getCellulaireAutomaat()->count(EIndustrialZone, row, col, 10)-1;
+    int houses = this->getCellulaireAutomaat()->count(EResidentialZone, row, col, 10);
+    value -= workplaces*0.2;
+    value += houses*0.2;
+    if(houses == 0) value -= 0.5;
+    if(workplaces == 0) value += 0.5;
+    //check for road in neighbourhood
+    std::vector<Cell*> neighbourhood = this->getCellulaireAutomaat()->getNeighbourhood(row,col);
+    bool road = false;
+    for(auto it = neighbourhood.begin(); it != neighbourhood.end(); it++){
+        if((*it)->getState() == ERoad){
+            road = true;
+            break;
+        }
+    }
+    if(!road) value -= 2;
+
+    if(value < -1) value = -1;
+    if(value > 1) value = 1;
+    return value;
 }
 
 void IndustrialZone::addPerson(Citizen *person) {
@@ -227,10 +277,6 @@ void StoreZone::addPerson(Citizen *person) {
 
 StoreZone::StoreZone(int row, int col, CellulaireAutomaat *cellulaireAutomaat) : Cell(row, col, cellulaireAutomaat) {
     building = Store();
-}
-
-float StoreZone::getHappiness() const {
-    return Cell::getHappiness();
 }
 
 Cell *CellFactorySingleton::getCell(EStates state) {
