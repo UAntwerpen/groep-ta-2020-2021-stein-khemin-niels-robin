@@ -233,6 +233,15 @@ void Road::addVehicle(Vehicle * v) {
     this->vehicles.push_back(v);
 }
 
+void Road::updateDaysUntilExpired() {
+    if(this->getCellulaireAutomaat()->count(ERoad, this->row, this->col, 1) <= 0){
+        this->daysUntilExpired = 0;
+    }
+    else{
+        Cell::updateDaysUntilExpired();
+    }
+}
+
 EStates ResidentialZone::getState() const {
     return EResidentialZone;
 }

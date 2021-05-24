@@ -118,7 +118,7 @@ protected:
 
     CellulaireAutomaat* cellulaireAutomaat;
     std::vector<Citizen*> people;
-    void updateDaysUntilExpired();
+    virtual void updateDaysUntilExpired();
 };
 
 class Vegetation : public Cell{
@@ -171,6 +171,8 @@ public:
     * @return
     */
     void addVehicle(Vehicle*);
+
+    void updateDaysUntilExpired() override;
 
 private:
     /*
