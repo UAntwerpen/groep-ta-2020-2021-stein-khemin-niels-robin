@@ -22,7 +22,9 @@ void MainWindow::UpdateRoadUsers() {
     clearRoadUsers();
     for (int x = 0; x < width; x++) {
         for (int y = 0; y < height; y++) {
-            //todo check pixelart for each cell
+            //TODO fix enkel roadusers
+            std::pair<int, std::string> pixart = c->operator()(x,y)->getPixelArt();
+            drawTile(x,y,pixart.first, pixart.second);
         }
     }
 }
@@ -32,7 +34,8 @@ void MainWindow::UpdateAll() {
     drawGrid(width,height);
     for (int x = 0; x < width; x++) {
         for (int y = 0; y < height; y++) {
-            //todo check pixelart for each cell
+            std::pair<int, std::string> pixart = c->operator()(x,y)->getPixelArt();
+            drawTile(x,y,pixart.first, pixart.second);
         }
     }
     UpdateRoadUsers();
@@ -188,7 +191,14 @@ void MainWindow::clearRoadUsers() {
     }
 }
 
+void MainWindow::clearWalls() {
+    for (auto it = Walls.begin(); it != Walls.end(); it++) {
+        delete *it;
+    }
+}
+
 MainWindow::~MainWindow() {
     clearBuildings();
     clearRoadUsers();
+    clearWalls();
 }

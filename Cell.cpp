@@ -20,7 +20,9 @@ Cell::~Cell() {
 
 Cell::Cell(int row, int col) : row(row), col(col){}
 
-Cell::Cell(int row, int col, CellulaireAutomaat* cellulaireAutomaat) : row(row), col(col), cellulaireAutomaat(cellulaireAutomaat) {}
+Cell::Cell(int row, int col, CellulaireAutomaat* cellulaireAutomaat) : row(row), col(col), cellulaireAutomaat(cellulaireAutomaat) {
+    this->daysUntilExpired = 100;
+}
 
 std::pair<int, int> Cell::getPos() const{
     return std::make_pair(row, col);
@@ -45,11 +47,11 @@ void Cell::setPos(std::pair<int, int> pos) {
 }
 
 void Cell::addPerson(Citizen *person) {
-
+    this->people.push_back(person);
 }
 
 std::vector<Citizen *> Cell::getPersons() const {
-    return std::vector<Citizen *>();
+    return this->getPersons();
 }
 
 CellulaireAutomaat* Cell::getCellulaireAutomaat() const {
@@ -70,8 +72,12 @@ void Cell::updateDaysUntilExpired() {
     this->daysUntilExpired = 1.2 + (0.2 * neighborsExpired) - this->getHappiness();
 }
 
-double Cell::isExpired() {
+bool Cell::isExpired() {
     return this->daysUntilExpired < 0;
+}
+
+Cell::Cell(const Cell &p2): Cell(p2.row, p2.col, p2.cellulaireAutomaat) {
+    this->people = p2.people;
 }
 
 EStates Vegetation::getState() const {
@@ -135,6 +141,9 @@ float Vegetation::getHappiness() const {
 }
 
 std::pair<int, std::string> Vegetation::getPixelArt() {
+    if(this->isExpired()){
+        return std::pair<int, std::string>(0, pixelArtVervallen);
+    }
     return std::pair<int, std::string>(0, pixelArt);
 }
 
@@ -146,16 +155,15 @@ void Road::update() {
 
 }
 
-void Road::addPerson(Citizen *person) {
-
-}
-
 void Road::drawToScreen(MainWindow *window) {
     std::pair<int, std::string> roadPixArt = this->getPixelArt();
     window->drawTile(this->getPos().first, this->getPos().second, roadPixArt.first, roadPixArt.second);
 }
 
 std::pair<int, std::string> Road::getPixelArt() {
+    if(this->isExpired()){
+        return std::pair<int, std::string>(0, pixelArtVervallen);
+    }
     std::vector<bool> neighborsRoads = getNeighborsRoads();
     return getCorrectRoad(neighborsRoads);
 }
@@ -217,6 +225,23 @@ std::vector<bool> Road::getNeighborsRoads() {
     return road;
 }
 
+std::vector<Vehicle *> Road::getVehicles() const {
+    return this->vehicles;
+}
+
+void Road::addVehicle(Vehicle * v) {
+    this->vehicles.push_back(v);
+}
+
+void Road::updateDaysUntilExpired() {
+    if(this->getCellulaireAutomaat()->count(ERoad, this->row, this->col, 1) <= 0){
+        this->daysUntilExpired = 0;
+    }
+    else{
+        Cell::updateDaysUntilExpired();
+    }
+}
+
 EStates ResidentialZone::getState() const {
     return EResidentialZone;
 }
@@ -253,12 +278,14 @@ float ResidentialZone::getHappiness() const {
     return value;
 }
 
-void ResidentialZone::addPerson(Citizen *person) {
-
-}
-
 ResidentialZone::ResidentialZone(int row, int col, CellulaireAutomaat *cellulaireAutomaat) : Cell(row, col, cellulaireAutomaat) {
     building = House();
+}
+
+std::pair<int, std::string> ResidentialZone::getPixelArt() {
+    if(this->isExpired())
+        return std::pair<int, std::string>(0, this->building.getExpiredPixelArt());
+    return std::pair<int, std::string>(0, this->building.getPixelArt());
 }
 
 EStates IndustrialZone::getState() const {
@@ -295,12 +322,14 @@ float IndustrialZone::getHappiness() const {
     return value;
 }
 
-void IndustrialZone::addPerson(Citizen *person) {
-
-}
-
 IndustrialZone::IndustrialZone(int row, int col, CellulaireAutomaat *cellulaireAutomaat) : Cell(row, col, cellulaireAutomaat) {
     building = Workplace();
+}
+
+std::pair<int, std::string> IndustrialZone::getPixelArt() {
+    if(this->isExpired())
+        return std::pair<int, std::string>(0, this->building.getExpiredPixelArt());
+    return std::pair<int, std::string>(0, this->building.getPixelArt());
 }
 
 EStates StoreZone::getState() const {
@@ -311,12 +340,14 @@ void StoreZone::update() {
 
 }
 
-void StoreZone::addPerson(Citizen *person) {
-
-}
-
 StoreZone::StoreZone(int row, int col, CellulaireAutomaat *cellulaireAutomaat) : Cell(row, col, cellulaireAutomaat) {
     building = Store();
+}
+
+std::pair<int, std::string> StoreZone::getPixelArt() {
+    if(this->isExpired())
+        return std::pair<int, std::string>(0, this->building.getExpiredPixelArt());
+    return std::pair<int, std::string>(0, this->building.getPixelArt());
 }
 
 Cell *CellFactorySingleton::getCell(EStates state) {

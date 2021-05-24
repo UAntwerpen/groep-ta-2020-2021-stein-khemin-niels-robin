@@ -14,7 +14,6 @@ class PFCell : public Cell {
 private:
     bool passable;
     bool goal;
-
     int value;
 
 public:
