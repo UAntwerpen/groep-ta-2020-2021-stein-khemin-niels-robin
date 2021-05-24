@@ -169,7 +169,7 @@ public:
 
     std::vector<bool> getNeighborsRoads();
 
-    float getHappiness() const override;
+    //float getHappiness() const override;
 
     void addPerson(Citizen* person) override;
 

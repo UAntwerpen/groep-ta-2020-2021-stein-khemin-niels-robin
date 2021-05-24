@@ -139,54 +139,39 @@ void CellulaireAutomaat::changeCell(int row, int column, Cell *to) {
     matrix[row * height + column] = to;
 }
 
-    void CellulaireAutomaat::updateRules() {
-        for (int col = 0; col < width; col++) {
-            for (int row = 0; row < height; row++) {
-                EStates state = static_cast<EStates>(rules[getNeighbourhoodValue(row, col)]);
+void CellulaireAutomaat::updateRules() {
+    for (int col = 0; col < width; col++) {
+        for (int row = 0; row < height; row++) {
+            EStates state = static_cast<EStates>(rules[getNeighbourhoodValue(row, col)]);
+            if (state == (*this)(row, col)->getState()) {
+                (*this)(row, col)->update();
                 if (state == (*this)(row, col)->getState()) {
-                    (*this)(row, col)->update();
-                    if (state == (*this)(row, col)->getState()) {
-                        continue;
-                    }
-                    Cell *new_cell = new Vegetation(row, col, this); //TODO
-                    changeCell(row, col, new_cell);
+                    continue;
                 }
+                Cell *new_cell = new Vegetation(row, col, this); //TODO
+                changeCell(row, col, new_cell);
             }
         }
     }
+}
 
-    int CellulaireAutomaat::count(const EStates &state) const {
-        int counter = 0;
-        for (int col = 0; col < width; col++) {
-            for (int row = 0; row < height; row++) {
-                if ((*this)(row, col)->getState() == state) {
-                    counter++;
-                }
+int CellulaireAutomaat::count(const EStates &state) const {
+    int counter = 0;
+    for (int col = 0; col < width; col++) {
+        for (int row = 0; row < height; row++) {
+            if ((*this)(row, col)->getState() == state) {
+                counter++;
             }
         }
-        return counter;
     }
+    return counter;
+}
 
-    std::map<EStates, int> CellulaireAutomaat::count_all() const {
-        std::map<EStates, int> counters;
-        counters[static_cast<EStates>(0)] = 0;
-        counters[static_cast<EStates>(1)] = 0;
-        counters[static_cast<EStates>(2)] = 0;
-        counters[static_cast<EStates>(3)] = 0;
-        counters[static_cast<EStates>(4)] = 0;
-        for (int col = 0; col < width; col++) {
-            for (int row = 0; row < height; row++) {
-                EStates cell_state = (*this)(row, col)->getState();
-                counters[cell_state]++;
-            }
-        }
-        return counters;
-    }
 int CellulaireAutomaat::count(const EStates &state, int row, int col, int radius) const {
     int counter = 0;
     for (int c = col-radius; c <= col+radius; c++){
         for (int r = row-radius; r <= row+radius; r++){
-            if(r >= 0 && r < width && c >= 0 && c < height && (*this)(r, c).getState() == state){
+            if(r >= 0 && r < width && c >= 0 && c < height && (*this)(r, c)->getState() == state){
                     counter++;
             }
         }
@@ -203,7 +188,7 @@ std::map<EStates, int> CellulaireAutomaat::count_all() const {
     counters[static_cast<EStates>(4)] = 0;
     for (int col = 0; col < width; col++){
         for (int row = 0; row < height; row++){
-            EStates cell_state = (*this)(row, col).getState();
+            EStates cell_state = (*this)(row, col)->getState();
             counters[cell_state]++;
         }
     }
