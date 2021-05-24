@@ -3,7 +3,6 @@
 //
 
 #include "MainWindow.h"
-#include <QtWidgets>
 #include <iostream>
 #include <string>
 
@@ -37,20 +36,39 @@ MainWindow::MainWindow(int w, int h) {
     QPushButton* button = new QPushButton();
     button->setText("Next day");
     button->setGeometry(30,30,200,50);
-    connect(button, &QPushButton::released, this, &MainWindow::handleButton);
+    connect(button, &QPushButton::released, this, &MainWindow::TemporaryNextDay);
 
     QPushButton* button1 = new QPushButton();
-    button1->setText("Button2");
+    button1->setText("Pause");
     button1->setGeometry(30,80,200,50);
+    pauseButton = button1;
+    connect(button1, &QPushButton::released, this, &MainWindow::pause);
 
     settingsDock->layout()->addWidget(button);
     settingsDock->layout()->addWidget(button1);
 }
 
-void MainWindow::handleButton(){
+void MainWindow::TemporaryNextDay(){
     cout<<"Button pushed."<<endl;
     c->updateRules();
 }
+
+void MainWindow::pause(){
+    //TODO pause in CitySimulation.h
+    cout<<"Paused"<<endl;
+    pauseButton->setText("Resume");
+    disconnect(pauseButton, &QPushButton::released, this, &MainWindow::pause);
+    connect(pauseButton, &QPushButton::released, this, &MainWindow::resume);
+}
+
+void MainWindow::resume(){
+    //TODO resume in CitySimulation.h
+    cout<<"Resumed"<<endl;
+    pauseButton->setText("Pause");
+    disconnect(pauseButton, &QPushButton::released, this, &MainWindow::resume);
+    connect(pauseButton, &QPushButton::released, this, &MainWindow::pause);
+}
+
 
 void MainWindow::UpdateRoadUsers() {
     clearRoadUsers();
