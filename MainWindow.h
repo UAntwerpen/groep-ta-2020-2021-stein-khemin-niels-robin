@@ -31,12 +31,17 @@ private:
 
     void clearRoadUsers();
     void clearBuildings();
+    void clearWalls();
 
+    void addWalls(int width, int height);
+
+    //TODO weg doen
     void drawGrid(int width, int height);
 
     CellulaireAutomaat* c;
     std::vector<QGraphicsPixmapItem*> RoadUsers;
     std::vector<QGraphicsPixmapItem*> Buildings;
+    std::vector<QGraphicsPixmapItem*> Walls;
     QGraphicsScene *scene;
     QGraphicsView *view;
     int width;

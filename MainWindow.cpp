@@ -13,6 +13,7 @@ MainWindow::MainWindow(int w, int h) {
     width = w;
     height = h;
     scene = new QGraphicsScene();
+    addWalls(width, height);
     drawGrid(width, height);
     view = new QGraphicsView(scene);
 }
@@ -21,7 +22,9 @@ void MainWindow::UpdateRoadUsers() {
     clearRoadUsers();
     for (int x = 0; x < width; x++) {
         for (int y = 0; y < height; y++) {
-            //todo check pixelart for each cell
+            //TODO fix enkel roadusers
+            std::pair<int, std::string> pixart = c->operator()(x,y)->getPixelArt();
+            drawTile(x,y,pixart.first, pixart.second);
         }
     }
 }
@@ -31,7 +34,8 @@ void MainWindow::UpdateAll() {
     drawGrid(width,height);
     for (int x = 0; x < width; x++) {
         for (int y = 0; y < height; y++) {
-            //todo check pixelart for each cell
+            std::pair<int, std::string> pixart = c->operator()(x,y)->getPixelArt();
+            drawTile(x,y,pixart.first, pixart.second);
         }
     }
     UpdateRoadUsers();
@@ -110,7 +114,7 @@ void MainWindow::drawGrid(int _width, int _height) {
     CellulaireAutomaat *automaat = new CellulaireAutomaat(_width, _height, "");
     for (int i = 0; i < _width; i++) {
         for (int j = 0; j < _height; j++) {
-            int random = rand() % 8;
+            int random = rand() % 9;
 
             int randomangle = rand() % 4;
             if (random == 0) {
@@ -130,9 +134,7 @@ void MainWindow::drawGrid(int _width, int _height) {
                 //Road* r = new Road(i, j, automaat);
                 //r->drawToScreen(this);
             } else if (random == 3) {
-                drawTile(i, j, randomangle, "../PixelArt/Road_Recht.png");
-                addPedestrian(i, j, randomangle + 2, "../PixelArt/Pedestrian1.png");
-                addCar(i, j, randomangle, "../PixelArt/Car1.png");
+                drawTile(i,j,0,"../PixelArt/Park.png");
             } else if (random == 4) {
                 drawTile(i, j, randomangle, "../PixelArt/Road_T_Kruispunt.png");
                 addPedestrian(i, j, randomangle + 2, "../PixelArt/Pedestrian2.png");
@@ -145,12 +147,31 @@ void MainWindow::drawGrid(int _width, int _height) {
                 drawTile(i, j, randomangle, "../PixelArt/Road_Doodlopend.png");
                 addPedestrian(i, j, randomangle + 2, "../PixelArt/Pedestrian1.png");
                 addCar(i, j, randomangle + 2, "../PixelArt/Car2.png");
-            } else {
+            } else if(random == 7) {
                 drawTile(i, j, randomangle, "../PixelArt/Road_Bocht.png");
                 addPedestrian(i, j, randomangle + 2, "../PixelArt/Pedestrian2.png");
                 addCar(i, j, randomangle + 2, "../PixelArt/Car2.png");
+            } else if(random == 8){
+                drawTile(i, j, randomangle, "../PixelArt/Road_Recht.png");
+                addPedestrian(i, j, randomangle + 2, "../PixelArt/Pedestrian1.png");
+                addCar(i, j, randomangle, "../PixelArt/Car1.png");
             }
         }
+    }
+}
+
+void MainWindow::addWalls(int _width, int _height){
+    drawTile(-1,-1, 0, "../PixelArt/Border_hoek.png");
+    drawTile(-1,_width, 1, "../PixelArt/Border_hoek.png");
+    drawTile(_height,_width, 2, "../PixelArt/Border_hoek.png");
+    drawTile(_height,-1, 3, "../PixelArt/Border_hoek.png");
+    for(int  i = 0; i < _width; i++){
+        drawTile(-1,i, 0, "../PixelArt/Border_lang.png");
+        drawTile(_height,i, 2, "../PixelArt/Border_lang.png");
+    }
+    for(int  i = 0; i < _height; i++){
+        drawTile(i,-1, 3, "../PixelArt/Border_lang.png");
+        drawTile(i,_width, 1, "../PixelArt/Border_lang.png");
     }
 }
 
@@ -170,7 +191,14 @@ void MainWindow::clearRoadUsers() {
     }
 }
 
+void MainWindow::clearWalls() {
+    for (auto it = Walls.begin(); it != Walls.end(); it++) {
+        delete *it;
+    }
+}
+
 MainWindow::~MainWindow() {
     clearBuildings();
     clearRoadUsers();
+    clearWalls();
 }
