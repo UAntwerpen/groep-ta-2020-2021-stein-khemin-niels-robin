@@ -9,13 +9,49 @@
 
 using namespace std;
 
+
 MainWindow::MainWindow(int w, int h) {
     width = w;
     height = h;
     scene = new QGraphicsScene();
-    addWalls(width, height);
-    drawGrid(width, height);
+    addWalls(w, h);
+    drawGrid(w, h);
     view = new QGraphicsView(scene);
+
+    QDockWidget *cityDock;
+    cityDock = new QDockWidget(tr("City"), this);
+    cityDock->setAllowedAreas(Qt::LeftDockWidgetArea |
+                                Qt::RightDockWidgetArea);
+    cityDock->setWidget(view);
+    addDockWidget(Qt::RightDockWidgetArea, cityDock);
+
+    QDockWidget *settingsDock;
+    settingsDock = new QDockWidget(tr("Settings"), this);
+    settingsDock->setAllowedAreas(Qt::LeftDockWidgetArea |
+                                 Qt::RightDockWidgetArea);
+    addDockWidget(Qt::LeftDockWidgetArea, settingsDock);
+    settingsDock->setFixedWidth(260);
+
+    QVBoxLayout* boxLayout = new QVBoxLayout();
+    QPushButton* button = new QPushButton();
+    button->setText("Start");
+    button->setGeometry(30,30,200,50);
+
+
+    QAction* action = new QAction();
+    QActionEvent* actionEvent1 = new QActionEvent();
+    actionEvent1.
+    action->activate()
+
+    button->addAction(action);
+
+
+    QPushButton* button1 = new QPushButton();
+    button1->setText("Start1");
+    button1->setGeometry(30,80,200,50);
+
+    settingsDock->layout()->addWidget(button);
+    settingsDock->layout()->addWidget(button1);
 }
 
 void MainWindow::UpdateRoadUsers() {
@@ -175,14 +211,14 @@ void MainWindow::addWalls(int _width, int _height){
     }
 }
 
-void MainWindow::show() {
-    view->show();
-}
-
 void MainWindow::clearBuildings() {
     for (auto it = Buildings.begin(); it != Buildings.end(); it++) {
         delete *it;
     }
+}
+
+void MainWindow::showView(){
+    //view->show();
 }
 
 void MainWindow::clearRoadUsers() {
