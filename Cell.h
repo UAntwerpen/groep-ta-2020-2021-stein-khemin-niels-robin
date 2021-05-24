@@ -144,7 +144,7 @@ public:
     float getHappiness() const override;
 
 private:
-    std::string pixelArt = "../PixelArt/Default.png";
+    std::string pixelArt = "../PixelArt/Park.png";
 };
 
 class Road : public Cell{
