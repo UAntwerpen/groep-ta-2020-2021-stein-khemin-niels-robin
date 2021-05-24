@@ -40,14 +40,6 @@ void Cell::setPos(std::pair<int, int> pos) {
     col = pos.second;
 }
 
-bool ResidentialZone::isDilapidated() {
-    return building.getVerval() > 0;
-}
-
-bool IndustrialZone::isDilapidated() {
-    return building.getVerval() > 0;
-}
-
 void Cell::addPerson(Citizen *person) {
 
 }
@@ -64,6 +56,20 @@ std::vector<bool> Cell::getRoadConnectPoints() {
     return std::vector<bool>{false,false,false,false};
 }
 
+float Cell::getHappiness() const {
+    return 0;
+}
+
+void Cell::updateDilapidated() {
+    double neighborsDecline = 0;
+    std::vector<Cell *> neighbors = this->getCellulaireAutomaat()->getNeighbourhood(this->getPos().first, this->getPos().second);
+    for(auto it = neighbors.begin(); it != neighbors.end(); it++){
+        neighborsDecline += (*it)->getDilapidated();
+    }
+
+    this->verval = this->days + (neighborsDecline/neighbors.size());
+}
+
 EStates Vegetation::getState() const {
     return EVegetation;
 }
@@ -74,14 +80,6 @@ void Vegetation::update() {
 
 float Vegetation::getHappiness() const {
     return 0;
-}
-
-void Vegetation::addPerson(Citizen *person) {
-
-}
-
-std::vector<Citizen *> Vegetation::getPersons() const {
-    return std::vector<Citizen *>();
 }
 
 void Vegetation::drawToScreen(MainWindow *window) {
@@ -102,10 +100,6 @@ void Road::update() {
 
 void Road::addPerson(Citizen *person) {
 
-}
-
-bool Road::isDilapidated() {
-    return Cell::isDilapidated();
 }
 
 void Road::drawToScreen(MainWindow *window) {
@@ -175,6 +169,10 @@ std::vector<bool> Road::getNeighborsRoads() {
     return road;
 }
 
+float Road::getHappiness() const {
+    return Cell::getHappiness();
+}
+
 EStates ResidentialZone::getState() const {
     return EResidentialZone;
 }
@@ -227,12 +225,12 @@ void StoreZone::addPerson(Citizen *person) {
 
 }
 
-bool StoreZone::isDilapidated() {
-    return Cell::isDilapidated();
-}
-
 StoreZone::StoreZone(int row, int col, CellulaireAutomaat *cellulaireAutomaat) : Cell(row, col, cellulaireAutomaat) {
     building = Store();
+}
+
+float StoreZone::getHappiness() const {
+    return Cell::getHappiness();
 }
 
 Cell *CellFactorySingleton::getCell(EStates state) {
