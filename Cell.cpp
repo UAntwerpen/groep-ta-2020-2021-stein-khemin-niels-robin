@@ -73,7 +73,29 @@ void Vegetation::update() {
 }
 
 float Vegetation::getHappiness() const {
-    return 0;
+    float value = 0;
+
+    //check for houses and other stores in radius
+    int stores = cellulaireAutomaat->count(EStoreZone, row, col, 10)-1;
+    int houses = cellulaireAutomaat->count(EResidentialZone, row, col, 10);
+    value -= stores*0.2;
+    value += houses*0.2;
+    if(houses == 0) value -= 0.5;
+    if(stores == 0) value += 0.5;
+    //check for road in neighbourhood
+    std::vector<Cell*> neighbourhood = cellulaireAutomaat->getNeighbourhood(row,col);
+    bool road = false;
+    for(auto it = neighbourhood.begin(); it != neighbourhood.end(); it++){
+        if((*it)->getState() == ERoad){
+            road = true;
+            break;
+        }
+    }
+    if(!road) value -= 2;
+
+    if(value < -1) value = -1;
+    if(value > 1) value = 1;
+    return value;
 }
 
 void Vegetation::addPerson(Citizen *person) {
@@ -184,7 +206,31 @@ void ResidentialZone::update() {
 }
 
 float ResidentialZone::getHappiness() const {
-    return 0;
+    float value = -1;
+
+    //check for store zones and industrial zones
+    int stores = cellulaireAutomaat->count(EStoreZone, row, col, 10);
+    int workplaces = cellulaireAutomaat->count(EIndustrialZone, row, col, 10);
+    int parks = cellulaireAutomaat->count(EVegetation, row, col, 10);
+    value += stores*0.2 + workplaces*0.2 + parks*0.1;
+    if(stores == 0) value -= 1;
+    if(workplaces == 0) value -= 1;
+    if(parks == 0) value -= 0.5;
+
+    //check for road in neighbourhood
+    std::vector<Cell*> neighbourhood = cellulaireAutomaat->getNeighbourhood(row,col);
+    bool road = false;
+    for(auto it = neighbourhood.begin(); it != neighbourhood.end(); it++){
+        if((*it)->getState() == ERoad){
+            road = true;
+            break;
+        }
+    }
+    if(!road) value -= 1;
+
+    if(value < -1) value = -1;
+    if(value > 1) value = 1;
+    return value;
 }
 
 void ResidentialZone::addPerson(Citizen *person) {
@@ -204,7 +250,29 @@ void IndustrialZone::update() {
 }
 
 float IndustrialZone::getHappiness() const {
-    return 0;
+    float value = 0;
+
+    //check for houses and other Industrial zones in radius
+    int workplaces = cellulaireAutomaat->count(EIndustrialZone, row, col, 10)-1;
+    int houses = cellulaireAutomaat->count(EResidentialZone, row, col, 10);
+    value -= workplaces*0.2;
+    value += houses*0.2;
+    if(houses == 0) value -= 0.5;
+    if(workplaces == 0) value += 0.5;
+    //check for road in neighbourhood
+    std::vector<Cell*> neighbourhood = cellulaireAutomaat->getNeighbourhood(row,col);
+    bool road = false;
+    for(auto it = neighbourhood.begin(); it != neighbourhood.end(); it++){
+        if((*it)->getState() == ERoad){
+            road = true;
+            break;
+        }
+    }
+    if(!road) value -= 2;
+
+    if(value < -1) value = -1;
+    if(value > 1) value = 1;
+    return value;
 }
 
 void IndustrialZone::addPerson(Citizen *person) {

@@ -84,6 +84,16 @@ public:
     int count(const EStates& state) const;
 
     /*!
+     * gives back how many states of the given state are in the given radius
+     * @param state type dat geteld moet worden
+     * @param row rij waaruit geteld moet worden
+     * @param col kolom waaruit geteld moet worden
+     * @param radius straal die bepaald hoeveel cellen worden negekijken
+     * @return int
+     */
+    int count(const EStates& state, int row, int col, int radius) const;
+
+    /*!
      * counts every type
      * @return how many times every type occurs
      */

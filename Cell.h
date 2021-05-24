@@ -48,7 +48,7 @@ public:
     };
 
     /*!
-     * geeft terug hoeveel happiness een bepaalde cell uitstoot
+     * geeft terug hoeveel happiness een bepaalde cell uitstoot (tussen -1 en 1)
      * @return float
      */
     virtual float getHappiness() const;
@@ -109,12 +109,12 @@ public:
      */
     virtual std::pair<int, std::string> getPixelArt(){return std::pair<int, std::string>(0, "");};
 
-private:
+protected:
     int row = 0;
     int col = 0;
 
-    CellulaireAutomaat* cellulaireAutomaat;
     std::vector<Citizen*> people;
+    CellulaireAutomaat* cellulaireAutomaat;
 };
 
 class Vegetation : public Cell{
