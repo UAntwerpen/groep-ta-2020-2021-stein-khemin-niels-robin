@@ -32,6 +32,7 @@ private:
     void clearRoadUsers();
     void clearBuildings();
 
+    void addWalls(int width, int height);
     void drawGrid(int width, int height);
 
     CellulaireAutomaat* c;
