@@ -25,10 +25,10 @@ CellulaireAutomaat::CellulaireAutomaat(int width, int height, const std::string&
         std::cerr << "couldn't open file!" << std::endl;
     }
     file.close();
-    w = nullptr;
-//    w = new MainWindow(100, 100);
-//    draw();
-//    w->show();
+    //w = nullptr;
+    w = new MainWindow(width, height);
+    //draw();
+    w->show();
 }
 
 CellulaireAutomaat::CellulaireAutomaat(const std::string &filename) {
@@ -77,7 +77,6 @@ CellulaireAutomaat::CellulaireAutomaat(const std::string &filename) {
         }
         std::cout << line << std::endl;
     }
-
     file.close();
 }
 
