@@ -26,6 +26,7 @@ MainWindow::MainWindow(int w, int h, CellulaireAutomaat *cellulaireAutomaat) {
     cityDock->setWidget(view);
     addDockWidget(Qt::RightDockWidgetArea, cityDock);
     view->setDragMode(QGraphicsView::DragMode::ScrollHandDrag);
+    view->setBackgroundBrush(QColor("#4CAF50"));
 
 
     QDockWidget *settingsDock;
