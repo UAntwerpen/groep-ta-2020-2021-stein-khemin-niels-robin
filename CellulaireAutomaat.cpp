@@ -92,6 +92,8 @@ CellulaireAutomaat::~CellulaireAutomaat() {
 }
 
 Cell* CellulaireAutomaat::operator()(int row, int column) const {
+    if (0 > row || row > width || 0 > column || column > height)
+        std::cout << "error";
     REQUIRE(0 <= row && row < width, "Row with is out of bounds!");
     REQUIRE(0 <= column && column < height, "Column is out of bounds!");
     return matrix[row * height + column];
@@ -102,14 +104,14 @@ std::vector<Cell *> CellulaireAutomaat::getNeighbourhood(int row, int col) {
     REQUIRE(0 <= col && col < width, "Column is out of bounds!");
     std::vector<Cell *> neighbourhood(8);
 
-    neighbourhood[0] = 0 <= row && 0 <= col ? (*this)(row - 1, col - 1) : nullptr;
-    neighbourhood[1] = 0 <= row ? (*this)(row - 1, col) : nullptr;
-    neighbourhood[2] = 0 <= row && col < width ? (*this)(row - 1, col + 1) : nullptr;
-    neighbourhood[3] = col < width ? (*this)(row, col + 1) : nullptr;
-    neighbourhood[4] = row < height && col < width ? (*this)(row + 1, col + 1) : nullptr;
-    neighbourhood[5] = row < height ? (*this)(row + 1, col) : nullptr;
-    neighbourhood[6] = row < height && 0 <= col ? (*this)(row + 1, col - 1) : nullptr;
-    neighbourhood[7] = 0 <= col ? (*this)(row, col - 1) : nullptr;
+    neighbourhood[0] = 0 <= row - 1 && 0 <= col - 1 ? (*this)(row - 1, col - 1) : nullptr;
+    neighbourhood[1] = 0 <= row - 1 ? (*this)(row - 1, col) : nullptr;
+    neighbourhood[2] = 0 <= row - 1 && col + 1 < width ? (*this)(row - 1, col + 1) : nullptr;
+    neighbourhood[3] = col + 1 < width ? (*this)(row, col + 1) : nullptr;
+    neighbourhood[4] = row + 1 < height && col + 1 < width ? (*this)(row + 1, col + 1) : nullptr;
+    neighbourhood[5] = row + 1 < height ? (*this)(row + 1, col) : nullptr;
+    neighbourhood[6] = row + 1 < height && 0 <= col - 1 ? (*this)(row + 1, col - 1) : nullptr;
+    neighbourhood[7] = 0 <= col - 1 ? (*this)(row, col - 1) : nullptr;
     return neighbourhood;
 }
 
@@ -156,8 +158,23 @@ void CellulaireAutomaat::updateRules() {
             if (state == (*this)(row, col)->getState()) {
                 continue;
             }
-            //Cell *new_cell = factory.getCell(state);
-            //changeCell(row, col, new_cell);
+            switch (state) {
+                case EVegetation:
+                    changeCell(row, col, new Vegetation(*(*this)(row, col)));
+                    break;
+                case ERoad:
+                    changeCell(row, col, new Road(*(*this)(row, col)));
+                    break;
+                case EResidentialZone:
+                    changeCell(row, col, new ResidentialZone(*(*this)(row, col)));
+                    break;
+                case EIndustrialZone:
+                    changeCell(row, col, new IndustrialZone(*(*this)(row, col)));
+                    break;
+                case EStoreZone:
+                    changeCell(row, col, new StoreZone(*(*this)(row, col)));
+                    break;
+            }
         }
     }
     w->updateAll();
