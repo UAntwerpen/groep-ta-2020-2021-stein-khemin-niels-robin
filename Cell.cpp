@@ -95,7 +95,7 @@ float StoreZone::getHappiness() const {
     std::vector<Cell*> neighbourhood = this->getCellulaireAutomaat()->getNeighbourhood(row,col);
     bool road = false;
     for(auto it = neighbourhood.begin(); it != neighbourhood.end(); it++){
-        if((*it)->getState() == ERoad){
+        if((*it) != nullptr && (*it)->getState() == ERoad){
             road = true;
             break;
         }
@@ -118,7 +118,7 @@ float Vegetation::getHappiness() const {
     std::vector<Cell*> neighbourhood = this->getCellulaireAutomaat()->getNeighbourhood(row,col);
     bool road = false;
     for(auto it = neighbourhood.begin(); it != neighbourhood.end(); it++){
-        if((*it)->getState() == ERoad){
+        if((*it) != nullptr && (*it)->getState() == ERoad){
             road = true;
             break;
         }
@@ -270,7 +270,7 @@ float ResidentialZone::getHappiness() const {
     std::vector<Cell*> neighbourhood = this->getCellulaireAutomaat()->getNeighbourhood(row,col);
     bool road = false;
     for(auto it = neighbourhood.begin(); it != neighbourhood.end(); it++){
-        if((*it)->getState() == ERoad){
+        if((*it) != nullptr && (*it)->getState() == ERoad){
             road = true;
             break;
         }
@@ -318,7 +318,7 @@ float IndustrialZone::getHappiness() const {
     std::vector<Cell*> neighbourhood = this->getCellulaireAutomaat()->getNeighbourhood(row,col);
     bool road = false;
     for(auto it = neighbourhood.begin(); it != neighbourhood.end(); it++){
-        if((*it)->getState() == ERoad){
+        if((*it) != nullptr && (*it)->getState() == ERoad){
             road = true;
             break;
         }
