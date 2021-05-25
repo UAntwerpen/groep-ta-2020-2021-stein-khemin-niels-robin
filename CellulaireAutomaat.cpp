@@ -156,8 +156,8 @@ void CellulaireAutomaat::updateRules() {
             if (state == (*this)(row, col)->getState()) {
                 continue;
             }
-            Cell *new_cell = factory.getCell(state);
-            changeCell(row, col, new_cell);
+            //Cell *new_cell = factory.getCell(state);
+            //changeCell(row, col, new_cell);
         }
     }
     w->updateAll();

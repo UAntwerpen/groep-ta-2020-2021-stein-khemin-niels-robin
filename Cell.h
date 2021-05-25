@@ -17,12 +17,7 @@ class CellulaireAutomaat;
 
 class Cell {
 public:
-    Cell();
-
     Cell(const Cell &p2);
-
-    //TODO weg
-    Cell(int row, int col);
 
     //Cel moet omgeving kunnen bepalen
     Cell(int row, int col, CellulaireAutomaat* cellulaireAutomaat);
@@ -122,9 +117,6 @@ public:
 
     Vegetation(const Cell &p2);
 
-    //TODO Weg
-    Vegetation(){}
-
     EStates getState() const override;
 
     void update() override;
@@ -141,9 +133,6 @@ private:
 
 class Road : public Cell{
 public:
-    //TODO weg
-    Road(){std::cout << "FOUT!" << std::endl;}
-
     Road(const Cell &p2);
 
     Road(int row, int col, CellulaireAutomaat *cellulaireAutomaat) : Cell(row, col, cellulaireAutomaat){};
@@ -184,11 +173,6 @@ class ResidentialZone : public Cell{
 private:
     House* building;
 public:
-    //TODO weg
-    ResidentialZone(){
-        building = new House();
-    }
-
     ResidentialZone(const Cell &p2);
 
     ResidentialZone(int row, int col, CellulaireAutomaat *cellulaireAutomaat);
@@ -206,9 +190,6 @@ class IndustrialZone : public Cell{
 private:
     Workplace* building;
 public:
-    //TODO weg
-    IndustrialZone(){std::cout << "FOUT" << std::endl;}
-
     IndustrialZone(const Cell &p2);
 
     IndustrialZone(int row, int col, CellulaireAutomaat *cellulaireAutomaat);
@@ -226,9 +207,6 @@ class StoreZone : public Cell{
 private:
     Store* building;
 public:
-    //TODO weg
-    StoreZone(){std::cout << "FOUT" << std::endl;}
-
     StoreZone(const Cell &p2);
 
     StoreZone(int row, int col, CellulaireAutomaat *cellulaireAutomaat);

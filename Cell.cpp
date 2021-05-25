@@ -9,16 +9,9 @@
 #include "MainWindow.h"
 #include "CellulaireAutomaat.h"
 
-Cell::Cell() {
-    row = 0;
-    col = 0;
-}
-
 Cell::~Cell() {
 
 }
-
-Cell::Cell(int row, int col) : row(row), col(col){}
 
 Cell::Cell(int row, int col, CellulaireAutomaat* cellulaireAutomaat) : row(row), col(col), cellulaireAutomaat(cellulaireAutomaat) {
     this->daysUntilExpired = 100;
@@ -371,31 +364,6 @@ std::pair<int, std::string> StoreZone::getPixelArt() {
 
 StoreZone::StoreZone(const Cell &p2): Cell(p2.getPos().first, p2.getPos().second, p2.getCellulaireAutomaat()) {
     this->people = p2.getPersons();
-}
-
-Cell *CellFactorySingleton::getCell(EStates state) {
-    Cell* ret;
-
-    switch (state) {
-        case 1:
-            ret = new Road;
-            break;
-        case 2:
-            ret = new ResidentialZone;
-            break;
-        case 3:
-            ret = new IndustrialZone;
-            break;
-        case 4:
-            ret = new StoreZone;
-        case 0:
-        default:
-            ret = new Vegetation;
-            break;
-    }
-
-//        objects.emplace_back(ret);
-    return ret;
 }
 
 Cell *CellFactorySingleton::getCell(EStates state, Cell* old){

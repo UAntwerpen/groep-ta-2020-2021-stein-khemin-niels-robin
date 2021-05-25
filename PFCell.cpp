@@ -4,13 +4,13 @@
 
 #include "PFCell.h"
 
-PFCell::PFCell() : Cell() {
+PFCell::PFCell() : Cell(0,0, nullptr) {
     passable = false;
     goal = false;
     value = std::numeric_limits<int>::max();
 }
 
-PFCell::PFCell(bool passable, int row, int col, bool goal) : Cell(row, col), passable(passable), goal(goal) {
+PFCell::PFCell(bool passable, int row, int col, bool goal) : Cell(row, col, nullptr), passable(passable), goal(goal) {
     if (goal) {
         value = 0;
     }
