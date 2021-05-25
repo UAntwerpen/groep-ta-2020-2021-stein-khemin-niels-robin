@@ -37,40 +37,46 @@ MainWindow::MainWindow(int w, int h, CellulaireAutomaat *cellulaireAutomaat) {
 
     QVBoxLayout* boxLayout = new QVBoxLayout();
 
+    QLabel* daytext = new QLabel("day: 0");
+    daytext->setGeometry(30,30,200,50);
+    dayint = 0;
+    day = daytext;
+
     QPushButton* button = new QPushButton();
     button->setText("Next day");
-    button->setGeometry(30,30,200,50);
+    button->setGeometry(30,100,200,50);
     connect(button, &QPushButton::released, this, &MainWindow::temporaryNextDay);
-    QPushButton* nextDayBtn = new QPushButton();
-    nextDayBtn->setText("Next day");
-    nextDayBtn->setGeometry(30,30,200,50);
-    connect(nextDayBtn, &QPushButton::released, this, &MainWindow::temporaryNextDay);
 
     QPushButton* pauseBtn = new QPushButton();
     pauseBtn->setText("Pause");
-    pauseBtn->setGeometry(30,80,200,50);
+    pauseBtn->setGeometry(30,160,200,50);
     pauseButton = pauseBtn;
     connect(pauseBtn, &QPushButton::released, this, &MainWindow::pause);
 
 
     QPushButton* zoomOutBtn = new QPushButton();
     zoomOutBtn->setText("-");
-    zoomOutBtn->setGeometry(30,130,90,50);
+    zoomOutBtn->setGeometry(30,220,90,50);
     connect(zoomOutBtn, &QPushButton::released, this, &MainWindow::zoomOut);
 
     QPushButton* zoomInBtn = new QPushButton();
     zoomInBtn->setText("+");
-    zoomInBtn->setGeometry(140,130,90,50);
+    zoomInBtn->setGeometry(140,220,90,50);
     connect(zoomInBtn, &QPushButton::released, this, &MainWindow::zoomIn);
 
-    settingsDock->layout()->addWidget(nextDayBtn);
+    settingsDock->layout()->addWidget(daytext);
+    settingsDock->layout()->addWidget(button);
     settingsDock->layout()->addWidget(pauseBtn);
     settingsDock->layout()->addWidget(zoomOutBtn);
     settingsDock->layout()->addWidget(zoomInBtn);
+
 }
 
 void MainWindow::temporaryNextDay(){
-    cout<<"Button pushed."<<endl;
+    dayint++;
+    string str = "day: "+ to_string(dayint);
+    QString time = QString::fromStdString(str);
+    day->setText(time);
     c->updateRules();
 }
 
@@ -103,6 +109,10 @@ void MainWindow::updateRoadUsers() {
 }
 
 void MainWindow::updateAll() {
+    dayint++;
+    string str = "day: "+ to_string(dayint);
+    QString time = QString::fromStdString(str);
+    day->setText(time);
     clearWalls();
     clearBuildings();
     drawGrid(width,height);
@@ -113,6 +123,10 @@ void MainWindow::updateAll() {
         }
     }
     updateRoadUsers();
+}
+
+void MainWindow::addDay() {
+
 }
 
 

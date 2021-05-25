@@ -5,6 +5,7 @@
 #ifndef TA_MAINWINDOW_H
 #define TA_MAINWINDOW_H
 
+#include <string>
 #include <QMainWindow>
 #include <QGraphicsScene>
 #include <QGraphicsView>
@@ -20,7 +21,11 @@ public:
 
     void updateAll();
 
+    void addDay();
+
     virtual ~MainWindow();
+
+
 
     //private maken
     void drawTile(int row, int col, int rotation, const std::string pixelart);
@@ -58,6 +63,8 @@ private:
     int width;
     double zoomTile = 2;
     QPushButton* pauseButton;
+    QLabel* day;
+    int dayint;
 };
 
 #endif //TA_MAINWINDOW_H
