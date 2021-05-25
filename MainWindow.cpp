@@ -44,7 +44,7 @@ MainWindow::MainWindow(int w, int h, CellulaireAutomaat *cellulaireAutomaat) {
     QPushButton* nextDayBtn = new QPushButton();
     nextDayBtn->setText("Next day");
     nextDayBtn->setGeometry(30,30,200,50);
-    connect(nextDayBtn, &QPushButton::released, this, &MainWindow::TemporaryNextDay);
+    connect(nextDayBtn, &QPushButton::released, this, &MainWindow::temporaryNextDay);
 
     QPushButton* pauseBtn = new QPushButton();
     pauseBtn->setText("Pause");
@@ -120,7 +120,7 @@ void MainWindow::drawTile(int row, int col, int rot, const std::string pixelart)
     QGraphicsPixmapItem *item = new QGraphicsPixmapItem(QPixmap(filename));
     item->setPixmap(QPixmap(filename));
     item->setCacheMode(QGraphicsItem::NoCache);
-    qreal scale = qMax(zoomTile, zoomTile);
+    //qreal scale = qMax(zoomTile, zoomTile);
     qreal scale = qMax(2, 2);
     item->setScale(scale);
     item->setRotation(rot * 90);
