@@ -17,6 +17,7 @@ float runSimulation(const std::string& rules){
         automaat.draw();
         it++;
     }
+    return 0;
 }
 
 #endif //TA_CITYSIMULATION_H

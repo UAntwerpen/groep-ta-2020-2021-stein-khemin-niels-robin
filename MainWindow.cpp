@@ -88,7 +88,7 @@ void MainWindow::updateAll() {
     drawGrid(width,height);
     for (int x = 0; x < width; x++) {
         for (int y = 0; y < height; y++) {
-            std::pair<int, std::string> pixart = c->operator()(x,y)->getPixelArt();
+            std::pair<int, std::string> pixart = (*c)(x,y)->getPixelArt();
             drawTile(x,y,pixart.first, pixart.second);
         }
     }
@@ -241,9 +241,9 @@ void MainWindow::showView(){
 }
 
 void MainWindow::clearBuildings() {
-    for (auto it = Buildings.begin(); it != Buildings.end(); it++) {
-        delete *it;
-    }
+//    for (auto it = Buildings.begin(); it != Buildings.end(); it++) {
+//        delete *it;
+//    }
 }
 
 void MainWindow::clearRoadUsers() {

@@ -167,6 +167,7 @@ void CellulaireAutomaat::updateCells() {
             (*this)(row, col)->update();
         }
     }
+    w->updateAll();
 }
 
 int CellulaireAutomaat::count(const EStates &state) const {
@@ -220,25 +221,26 @@ std::map<EStates, int> CellulaireAutomaat::count_all() const {
     }
 
     void CellulaireAutomaat::draw() {
-    for (int col = 0; col < width; col++){
-        for (int row = 0; row < height; row++){
-            switch ((*this)(row, col)->getState()) {
-                case 1:
-                    std::cout << "r ";
-                case 2:
-                    std::cout << "R ";
-                    break;
-                case 3:
-                    std::cout << "I ";
-                    break;
-                case 4:
-                    std::cout << "S ";
-                case 0:
-                default:
-                    std::cout << "V ";
-                    break;
+        w->updateAll();
+        /*for (int col = 0; col < width; col++){
+            for (int row = 0; row < height; row++){
+                switch ((*this)(row, col)->getState()) {
+                    case 1:
+                        std::cout << "r ";
+                    case 2:
+                        std::cout << "R ";
+                        break;
+                    case 3:
+                        std::cout << "I ";
+                        break;
+                    case 4:
+                        std::cout << "S ";
+                    case 0:
+                    default:
+                        std::cout << "V ";
+                        break;
+                }
             }
-        }
-        std::cout << std::endl;
-    }
+            std::cout << std::endl;
+        }*/
     }

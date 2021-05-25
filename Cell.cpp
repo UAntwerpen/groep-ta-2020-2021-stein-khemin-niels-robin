@@ -51,11 +51,11 @@ void Cell::addPerson(Citizen *person) {
 }
 
 std::vector<Citizen *> Cell::getPersons() const {
-    return this->getPersons();
+    return people;
 }
 
 CellulaireAutomaat* Cell::getCellulaireAutomaat() const {
-    return this->getCellulaireAutomaat();
+    return cellulaireAutomaat;
 }
 
 std::vector<bool> Cell::getRoadConnectPoints() {
@@ -215,16 +215,19 @@ std::vector<bool> Road::getNeighborsRoads() {
      *                    [2]
      */
     std::vector<bool> road = {false, false, false, false};
+
+
+    //TODO eerst checken of de offset niet out of bounds is!
 /*
     road[1] = (*cellulaireAutomaat)(row, col + 1).getRoadConnectPoints()[0];
     road[0] = (*cellulaireAutomaat)(row, col - 1).getRoadConnectPoints()[1];
     road[3] = (*cellulaireAutomaat)(row + 1, col).getRoadConnectPoints()[2];
     road[2] = (*cellulaireAutomaat)(row - 1, col).getRoadConnectPoints()[3];*/
 
-    road[1] = (*cellulaireAutomaat)(row, col + 1)->getState() == ERoad;
+/*    road[1] = (*cellulaireAutomaat)(row, col + 1)->getState() == ERoad;
     road[3] = (*cellulaireAutomaat)(row, col - 1)->getState() == ERoad;
     road[2] = (*cellulaireAutomaat)(row + 1, col)->getState() == ERoad;
-    road[0] = (*cellulaireAutomaat)(row - 1, col)->getState() == ERoad;
+    road[0] = (*cellulaireAutomaat)(row - 1, col)->getState() == ERoad;*/
 
     return road;
 }
