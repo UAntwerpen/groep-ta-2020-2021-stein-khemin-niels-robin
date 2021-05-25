@@ -38,7 +38,7 @@ MainWindow::MainWindow(int w, int h, CellulaireAutomaat *cellulaireAutomaat) {
     QPushButton* button = new QPushButton();
     button->setText("Next day");
     button->setGeometry(30,30,200,50);
-    connect(button, &QPushButton::released, this, &MainWindow::TemporaryNextDay);
+    connect(button, &QPushButton::released, this, &MainWindow::temporaryNextDay);
 
     QPushButton* button1 = new QPushButton();
     button1->setText("Pause");
@@ -50,7 +50,7 @@ MainWindow::MainWindow(int w, int h, CellulaireAutomaat *cellulaireAutomaat) {
     settingsDock->layout()->addWidget(button1);
 }
 
-void MainWindow::TemporaryNextDay(){
+void MainWindow::temporaryNextDay(){
     cout<<"Button pushed."<<endl;
     c->updateRules();
 }
@@ -72,7 +72,7 @@ void MainWindow::resume(){
 }
 
 
-void MainWindow::UpdateRoadUsers() {
+void MainWindow::updateRoadUsers() {
     clearRoadUsers();
     for (int x = 0; x < width; x++) {
         for (int y = 0; y < height; y++) {
@@ -83,7 +83,7 @@ void MainWindow::UpdateRoadUsers() {
     }
 }
 
-void MainWindow::UpdateAll() {
+void MainWindow::updateAll() {
     clearBuildings();
     drawGrid(width,height);
     for (int x = 0; x < width; x++) {
@@ -92,7 +92,7 @@ void MainWindow::UpdateAll() {
             drawTile(x,y,pixart.first, pixart.second);
         }
     }
-    UpdateRoadUsers();
+    updateRoadUsers();
 }
 
 

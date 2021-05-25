@@ -26,6 +26,14 @@ House::House() {
     setPixelArt("../PixelArt/House.png");
 }
 
+void House::addResident(Citizen *resident) {
+
+}
+
+void House::removeResident(Citizen *resident) {
+
+}
+
 Store::Store() {
     setPixelArt("../PixelArt/Store.png");
 }

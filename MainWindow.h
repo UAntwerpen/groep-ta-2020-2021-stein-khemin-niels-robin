@@ -16,9 +16,9 @@ class MainWindow: public QMainWindow {
 public:
     MainWindow(int width, int height, CellulaireAutomaat *cellulaireAutomaat);
 
-    void UpdateRoadUsers();
+    void updateRoadUsers();
 
-    void UpdateAll();
+    void updateAll();
 
     virtual ~MainWindow();
 
@@ -28,7 +28,7 @@ public:
     void drawTile(int row, int col, int rotation, const std::string pixelart);
     void addCar(int row, int col, int rotation, const std::string pixelart);
     void addPedestrian(int row, int col, int rotation, const std::string pixelart);
-    void TemporaryNextDay();
+    void temporaryNextDay();
     void pause();
     void resume();
 private slots:

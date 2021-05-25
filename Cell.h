@@ -109,7 +109,7 @@ public:
     /*
      * int: rotation, string: pad to pixel art
      */
-    virtual std::pair<int, std::string> getPixelArt(){return std::pair<int, std::string>(0, "");};
+    virtual std::pair<int, std::string> getPixelArt(){return std::pair<int, std::string>(0, "../PixelArt/Default.png");};
 
 protected:
     int row = 0;

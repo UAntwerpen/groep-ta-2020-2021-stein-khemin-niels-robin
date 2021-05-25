@@ -158,6 +158,7 @@ void CellulaireAutomaat::updateRules() {
             changeCell(row, col, new_cell);
         }
     }
+    w->updateAll();
 }
 
 void CellulaireAutomaat::updateCells() {
@@ -166,7 +167,6 @@ void CellulaireAutomaat::updateCells() {
             (*this)(row, col)->update();
         }
     }
-    w->UpdateAll();
 }
 
 int CellulaireAutomaat::count(const EStates &state) const {
