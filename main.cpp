@@ -25,7 +25,7 @@ int main(int argc, char *argv[]){
     for(char c: *rule){
         s += c;
     }
-    CellulaireAutomaat A(100,100, s);
+    CellulaireAutomaat A(10,10, s);
 
     return QApplication::exec();
 }

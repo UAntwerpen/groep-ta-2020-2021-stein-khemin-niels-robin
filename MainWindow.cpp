@@ -100,19 +100,19 @@ void MainWindow::drawTile(int row, int col, int rot, const std::string pixelart)
     QString filename = pixelart.c_str();
     QGraphicsPixmapItem *item = new QGraphicsPixmapItem(QPixmap(filename));
     item->setCacheMode(QGraphicsItem::NoCache);
-    qreal scale = qMax(4, 4);
+    qreal scale = qMax(2, 2);
     item->setScale(scale);
     item->setRotation(rot * 90);
     rot = rot % 4;
     int ofsetx = 0;
     int ofsety = 0;
     if (rot == 1 || rot == 2) {
-        ofsetx = 128;
+        ofsetx = 64;
     }
     if (rot == 3 || rot == 2) {
-        ofsety = 128;
+        ofsety = 64;
     }
-    item->setPos(col * 128 + ofsetx, row * 128 + ofsety);
+    item->setPos(col * 64 + ofsetx, row * 64 + ofsety);
     scene->addItem(item);
     if(pixelart.find("Border") != string::npos){
         Walls.push_back(item);
@@ -125,19 +125,19 @@ void MainWindow::addCar(int row, int col, int rot, const std::string pixelart) {
     QString filename = pixelart.c_str();
     QGraphicsPixmapItem *item = new QGraphicsPixmapItem(QPixmap(filename));
     item->setCacheMode(QGraphicsItem::NoCache);
-    qreal scale = qMax(2, 2);
+    qreal scale = qMax(1, 1);
     item->setScale(scale);
     item->setRotation(rot * 90);
     rot = rot % 4;
     int ofsetx = 0;
     int ofsety = 0;
     if (rot == 1 || rot == 2) {
-        ofsetx = 128;
+        ofsetx = 64;
     }
     if (rot == 3 || rot == 2) {
-        ofsety = 128;
+        ofsety = 64;
     }
-    item->setPos(col * 128 + ofsetx, row * 128 + ofsety);
+    item->setPos(col * 64 + ofsetx, row * 64 + ofsety);
     scene->addItem(item);
     RoadUsers.push_back(item);
 }
@@ -147,24 +147,24 @@ void MainWindow::addPedestrian(int row, int col, int rot, const std::string pixe
 
     QGraphicsPixmapItem *item = new QGraphicsPixmapItem(QPixmap(filename));
     item->setCacheMode(QGraphicsItem::NoCache);
-    qreal scale = qMax(2, 2);
+    qreal scale = qMax(1, 1);
     item->setScale(scale);
     rot = rot % 4;
     int ofsetx = 0;
     int ofsety = 0;
     if (rot == 0 || rot == 1) {
-        ofsety = -54;
+        ofsety = -27;
     }
     if (rot == 1 || rot == 2) {
-        ofsetx = 54;
+        ofsetx = 27;
     }
     if (rot == 3 || rot == 2) {
-        ofsety = 54;
+        ofsety = 27;
     }
     if (rot == 0 || rot == 3) {
-        ofsetx = -54;
+        ofsetx = -27;
     }
-    item->setPos(col * 128 + ofsetx, row * 128 + ofsety);
+    item->setPos(col * 64 + ofsetx, row * 64 + ofsety);
     scene->addItem(item);
     RoadUsers.push_back(item);
 }
