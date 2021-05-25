@@ -91,7 +91,7 @@ CellulaireAutomaat::~CellulaireAutomaat() {
 }
 
 Cell* CellulaireAutomaat::operator()(int row, int column) const {
-    REQUIRE(0 <= row && row < width, "Row is out of bounds!");
+    REQUIRE(0 <= row && row < width, "Row with is out of bounds!");
     REQUIRE(0 <= column && column < height, "Column is out of bounds!");
     return matrix[row * height + column];
 }
@@ -119,15 +119,22 @@ int CellulaireAutomaat::getNeighbourhoodValue(int row, int col) {
     static int powers[8] = {static_cast<int>(pow(5, 7)), static_cast<int>(pow(5, 6)), static_cast<int>(pow(5, 5)),
                             static_cast<int>(pow(5, 4)), static_cast<int>(pow(5, 3)),
                             static_cast<int>(pow(5, 2)), 5, 1};
-
-    value += (0 <= row && 0 <= col ? ((*this)(row - 1, col - 1))->getState() : 0) * powers[0];
-    value += (0 <= row ? ((*this)(row - 1, col))->getState() : 0) * powers[1];
-    value += (0 <= row && col < width ? ((*this)(row - 1, col + 1))->getState(): 0) * powers[2];
-    value += (col < width ? ((*this)(row, col + 1))->getState() : 0) * powers[3];
-    value += (row < height && col < width ? ((*this)(row + 1, col + 1))->getState() : 0) * powers[4];
-    value += (row < height ? ((*this)(row + 1, col))->getState() : 0) * powers[5];
-    value += (row < height && 0 <= col ? ((*this)(row + 1, col - 1))->getState() : 0) * powers[6];
-    value += (0 <= col ? ((*this)(row, col - 1))->getState() : 0) * powers[7];
+    if (0 <= row - 1 && 0 <= col - 1)
+        value += ((*this)(row - 1, col - 1))->getState() * powers[0];
+    if (0 <= row - 1)
+        value += ((*this)(row - 1, col))->getState() * powers[1];
+    if (0 <= row - 1 && col + 1 < width)
+        value += ((*this)(row - 1, col + 1))->getState() * powers[2];
+    if (col + 1 < width)
+        value += ((*this)(row, col + 1))->getState() * powers[3];
+    if (row + 1 < height && col + 1 < width)
+        value += ((*this)(row + 1, col + 1))->getState() * powers[4];
+    if (row + 1 < height)
+        value += ((*this)(row + 1, col))->getState() * powers[5];
+    if (row + 1 < height && 0 <= col - 1)
+        value += ((*this)(row + 1, col - 1))->getState() * powers[6];
+    if (0 <= col - 1)
+        value += ((*this)(row, col - 1))->getState() * powers[7];
     return value;
 }
 
