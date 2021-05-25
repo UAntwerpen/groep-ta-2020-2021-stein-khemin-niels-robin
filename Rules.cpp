@@ -35,7 +35,7 @@ Genome<GENOME_SIZE> *GeneticAlgorith::generateGenome() {
 Genome<GENOME_SIZE> GeneticAlgorith::run(int max_gen) {
     for (int _ = 0; _ < GENERATION_LIMIT && fitness[indices[0]] != 1; _++){
         std::cout << "Running Generation: " << _ << std::endl;
-#pragma omp parallel for if (PARALLELISM_ENABLED)
+//#pragma omp parallel for if (PARALLELISM_ENABLED)
         for (int i = 0; i < POPULATION_SIZE; i++){
             fitness[i] = calc_fitness(*population[i]);
         }

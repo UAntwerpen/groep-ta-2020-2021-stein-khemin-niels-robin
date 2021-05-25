@@ -8,15 +8,17 @@
 
 float runSimulation(const std::string& rules){
     int it = 0;
-    int max = 2000;
+    int max = 200;
     CellulaireAutomaat automaat(10, 10, rules);
     automaat.changeCell(0, 5, new Road(0, 5, &automaat));
-    while (it < max){
-        automaat.updateRules();
-        automaat.updateCells();
-        automaat.draw();
-        it++;
-    }
+    automaat.draw();
+    QApplication::exec();
+//    while (it < max){
+//        automaat.updateRules();
+//        automaat.updateCells();
+//        automaat.draw();
+//        it++;
+//    }
     return 0;
 }
 

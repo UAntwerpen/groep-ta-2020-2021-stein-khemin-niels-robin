@@ -72,6 +72,7 @@ MainWindow::MainWindow(int w, int h, CellulaireAutomaat *cellulaireAutomaat) {
 void MainWindow::temporaryNextDay(){
     cout<<"Button pushed."<<endl;
     c->updateRules();
+    c->updateCells();
 }
 
 void MainWindow::pause(){
