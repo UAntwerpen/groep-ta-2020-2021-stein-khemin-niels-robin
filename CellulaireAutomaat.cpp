@@ -26,7 +26,7 @@ CellulaireAutomaat::CellulaireAutomaat(int width, int height, const std::string&
     }
     file.close();
     //w = nullptr;
-    w = new MainWindow(width, height);
+    w = new MainWindow(width, height, this);
     //draw();
     w->show();
 }

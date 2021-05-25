@@ -14,7 +14,7 @@
 
 class MainWindow: public QMainWindow {
 public:
-    MainWindow(int width, int height);
+    MainWindow(int width, int height, CellulaireAutomaat *cellulaireAutomaat);
 
     void UpdateRoadUsers();
 

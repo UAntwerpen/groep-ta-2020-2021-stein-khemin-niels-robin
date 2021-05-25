@@ -10,9 +10,10 @@
 using namespace std;
 
 
-MainWindow::MainWindow(int w, int h) {
+MainWindow::MainWindow(int w, int h, CellulaireAutomaat *cellulaireAutomaat) {
     width = w;
     height = h;
+    c = cellulaireAutomaat;
     scene = new QGraphicsScene();
     addWalls(w, h);
     drawGrid(w, h);
@@ -169,7 +170,6 @@ void MainWindow::addPedestrian(int row, int col, int rot, const std::string pixe
 }
 
 void MainWindow::drawGrid(int _width, int _height) {
-    CellulaireAutomaat *automaat = new CellulaireAutomaat(_width, _height, "");
     for (int i = 0; i < _width; i++) {
         for (int j = 0; j < _height; j++) {
 
