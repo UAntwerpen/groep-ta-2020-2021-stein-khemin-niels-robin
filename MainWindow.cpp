@@ -136,9 +136,9 @@ void MainWindow::drawTile(int row, int col, int rot, const std::string pixelart)
     item->setPos(col * (32*zoomTile) + ofsetx, row * (32*zoomTile) + ofsety);
     scene->addItem(item);
     if(pixelart.find("Border") != string::npos){
-        Walls.push_back(item);
+        walls.push_back(item);
     } else{
-        Buildings.push_back(item);
+        buildings.push_back(item);
     }
 }
 
@@ -160,7 +160,7 @@ void MainWindow::addCar(int row, int col, int rot, const std::string pixelart) {
     }
     item->setPos(col * (32*zoomTile) + ofsetx, row * (32*zoomTile) + ofsety);
     scene->addItem(item);
-    RoadUsers.push_back(item);
+    roadUsers.push_back(item);
 }
 
 void MainWindow::addPedestrian(int row, int col, int rot, const std::string pixelart) {
@@ -188,7 +188,7 @@ void MainWindow::addPedestrian(int row, int col, int rot, const std::string pixe
     }
     item->setPos(col * (32*zoomTile) + ofsetx, row * (32*zoomTile) + ofsety);
     scene->addItem(item);
-    RoadUsers.push_back(item);
+    roadUsers.push_back(item);
 }
 
 void MainWindow::drawGrid(int _width, int _height) {
@@ -258,24 +258,24 @@ void MainWindow::addWalls(int _width, int _height){
 }
 
 void MainWindow::clearBuildings() {
-    for (auto it = Buildings.begin(); it != Buildings.end(); it++) {
+    for (auto it = buildings.begin(); it != buildings.end(); it++) {
         delete *it;
     }
-    Buildings = {};
+    buildings = {};
 }
 
 void MainWindow::clearRoadUsers() {
-    for (auto it = RoadUsers.begin(); it != RoadUsers.end(); it++) {
+    for (auto it = roadUsers.begin(); it != roadUsers.end(); it++) {
         delete *it;
     }
-    RoadUsers = {};
+    roadUsers = {};
 }
 
 void MainWindow::clearWalls() {
-    for (auto it = Walls.begin(); it != Walls.end(); it++) {
+    for (auto it = walls.begin(); it != walls.end(); it++) {
         delete *it;
     }
-    Walls = {};
+    walls = {};
 }
 
 MainWindow::~MainWindow() {

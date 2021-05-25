@@ -46,9 +46,9 @@ private:
     void drawGrid(int width, int height);
 
     CellulaireAutomaat* c;
-    std::vector<QGraphicsPixmapItem*> RoadUsers;
-    std::vector<QGraphicsPixmapItem*> Buildings;
-    std::vector<QGraphicsPixmapItem*> Walls;
+    std::vector<QGraphicsPixmapItem*> roadUsers;
+    std::vector<QGraphicsPixmapItem*> buildings;
+    std::vector<QGraphicsPixmapItem*> walls;
     QGraphicsScene *scene;
     QGraphicsView *view;
     QVBoxLayout* boxLayout;
