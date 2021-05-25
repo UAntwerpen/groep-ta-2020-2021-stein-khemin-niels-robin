@@ -77,6 +77,7 @@ CellulaireAutomaat::CellulaireAutomaat(const std::string &filename) {
         }
         std::cout << line << std::endl;
     }
+
     file.close();
 }
 
@@ -143,11 +144,11 @@ void CellulaireAutomaat::changeCell(int row, int column, Cell *to) {
     REQUIRE(0 <= column && column < width, "Column is out of bounds!");
     REQUIRE(to != nullptr, "De gegeven cell is een nullptr!");
     delete matrix[row * height + column];
-    matrix[row * height + column] = to;
+    //matrix[row * height + column] = to;
+    matrix[(row) * height + (column)] = to;
 }
 
 void CellulaireAutomaat::updateRules() {
-    CellFactorySingleton& factory = CellFactorySingleton::getInstance();
     for (int col = 0; col < width; col++) {
         for (int row = 0; row < height; row++) {
             EStates state = static_cast<EStates>(rules[getNeighbourhoodValue(row, col)]);

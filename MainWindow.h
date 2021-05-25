@@ -38,6 +38,10 @@ private:
     void clearRoadUsers();
     void clearBuildings();
     void clearWalls();
+    void scaleTiles(int zoom);
+
+    void zoomOut();
+    void zoomIn();
 
     void addWalls(int width, int height);
 
@@ -55,6 +59,7 @@ private:
     QDockWidget* cityDock;
     int height;
     int width;
+    int zoomTile = 4;
     QPushButton* pauseButton;
 };
 

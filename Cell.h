@@ -45,9 +45,7 @@ public:
     /*!
      * draw cell to interface
      */
-    virtual void drawToScreen(MainWindow *window){
-        std::cout << "fout" << std::endl;
-    };
+    virtual void drawToScreen(MainWindow *window);
 
     /*!
      * geeft terug hoeveel happiness een bepaalde cell uitstoot (tussen -1 en 1)
@@ -123,7 +121,8 @@ protected:
 
 class Vegetation : public Cell{
 public:
-    Vegetation(int row, int col, CellulaireAutomaat* cellulaireAutomaat): Cell(row, col, cellulaireAutomaat){}
+    Vegetation(int row, int col, CellulaireAutomaat* cellulaireAutomaat): Cell(row, col, cellulaireAutomaat){
+    }
 
     Vegetation(const Cell &p2);
 
@@ -189,11 +188,11 @@ private:
 
 class ResidentialZone : public Cell{
 private:
-    House building;
+    House* building;
 public:
     //TODO weg
     ResidentialZone(){
-        building = House();
+        building = new House();
     }
 
     ResidentialZone(const Cell &p2);
@@ -211,7 +210,7 @@ public:
 
 class IndustrialZone : public Cell{
 private:
-    Workplace building;
+    Workplace* building;
 public:
     //TODO weg
     IndustrialZone(){std::cout << "FOUT" << std::endl;}
@@ -231,7 +230,7 @@ public:
 
 class StoreZone : public Cell{
 private:
-    Store building;
+    Store* building;
 public:
     //TODO weg
     StoreZone(){std::cout << "FOUT" << std::endl;}
