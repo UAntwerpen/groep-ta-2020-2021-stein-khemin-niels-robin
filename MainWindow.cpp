@@ -103,14 +103,15 @@ void MainWindow::updateRoadUsers() {
 }
 
 void MainWindow::updateAll() {
+    clearWalls();
     clearBuildings();
     drawGrid(width,height);
-    for (int x = 0; x < width; x++) {
+    /*for (int x = 0; x < width; x++) {
         for (int y = 0; y < height; y++) {
             std::pair<int, std::string> pixart = (*c)(x,y)->getPixelArt();
             drawTile(x,y,pixart.first, pixart.second);
         }
-    }
+    }*/
     updateRoadUsers();
 }
 
@@ -120,7 +121,6 @@ void MainWindow::drawTile(int row, int col, int rot, const std::string pixelart)
     QGraphicsPixmapItem *item = new QGraphicsPixmapItem(QPixmap(filename));
     item->setPixmap(QPixmap(filename));
     item->setCacheMode(QGraphicsItem::NoCache);
-    //qreal scale = qMax(zoomTile, zoomTile);
     qreal scale = qMax(zoomTile, zoomTile);
     item->setScale(scale);
     item->setRotation(rot * 90);
@@ -128,12 +128,12 @@ void MainWindow::drawTile(int row, int col, int rot, const std::string pixelart)
     int ofsetx = 0;
     int ofsety = 0;
     if (rot == 1 || rot == 2) {
-        ofsetx = zoomTile*64;
+        ofsetx = zoomTile*32;
     }
     if (rot == 3 || rot == 2) {
-        ofsety = zoomTile*64;
+        ofsety = zoomTile*32;
     }
-    item->setPos(col * (64*zoomTile) + ofsetx, row * (64*zoomTile) + ofsety);
+    item->setPos(col * (32*zoomTile) + ofsetx, row * (32*zoomTile) + ofsety);
     scene->addItem(item);
     if(pixelart.find("Border") != string::npos){
         Walls.push_back(item);
@@ -153,12 +153,12 @@ void MainWindow::addCar(int row, int col, int rot, const std::string pixelart) {
     int ofsetx = 0;
     int ofsety = 0;
     if (rot == 1 || rot == 2) {
-        ofsetx = zoomTile*64;
+        ofsetx = zoomTile*32;
     }
     if (rot == 3 || rot == 2) {
-        ofsety = zoomTile*64;
+        ofsety = zoomTile*32;
     }
-    item->setPos(col * (64*zoomTile) + ofsetx, row * (64*zoomTile) + ofsety);
+    item->setPos(col * (32*zoomTile) + ofsetx, row * (32*zoomTile) + ofsety);
     scene->addItem(item);
     RoadUsers.push_back(item);
 }
@@ -175,27 +175,27 @@ void MainWindow::addPedestrian(int row, int col, int rot, const std::string pixe
     int ofsetx = 0;
     int ofsety = 0;
     if (rot == 0 || rot == 1) {
-        ofsety = -27*zoomTile;
+        ofsety = -27*(zoomTile/2);
     }
     if (rot == 1 || rot == 2) {
-        ofsetx = 27*zoomTile;
+        ofsetx = 27*(zoomTile/2);
     }
     if (rot == 3 || rot == 2) {
-        ofsety = 27*zoomTile;
+        ofsety = 27*(zoomTile/2);
     }
     if (rot == 0 || rot == 3) {
-        ofsetx = -27*zoomTile;
+        ofsetx = -27*(zoomTile/2);
     }
-    item->setPos(col * (64*zoomTile) + ofsetx, row * (64*zoomTile) + ofsety);
+    item->setPos(col * (32*zoomTile) + ofsetx, row * (32*zoomTile) + ofsety);
     scene->addItem(item);
     RoadUsers.push_back(item);
 }
 
 void MainWindow::drawGrid(int _width, int _height) {
+    addWalls(_width, _height);
     for (int i = 0; i < _width; i++) {
         for (int j = 0; j < _height; j++) {
-            drawTile(i, j, 0, "../PixelArt/Default.png");
-            /*
+            //drawTile(i, j, 0, "../PixelArt/Default.png");
             int random = rand() % 14;
             int randomangle = rand() % 4;
             if (random == 0) {
@@ -237,7 +237,7 @@ void MainWindow::drawGrid(int _width, int _height) {
             }  else if(random == 13){
                 drawTile(i, j, 0, "../PixelArt/Park_Broken.png");
             }
-            */
+
         }
     }
 }

@@ -56,7 +56,7 @@ private:
     QDockWidget* cityDock;
     int height;
     int width;
-    double zoomTile = 1;
+    double zoomTile = 2;
     QPushButton* pauseButton;
 };
 
