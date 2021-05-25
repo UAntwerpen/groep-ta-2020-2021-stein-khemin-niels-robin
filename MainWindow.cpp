@@ -92,7 +92,7 @@ void MainWindow::resume(){
 
 
 void MainWindow::updateRoadUsers() {
-    //clearRoadUsers();
+    clearRoadUsers();
     for (int x = 0; x < width; x++) {
         for (int y = 0; y < height; y++) {
             //TODO fix enkel roadusers
@@ -103,7 +103,7 @@ void MainWindow::updateRoadUsers() {
 }
 
 void MainWindow::updateAll() {
-    //clearBuildings();
+    clearBuildings();
     drawGrid(width,height);
     for (int x = 0; x < width; x++) {
         for (int y = 0; y < height; y++) {
@@ -121,19 +121,19 @@ void MainWindow::drawTile(int row, int col, int rot, const std::string pixelart)
     item->setPixmap(QPixmap(filename));
     item->setCacheMode(QGraphicsItem::NoCache);
     //qreal scale = qMax(zoomTile, zoomTile);
-    qreal scale = qMax(2, 2);
+    qreal scale = qMax(zoomTile, zoomTile);
     item->setScale(scale);
     item->setRotation(rot * 90);
     rot = rot % 4;
     int ofsetx = 0;
     int ofsety = 0;
     if (rot == 1 || rot == 2) {
-        ofsetx = 64;
+        ofsetx = zoomTile*64;
     }
     if (rot == 3 || rot == 2) {
-        ofsety = 64;
+        ofsety = zoomTile*64;
     }
-    item->setPos(col * 64 + ofsetx, row * 64 + ofsety);
+    item->setPos(col * (64*zoomTile) + ofsetx, row * (64*zoomTile) + ofsety);
     scene->addItem(item);
     if(pixelart.find("Border") != string::npos){
         Walls.push_back(item);
@@ -146,19 +146,19 @@ void MainWindow::addCar(int row, int col, int rot, const std::string pixelart) {
     QString filename = pixelart.c_str();
     QGraphicsPixmapItem *item = new QGraphicsPixmapItem(QPixmap(filename));
     item->setCacheMode(QGraphicsItem::NoCache);
-    qreal scale = qMax(1, 1);
+    qreal scale = qMax(zoomTile/2, zoomTile/2);
     item->setScale(scale);
     item->setRotation(rot * 90);
     rot = rot % 4;
     int ofsetx = 0;
     int ofsety = 0;
     if (rot == 1 || rot == 2) {
-        ofsetx = 64;
+        ofsetx = zoomTile*64;
     }
     if (rot == 3 || rot == 2) {
-        ofsety = 64;
+        ofsety = zoomTile*64;
     }
-    item->setPos(col * 64 + ofsetx, row * 64 + ofsety);
+    item->setPos(col * (64*zoomTile) + ofsetx, row * (64*zoomTile) + ofsety);
     scene->addItem(item);
     RoadUsers.push_back(item);
 }
@@ -169,24 +169,24 @@ void MainWindow::addPedestrian(int row, int col, int rot, const std::string pixe
     QGraphicsPixmapItem *item = new QGraphicsPixmapItem(QPixmap(filename));
     item->setPixmap(QPixmap(filename));
     item->setCacheMode(QGraphicsItem::NoCache);
-    qreal scale = qMax(1, 1);
+    qreal scale = qMax(zoomTile/2, zoomTile/2);
     item->setScale(scale);
     rot = rot % 4;
     int ofsetx = 0;
     int ofsety = 0;
     if (rot == 0 || rot == 1) {
-        ofsety = -27;
+        ofsety = -27*zoomTile;
     }
     if (rot == 1 || rot == 2) {
-        ofsetx = 27;
+        ofsetx = 27*zoomTile;
     }
     if (rot == 3 || rot == 2) {
-        ofsety = 27;
+        ofsety = 27*zoomTile;
     }
     if (rot == 0 || rot == 3) {
-        ofsetx = -27;
+        ofsetx = -27*zoomTile;
     }
-    item->setPos(col * 64 + ofsetx, row * 64 + ofsety);
+    item->setPos(col * (64*zoomTile) + ofsetx, row * (64*zoomTile) + ofsety);
     scene->addItem(item);
     RoadUsers.push_back(item);
 }
@@ -257,26 +257,25 @@ void MainWindow::addWalls(int _width, int _height){
     }
 }
 
-void MainWindow::showView(){
-    //view->show();
-}
-
 void MainWindow::clearBuildings() {
     for (auto it = Buildings.begin(); it != Buildings.end(); it++) {
         delete *it;
     }
+    Buildings = {};
 }
 
 void MainWindow::clearRoadUsers() {
     for (auto it = RoadUsers.begin(); it != RoadUsers.end(); it++) {
         delete *it;
     }
+    RoadUsers = {};
 }
 
 void MainWindow::clearWalls() {
     for (auto it = Walls.begin(); it != Walls.end(); it++) {
         delete *it;
     }
+    Walls = {};
 }
 
 MainWindow::~MainWindow() {
@@ -285,30 +284,15 @@ MainWindow::~MainWindow() {
     clearWalls();
 }
 
-void MainWindow::scaleTiles(int zoom) {
-    zoomTile = zoom;
-
-    //vervangen door code die elk vak van de cellulaire autmaat opnieuw tekent maar met de nieuwe schaal
-    //clearBuildings();
-    //clearRoadUsers();
-
-}
-
-void MainWindow::clicked() {
-
-}
 
 void MainWindow::zoomOut() {
-    if(zoomTile <= 0){
-        scaleTiles(0);
-    }
-    else{
-        zoomTile--;
-        scaleTiles(zoomTile);
-    }
+    clearWalls();
+    zoomTile/=2;
+    updateAll();
 }
 
 void MainWindow::zoomIn() {
-    zoomTile++;
-    scaleTiles(zoomTile);
+    clearWalls();
+    zoomTile*=2;
+    updateAll();
 }

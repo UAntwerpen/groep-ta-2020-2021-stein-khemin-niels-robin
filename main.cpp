@@ -22,7 +22,7 @@ int main(int argc, char *argv[]){
         s += c;
     }
     CellulaireAutomaat A(10,10, s);
-    A.changeCell(0, 5, new Road(0, 5, &A));
+    //A.changeCell(0, 5, new Road(0, 5, &A));
     A.draw();
 
     return QApplication::exec();

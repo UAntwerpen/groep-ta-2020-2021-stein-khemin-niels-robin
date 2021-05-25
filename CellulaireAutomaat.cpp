@@ -222,7 +222,6 @@ std::map<EStates, int> CellulaireAutomaat::count_all() const {
     }
 
     void CellulaireAutomaat::draw() {
-        w->updateAll();
         /*for (int col = 0; col < width; col++){
             for (int row = 0; row < height; row++){
                 switch ((*this)(row, col)->getState()) {

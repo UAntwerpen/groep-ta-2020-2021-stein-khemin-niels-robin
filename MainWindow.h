@@ -22,8 +22,6 @@ public:
 
     virtual ~MainWindow();
 
-    void showView();
-
     //private maken
     void drawTile(int row, int col, int rotation, const std::string pixelart);
     void addCar(int row, int col, int rotation, const std::string pixelart);
@@ -38,7 +36,6 @@ private:
     void clearRoadUsers();
     void clearBuildings();
     void clearWalls();
-    void scaleTiles(int zoom);
 
     void zoomOut();
     void zoomIn();
@@ -59,7 +56,7 @@ private:
     QDockWidget* cityDock;
     int height;
     int width;
-    int zoomTile = 4;
+    double zoomTile = 1;
     QPushButton* pauseButton;
 };
 
