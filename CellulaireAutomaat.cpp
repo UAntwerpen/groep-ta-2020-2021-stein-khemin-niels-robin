@@ -92,6 +92,7 @@ CellulaireAutomaat::~CellulaireAutomaat() {
 }
 
 Cell* CellulaireAutomaat::operator()(int row, int column) const {
+
     REQUIRE(0 <= row && row < width, "Row is out of bounds!");
     REQUIRE(0 <= column && column < height, "Column is out of bounds!");
     return matrix[(row + 1) * height + (column + 1)];//TODO waarom +1?
@@ -136,7 +137,8 @@ void CellulaireAutomaat::changeCell(int row, int column, Cell *to) {
     REQUIRE(0 <= column && column < height, "Column is out of bounds!");
     REQUIRE(to != nullptr, "De gegeven cell is een nullptr!");
     delete matrix[row * height + column];
-    matrix[row * height + column] = to;
+    //matrix[row * height + column] = to;
+    matrix[(row) * height + (column)] = to;
 }
 
 void CellulaireAutomaat::updateRules() {

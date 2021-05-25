@@ -24,6 +24,8 @@ MainWindow::MainWindow(int w, int h) {
                                 Qt::RightDockWidgetArea);
     cityDock->setWidget(view);
     addDockWidget(Qt::RightDockWidgetArea, cityDock);
+    view->setDragMode(QGraphicsView::DragMode::ScrollHandDrag);
+
 
     QDockWidget *settingsDock;
     settingsDock = new QDockWidget(tr("Settings"), this);
@@ -34,19 +36,32 @@ MainWindow::MainWindow(int w, int h) {
 
     QVBoxLayout* boxLayout = new QVBoxLayout();
 
-    QPushButton* button = new QPushButton();
-    button->setText("Next day");
-    button->setGeometry(30,30,200,50);
-    connect(button, &QPushButton::released, this, &MainWindow::TemporaryNextDay);
+    QPushButton* nextDayBtn = new QPushButton();
+    nextDayBtn->setText("Next day");
+    nextDayBtn->setGeometry(30,30,200,50);
+    connect(nextDayBtn, &QPushButton::released, this, &MainWindow::TemporaryNextDay);
 
-    QPushButton* button1 = new QPushButton();
-    button1->setText("Pause");
-    button1->setGeometry(30,80,200,50);
-    pauseButton = button1;
-    connect(button1, &QPushButton::released, this, &MainWindow::pause);
+    QPushButton* pauseBtn = new QPushButton();
+    pauseBtn->setText("Pause");
+    pauseBtn->setGeometry(30,80,200,50);
+    pauseButton = pauseBtn;
+    connect(pauseBtn, &QPushButton::released, this, &MainWindow::pause);
 
-    settingsDock->layout()->addWidget(button);
-    settingsDock->layout()->addWidget(button1);
+
+    QPushButton* zoomOutBtn = new QPushButton();
+    zoomOutBtn->setText("-");
+    zoomOutBtn->setGeometry(30,130,90,50);
+    connect(zoomOutBtn, &QPushButton::released, this, &MainWindow::zoomOut);
+
+    QPushButton* zoomInBtn = new QPushButton();
+    zoomInBtn->setText("+");
+    zoomInBtn->setGeometry(140,130,90,50);
+    connect(zoomInBtn, &QPushButton::released, this, &MainWindow::zoomIn);
+
+    settingsDock->layout()->addWidget(nextDayBtn);
+    settingsDock->layout()->addWidget(pauseBtn);
+    settingsDock->layout()->addWidget(zoomOutBtn);
+    settingsDock->layout()->addWidget(zoomInBtn);
 }
 
 void MainWindow::TemporaryNextDay(){
@@ -94,12 +109,12 @@ void MainWindow::UpdateAll() {
     UpdateRoadUsers();
 }
 
-
 void MainWindow::drawTile(int row, int col, int rot, const std::string pixelart) {
     QString filename = pixelart.c_str();
     QGraphicsPixmapItem *item = new QGraphicsPixmapItem(QPixmap(filename));
+    item->setPixmap(QPixmap(filename));
     item->setCacheMode(QGraphicsItem::NoCache);
-    qreal scale = qMax(4, 4);
+    qreal scale = qMax(zoomTile, zoomTile);
     item->setScale(scale);
     item->setRotation(rot * 90);
     rot = rot % 4;
@@ -145,6 +160,7 @@ void MainWindow::addPedestrian(int row, int col, int rot, const std::string pixe
     QString filename = pixelart.c_str();
 
     QGraphicsPixmapItem *item = new QGraphicsPixmapItem(QPixmap(filename));
+    item->setPixmap(QPixmap(filename));
     item->setCacheMode(QGraphicsItem::NoCache);
     qreal scale = qMax(2, 2);
     item->setScale(scale);
@@ -169,12 +185,11 @@ void MainWindow::addPedestrian(int row, int col, int rot, const std::string pixe
 }
 
 void MainWindow::drawGrid(int _width, int _height) {
-    CellulaireAutomaat *automaat = new CellulaireAutomaat(_width, _height, "");
+   // CellulaireAutomaat *automaat = new CellulaireAutomaat(_width, _height, "");
     for (int i = 0; i < _width; i++) {
         for (int j = 0; j < _height; j++) {
+          //  drawTile(i, j, 0, "../PixelArt/Default.png");
 
-            drawTile(i, j, 0, "../PixelArt/Default.png");
-            /*
             int random = rand() % 14;
             int randomangle = rand() % 4;
             if (random == 0) {
@@ -216,7 +231,7 @@ void MainWindow::drawGrid(int _width, int _height) {
             }  else if(random == 13){
                 drawTile(i, j, 0, "../PixelArt/Park_Broken.png");
             }
-            */
+
         }
     }
 }
@@ -262,4 +277,32 @@ MainWindow::~MainWindow() {
     clearBuildings();
     clearRoadUsers();
     clearWalls();
+}
+
+void MainWindow::scaleTiles(int zoom) {
+    zoomTile = zoom;
+
+    //vervangen door code die elk vak van de cellulaire autmaat opnieuw tekent maar met de nieuwe schaal
+    clearBuildings();
+    clearRoadUsers();
+
+}
+
+void MainWindow::clicked() {
+
+}
+
+void MainWindow::zoomOut() {
+    if(zoomTile <= 0){
+        scaleTiles(0);
+    }
+    else{
+        zoomTile--;
+        scaleTiles(zoomTile);
+    }
+}
+
+void MainWindow::zoomIn() {
+    zoomTile++;
+    scaleTiles(zoomTile);
 }

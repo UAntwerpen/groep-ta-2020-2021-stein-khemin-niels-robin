@@ -55,7 +55,7 @@ std::vector<Citizen *> Cell::getPersons() const {
 }
 
 CellulaireAutomaat* Cell::getCellulaireAutomaat() const {
-    return this->getCellulaireAutomaat();
+    return this->cellulaireAutomaat;
 }
 
 std::vector<bool> Cell::getRoadConnectPoints() {
@@ -78,6 +78,10 @@ bool Cell::isExpired() {
 
 Cell::Cell(const Cell &p2): Cell(p2.row, p2.col, p2.cellulaireAutomaat) {
     this->people = p2.people;
+}
+
+void Cell::drawToScreen(MainWindow *window) {
+    window->drawTile(this->getPos().first, this->getPos().second, this->getPixelArt().first, this->getPixelArt().second);
 }
 
 EStates Vegetation::getState() const {
@@ -220,11 +224,14 @@ std::vector<bool> Road::getNeighborsRoads() {
     road[0] = (*cellulaireAutomaat)(row, col - 1).getRoadConnectPoints()[1];
     road[3] = (*cellulaireAutomaat)(row + 1, col).getRoadConnectPoints()[2];
     road[2] = (*cellulaireAutomaat)(row - 1, col).getRoadConnectPoints()[3];*/
-
-    road[1] = (*cellulaireAutomaat)(row, col + 1)->getState() == ERoad;
-    road[3] = (*cellulaireAutomaat)(row, col - 1)->getState() == ERoad;
-    road[2] = (*cellulaireAutomaat)(row + 1, col)->getState() == ERoad;
-    road[0] = (*cellulaireAutomaat)(row - 1, col)->getState() == ERoad;
+    if(row + 1 < cellulaireAutomaat->getHeight() && col + 1 < cellulaireAutomaat->getWidth())
+        road[1] = (*cellulaireAutomaat)(row, col + 1)->getState() == ERoad;
+    if(row- 1 > 0 && col - 1 > 0)
+        road[3] = (*cellulaireAutomaat)(row, col - 1)->getState() == ERoad;
+    if(row + 1 < cellulaireAutomaat->getHeight() && col + 1 < cellulaireAutomaat->getWidth())
+        road[2] = (*cellulaireAutomaat)(row + 1, col)->getState() == ERoad;
+    if(row - 1 >0 && col - 1 >0)
+        road[0] = (*cellulaireAutomaat)(row - 1, col)->getState() == ERoad;
 
     return road;
 }
@@ -287,13 +294,13 @@ float ResidentialZone::getHappiness() const {
 }
 
 ResidentialZone::ResidentialZone(int row, int col, CellulaireAutomaat *cellulaireAutomaat) : Cell(row, col, cellulaireAutomaat) {
-    building = House();
+    building = new House();
 }
 
 std::pair<int, std::string> ResidentialZone::getPixelArt() {
     if(this->isExpired())
-        return std::pair<int, std::string>(0, this->building.getExpiredPixelArt());
-    return std::pair<int, std::string>(0, this->building.getPixelArt());
+        return std::pair<int, std::string>(0, this->building->getExpiredPixelArt());
+    return std::pair<int, std::string>(0, this->building->getPixelArt());
 }
 
 ResidentialZone::ResidentialZone(const Cell &p2): Cell(p2.getPos().first, p2.getPos().second, p2.getCellulaireAutomaat()) {
@@ -335,13 +342,13 @@ float IndustrialZone::getHappiness() const {
 }
 
 IndustrialZone::IndustrialZone(int row, int col, CellulaireAutomaat *cellulaireAutomaat) : Cell(row, col, cellulaireAutomaat) {
-    building = Workplace();
+    building = new Workplace();
 }
 
 std::pair<int, std::string> IndustrialZone::getPixelArt() {
     if(this->isExpired())
-        return std::pair<int, std::string>(0, this->building.getExpiredPixelArt());
-    return std::pair<int, std::string>(0, this->building.getPixelArt());
+        return std::pair<int, std::string>(0, this->building->getExpiredPixelArt());
+    return std::pair<int, std::string>(0, this->building->getPixelArt());
 }
 
 IndustrialZone::IndustrialZone(const Cell &p2): Cell(p2.getPos().first, p2.getPos().second, p2.getCellulaireAutomaat()) {
@@ -357,13 +364,13 @@ void StoreZone::update() {
 }
 
 StoreZone::StoreZone(int row, int col, CellulaireAutomaat *cellulaireAutomaat) : Cell(row, col, cellulaireAutomaat) {
-    building = Store();
+    building = new Store();
 }
 
 std::pair<int, std::string> StoreZone::getPixelArt() {
     if(this->isExpired())
-        return std::pair<int, std::string>(0, this->building.getExpiredPixelArt());
-    return std::pair<int, std::string>(0, this->building.getPixelArt());
+        return std::pair<int, std::string>(0, this->building->getExpiredPixelArt());
+    return std::pair<int, std::string>(0, this->building->getPixelArt());
 }
 
 StoreZone::StoreZone(const Cell &p2): Cell(p2.getPos().first, p2.getPos().second, p2.getCellulaireAutomaat()) {
