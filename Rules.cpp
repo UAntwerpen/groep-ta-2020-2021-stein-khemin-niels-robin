@@ -1,5 +1,4 @@
 #include <ctime>
-
 #include "Rules.h"
 #include "Utils.h"
 #include "CitySimulation.h"
@@ -9,8 +8,9 @@
 GeneticAlgorith::GeneticAlgorith(int genomeSize, int populationSize) {
     population_size = populationSize;
     genome_size = genomeSize;
-    std::srand(time(NULL));
-    mt = new std::mt19937(rd());
+    std::srand(std::time(nullptr));
+    mt = new std::mt19937(std::rand());
+    std::cout << (*mt)() << std::endl;
     generatePopulation();
     for (int i = 0; i < POPULATION_SIZE;i++) indices[i] = i;
 }
