@@ -95,7 +95,7 @@ float StoreZone::getHappiness() const {
     std::vector<Cell*> neighbourhood = this->getCellulaireAutomaat()->getNeighbourhood(row,col);
     bool road = false;
     for(auto it = neighbourhood.begin(); it != neighbourhood.end(); it++){
-        if((*it)->getState() == ERoad){
+        if((*it) != nullptr && (*it)->getState() == ERoad){
             road = true;
             break;
         }
@@ -118,7 +118,7 @@ float Vegetation::getHappiness() const {
     std::vector<Cell*> neighbourhood = this->getCellulaireAutomaat()->getNeighbourhood(row,col);
     bool road = false;
     for(auto it = neighbourhood.begin(); it != neighbourhood.end(); it++){
-        if((*it)->getState() == ERoad){
+        if((*it) != nullptr && (*it)->getState() == ERoad){
             road = true;
             break;
         }
@@ -159,7 +159,7 @@ std::pair<int, std::string> Road::getPixelArt() {
 
 std::pair<int, std::string> Road::getCorrectRoad(std::vector<bool> &roadConnectPoint1) {
     if(!roadConnectPoint1[0] && !roadConnectPoint1[1] && !roadConnectPoint1[2] && !roadConnectPoint1[3]){
-        return std::pair<int, std::string>(2, "../PixelArt/Road_Doodlopend.png");
+        return std::pair<int, std::string>(2, "../PixelArt/Road_Broken.png");
     }
     std::map<std::string,std::vector<bool>> connectionPointCountImage = {
             {"../PixelArt/Road_Doodlopend.png", {true, false, false, false}},
@@ -202,25 +202,17 @@ std::vector<bool> Road::getNeighborsRoads() {
     std::vector<bool> road = {false, false, false, false};
 
 
-    //TODO eerst checken of de offset niet out of bounds is!
-/*
-    road[1] = (*cellulaireAutomaat)(row, col + 1).getRoadConnectPoints()[0];
-    road[0] = (*cellulaireAutomaat)(row, col - 1).getRoadConnectPoints()[1];
-    road[3] = (*cellulaireAutomaat)(row + 1, col).getRoadConnectPoints()[2];
-    road[2] = (*cellulaireAutomaat)(row - 1, col).getRoadConnectPoints()[3];*/
-    if(row + 1 < cellulaireAutomaat->getHeight() && col + 1 < cellulaireAutomaat->getWidth())
+    if(row < cellulaireAutomaat->getHeight() && col + 1 < cellulaireAutomaat->getWidth())
         road[1] = (*cellulaireAutomaat)(row, col + 1)->getState() == ERoad;
-    if(row- 1 > 0 && col - 1 > 0)
-        road[3] = (*cellulaireAutomaat)(row, col - 1)->getState() == ERoad;
-    if(row + 1 < cellulaireAutomaat->getHeight() && col + 1 < cellulaireAutomaat->getWidth())
-        road[2] = (*cellulaireAutomaat)(row + 1, col)->getState() == ERoad;
-    if(row - 1 >0 && col - 1 >0)
-        road[0] = (*cellulaireAutomaat)(row - 1, col)->getState() == ERoad;
 
-/*    road[1] = (*cellulaireAutomaat)(row, col + 1)->getState() == ERoad;
-    road[3] = (*cellulaireAutomaat)(row, col - 1)->getState() == ERoad;
-    road[2] = (*cellulaireAutomaat)(row + 1, col)->getState() == ERoad;
-    road[0] = (*cellulaireAutomaat)(row - 1, col)->getState() == ERoad;*/
+    if(row >= 0 && col - 1 >= 0)
+        road[3] = (*cellulaireAutomaat)(row, col - 1)->getState() == ERoad;
+
+    if(row + 1 < cellulaireAutomaat->getHeight() && col < cellulaireAutomaat->getWidth())
+        road[2] = (*cellulaireAutomaat)(row + 1, col)->getState() == ERoad;
+
+    if(row - 1 >= 0 && col >= 0)
+        road[0] = (*cellulaireAutomaat)(row - 1, col)->getState() == ERoad;
 
     return road;
 }
@@ -270,7 +262,7 @@ float ResidentialZone::getHappiness() const {
     std::vector<Cell*> neighbourhood = this->getCellulaireAutomaat()->getNeighbourhood(row,col);
     bool road = false;
     for(auto it = neighbourhood.begin(); it != neighbourhood.end(); it++){
-        if((*it)->getState() == ERoad){
+        if((*it) != nullptr && (*it)->getState() == ERoad){
             road = true;
             break;
         }
@@ -318,7 +310,7 @@ float IndustrialZone::getHappiness() const {
     std::vector<Cell*> neighbourhood = this->getCellulaireAutomaat()->getNeighbourhood(row,col);
     bool road = false;
     for(auto it = neighbourhood.begin(); it != neighbourhood.end(); it++){
-        if((*it)->getState() == ERoad){
+        if((*it) != nullptr && (*it)->getState() == ERoad){
             road = true;
             break;
         }

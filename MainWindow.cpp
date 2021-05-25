@@ -77,6 +77,7 @@ void MainWindow::temporaryNextDay(){
 
 void MainWindow::pause(){
     //TODO pause in CitySimulation.h
+
     cout<<"Paused"<<endl;
     pauseButton->setText("Resume");
     disconnect(pauseButton, &QPushButton::released, this, &MainWindow::pause);
