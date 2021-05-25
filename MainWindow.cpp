@@ -15,7 +15,6 @@ MainWindow::MainWindow(int w, int h, CellulaireAutomaat *cellulaireAutomaat) {
     height = h;
     c = cellulaireAutomaat;
     scene = new QGraphicsScene();
-    addWalls(w, h);
     drawGrid(w, h);
     view = new QGraphicsView(scene);
 
@@ -97,8 +96,8 @@ void MainWindow::updateRoadUsers() {
     for (int x = 0; x < width; x++) {
         for (int y = 0; y < height; y++) {
             //TODO fix enkel roadusers
-            std::pair<int, std::string> pixart = c->operator()(x,y)->getPixelArt();
-            drawTile(x,y,pixart.first, pixart.second);
+            //std::pair<int, std::string> pixart = c->operator()(x,y)->getPixelArt();
+            //drawTile(x,y,pixart.first, pixart.second);
         }
     }
 }
@@ -107,12 +106,12 @@ void MainWindow::updateAll() {
     clearWalls();
     clearBuildings();
     drawGrid(width,height);
-    /*for (int x = 0; x < width; x++) {
+    for (int x = 0; x < width; x++) {
         for (int y = 0; y < height; y++) {
             std::pair<int, std::string> pixart = (*c)(x,y)->getPixelArt();
             drawTile(x,y,pixart.first, pixart.second);
         }
-    }*/
+    }
     updateRoadUsers();
 }
 
@@ -196,7 +195,7 @@ void MainWindow::drawGrid(int _width, int _height) {
     addWalls(_width, _height);
     for (int i = 0; i < _width; i++) {
         for (int j = 0; j < _height; j++) {
-            //drawTile(i, j, 0, "../PixelArt/Default.png");
+            /*drawTile(i, j, 0, "../PixelArt/Default.png");
             int random = rand() % 14;
             int randomangle = rand() % 4;
             if (random == 0) {
@@ -238,7 +237,7 @@ void MainWindow::drawGrid(int _width, int _height) {
             }  else if(random == 13){
                 drawTile(i, j, 0, "../PixelArt/Park_Broken.png");
             }
-
+            */
         }
     }
 }
@@ -287,13 +286,11 @@ MainWindow::~MainWindow() {
 
 
 void MainWindow::zoomOut() {
-    clearWalls();
     zoomTile/=2;
     updateAll();
 }
 
 void MainWindow::zoomIn() {
-    clearWalls();
     zoomTile*=2;
     updateAll();
 }
