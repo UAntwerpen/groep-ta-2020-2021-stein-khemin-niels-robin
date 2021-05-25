@@ -5,6 +5,10 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_CXX_STANDARD 14)
 
+set(CMAKE_EXE_LINKER_FLAGS -pthread)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_AUTOUIC ON)
+
 #QT
 set(Qt5Core_DIR "C:\\Qt\\5.15.2\\mingw81_64\\lib\\cmake\\Qt5Core")
 set(Qt5Widgets_DIR "C:\\Qt\\5.15.2\\mingw81_64\\lib\\cmake\\Qt5Widgets")
@@ -30,6 +34,10 @@ add_executable(TA main.cpp CellulaireAutomaat.cpp CellulaireAutomaat.h
         PFCell.cpp PFCell.h 
         Pathfinding.cpp Pathfinding.h
         Building.cpp Building.h
-        MainWindow.cpp MainWindow.h)
+        MainWindow.cpp MainWindow.h
+        settingswindow.cpp
+        settingswindow.h
+        settingswindow.ui
+        )
 
 qt5_use_modules(TA Core Widgets Gui)

@@ -9,14 +9,67 @@
 
 using namespace std;
 
+
 MainWindow::MainWindow(int w, int h) {
     width = w;
     height = h;
     scene = new QGraphicsScene();
-    addWalls(width, height);
-    drawGrid(width, height);
+    addWalls(w, h);
+    drawGrid(w, h);
     view = new QGraphicsView(scene);
+
+    QDockWidget *cityDock;
+    cityDock = new QDockWidget(tr("City"), this);
+    cityDock->setAllowedAreas(Qt::LeftDockWidgetArea |
+                                Qt::RightDockWidgetArea);
+    cityDock->setWidget(view);
+    addDockWidget(Qt::RightDockWidgetArea, cityDock);
+
+    QDockWidget *settingsDock;
+    settingsDock = new QDockWidget(tr("Settings"), this);
+    settingsDock->setAllowedAreas(Qt::LeftDockWidgetArea |
+                                 Qt::RightDockWidgetArea);
+    addDockWidget(Qt::LeftDockWidgetArea, settingsDock);
+    settingsDock->setFixedWidth(260);
+
+    QVBoxLayout* boxLayout = new QVBoxLayout();
+
+    QPushButton* button = new QPushButton();
+    button->setText("Next day");
+    button->setGeometry(30,30,200,50);
+    connect(button, &QPushButton::released, this, &MainWindow::TemporaryNextDay);
+
+    QPushButton* button1 = new QPushButton();
+    button1->setText("Pause");
+    button1->setGeometry(30,80,200,50);
+    pauseButton = button1;
+    connect(button1, &QPushButton::released, this, &MainWindow::pause);
+
+    settingsDock->layout()->addWidget(button);
+    settingsDock->layout()->addWidget(button1);
 }
+
+void MainWindow::TemporaryNextDay(){
+    cout<<"Button pushed."<<endl;
+    c->updateRules();
+}
+
+void MainWindow::pause(){
+    //TODO pause in CitySimulation.h
+    cout<<"Paused"<<endl;
+    pauseButton->setText("Resume");
+    disconnect(pauseButton, &QPushButton::released, this, &MainWindow::pause);
+    connect(pauseButton, &QPushButton::released, this, &MainWindow::resume);
+}
+
+void MainWindow::resume(){
+    //TODO resume in CitySimulation.h
+    cout<<"Resumed"<<endl;
+    pauseButton->setText("Pause");
+    disconnect(pauseButton, &QPushButton::released, this, &MainWindow::resume);
+    connect(pauseButton, &QPushButton::released, this, &MainWindow::pause);
+}
+
 
 void MainWindow::UpdateRoadUsers() {
     clearRoadUsers();
@@ -44,7 +97,6 @@ void MainWindow::UpdateAll() {
 
 void MainWindow::drawTile(int row, int col, int rot, const std::string pixelart) {
     QString filename = pixelart.c_str();
-
     QGraphicsPixmapItem *item = new QGraphicsPixmapItem(QPixmap(filename));
     item->setCacheMode(QGraphicsItem::NoCache);
     qreal scale = qMax(4, 4);
@@ -61,11 +113,15 @@ void MainWindow::drawTile(int row, int col, int rot, const std::string pixelart)
     }
     item->setPos(col * 128 + ofsetx, row * 128 + ofsety);
     scene->addItem(item);
+    if(pixelart.find("Border") != string::npos){
+        Walls.push_back(item);
+    } else{
+        Buildings.push_back(item);
+    }
 }
 
 void MainWindow::addCar(int row, int col, int rot, const std::string pixelart) {
     QString filename = pixelart.c_str();
-
     QGraphicsPixmapItem *item = new QGraphicsPixmapItem(QPixmap(filename));
     item->setCacheMode(QGraphicsItem::NoCache);
     qreal scale = qMax(2, 2);
@@ -82,6 +138,7 @@ void MainWindow::addCar(int row, int col, int rot, const std::string pixelart) {
     }
     item->setPos(col * 128 + ofsetx, row * 128 + ofsety);
     scene->addItem(item);
+    RoadUsers.push_back(item);
 }
 
 void MainWindow::addPedestrian(int row, int col, int rot, const std::string pixelart) {
@@ -108,31 +165,24 @@ void MainWindow::addPedestrian(int row, int col, int rot, const std::string pixe
     }
     item->setPos(col * 128 + ofsetx, row * 128 + ofsety);
     scene->addItem(item);
+    RoadUsers.push_back(item);
 }
 
 void MainWindow::drawGrid(int _width, int _height) {
     CellulaireAutomaat *automaat = new CellulaireAutomaat(_width, _height, "");
     for (int i = 0; i < _width; i++) {
         for (int j = 0; j < _height; j++) {
-            int random = rand() % 9;
 
+            drawTile(i, j, 0, "../PixelArt/Default.png");
+            /*
+            int random = rand() % 14;
             int randomangle = rand() % 4;
             if (random == 0) {
                 drawTile(i, j, 0, "../PixelArt/Store.png");
-                /*
-                Vegetation* v = new Vegetation(i, j, automaat);
-                v->drawToScreen(this);
-                Road* r = new Road(i, j, automaat);
-                r->drawToScreen(this);
-                 */
             } else if (random == 1) {
                 drawTile(i, j, 0, "../PixelArt/House.png");
-                //Road* r = new Road(i, j, automaat);
-                //r->drawToScreen(this);
             } else if (random == 2) {
                 drawTile(i, j, 0, "../PixelArt/Workplace.png");
-                //Road* r = new Road(i, j, automaat);
-                //r->drawToScreen(this);
             } else if (random == 3) {
                 drawTile(i,j,0,"../PixelArt/Park.png");
             } else if (random == 4) {
@@ -155,7 +205,18 @@ void MainWindow::drawGrid(int _width, int _height) {
                 drawTile(i, j, randomangle, "../PixelArt/Road_Recht.png");
                 addPedestrian(i, j, randomangle + 2, "../PixelArt/Pedestrian1.png");
                 addCar(i, j, randomangle, "../PixelArt/Car1.png");
+            } else if(random == 9){
+                drawTile(i, j, 0, "../PixelArt/House_Broken.png");
+            } else if(random == 10){
+                drawTile(i, j, 0, "../PixelArt/Store_Broken.png");
+            } else if(random == 11){
+                drawTile(i, j, 0, "../PixelArt/WorkPlace_Broken.png");
+            } else if(random == 12){
+                drawTile(i, j, 0, "../PixelArt/Road_Broken.png");
+            }  else if(random == 13){
+                drawTile(i, j, 0, "../PixelArt/Park_Broken.png");
             }
+            */
         }
     }
 }
@@ -175,8 +236,8 @@ void MainWindow::addWalls(int _width, int _height){
     }
 }
 
-void MainWindow::show() {
-    view->show();
+void MainWindow::showView(){
+    //view->show();
 }
 
 void MainWindow::clearBuildings() {

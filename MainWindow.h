@@ -5,13 +5,14 @@
 #ifndef TA_MAINWINDOW_H
 #define TA_MAINWINDOW_H
 
-
+#include <QMainWindow>
 #include <QGraphicsScene>
 #include <QGraphicsView>
+#include <QtWidgets>
 #include "Cell.h"
 #include "CellulaireAutomaat.h"
 
-class MainWindow {
+class MainWindow: public QMainWindow {
 public:
     MainWindow(int width, int height);
 
@@ -21,12 +22,17 @@ public:
 
     virtual ~MainWindow();
 
-    void show();
+    void showView();
 
     //private maken
     void drawTile(int row, int col, int rotation, const std::string pixelart);
     void addCar(int row, int col, int rotation, const std::string pixelart);
     void addPedestrian(int row, int col, int rotation, const std::string pixelart);
+    void TemporaryNextDay();
+    void pause();
+    void resume();
+private slots:
+    void clicked();
 private:
 
     void clearRoadUsers();
@@ -44,8 +50,12 @@ private:
     std::vector<QGraphicsPixmapItem*> Walls;
     QGraphicsScene *scene;
     QGraphicsView *view;
-    int width;
+    QVBoxLayout* boxLayout;
+    QPushButton* button;
+    QDockWidget* cityDock;
     int height;
+    int width;
+    QPushButton* pauseButton;
 };
 
 #endif //TA_MAINWINDOW_H
