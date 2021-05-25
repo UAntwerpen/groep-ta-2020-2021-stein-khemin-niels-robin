@@ -42,10 +42,6 @@ public:
      */
     virtual void update() = 0;
 
-    /*!
-     * draw cell to interface
-     */
-    virtual void drawToScreen(MainWindow *window);
 
     /*!
      * geeft terug hoeveel happiness een bepaalde cell uitstoot (tussen -1 en 1)
@@ -133,7 +129,6 @@ public:
 
     void update() override;
 
-    void drawToScreen(MainWindow *window) override;
 
     std::pair<int, std::string> getPixelArt() override;
 
@@ -157,7 +152,6 @@ public:
 
     void update() override;
 
-    void drawToScreen(MainWindow *window) override;
 
     std::pair<int, std::string> getPixelArt() override;
 

@@ -194,7 +194,6 @@ void MainWindow::addPedestrian(int row, int col, int rot, const std::string pixe
 void MainWindow::drawGrid(int _width, int _height) {
     for (int i = 0; i < _width; i++) {
         for (int j = 0; j < _height; j++) {
-
             drawTile(i, j, 0, "../PixelArt/Default.png");
             /*
             int random = rand() % 14;
@@ -290,8 +289,8 @@ void MainWindow::scaleTiles(int zoom) {
     zoomTile = zoom;
 
     //vervangen door code die elk vak van de cellulaire autmaat opnieuw tekent maar met de nieuwe schaal
-    clearBuildings();
-    clearRoadUsers();
+    //clearBuildings();
+    //clearRoadUsers();
 
 }
 

@@ -114,9 +114,6 @@ float StoreZone::getHappiness() const {
     return value;
 }
 
-void Vegetation::drawToScreen(MainWindow *window) {
-    window->drawTile(this->getPos().first, this->getPos().second, this->getPixelArt().first, this->getPixelArt().second);
-}
 
 float Vegetation::getHappiness() const {
     float value = 0;
@@ -157,11 +154,6 @@ EStates Road::getState() const {
 
 void Road::update() {
 
-}
-
-void Road::drawToScreen(MainWindow *window) {
-    std::pair<int, std::string> roadPixArt = this->getPixelArt();
-    window->drawTile(this->getPos().first, this->getPos().second, roadPixArt.first, roadPixArt.second);
 }
 
 std::pair<int, std::string> Road::getPixelArt() {

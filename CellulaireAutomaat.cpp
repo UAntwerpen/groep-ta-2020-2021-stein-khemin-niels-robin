@@ -149,6 +149,7 @@ void CellulaireAutomaat::changeCell(int row, int column, Cell *to) {
 }
 
 void CellulaireAutomaat::updateRules() {
+    CellFactorySingleton& factory = CellFactorySingleton::getInstance();
     for (int col = 0; col < width; col++) {
         for (int row = 0; row < height; row++) {
             EStates state = static_cast<EStates>(rules[getNeighbourhoodValue(row, col)]);
@@ -168,7 +169,6 @@ void CellulaireAutomaat::updateCells() {
             (*this)(row, col)->update();
         }
     }
-    w->updateAll();
 }
 
 int CellulaireAutomaat::count(const EStates &state) const {
