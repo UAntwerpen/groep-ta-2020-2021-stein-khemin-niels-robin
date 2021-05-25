@@ -73,7 +73,7 @@ void MainWindow::resume(){
 
 
 void MainWindow::updateRoadUsers() {
-    clearRoadUsers();
+    //clearRoadUsers();
     for (int x = 0; x < width; x++) {
         for (int y = 0; y < height; y++) {
             //TODO fix enkel roadusers
@@ -84,7 +84,7 @@ void MainWindow::updateRoadUsers() {
 }
 
 void MainWindow::updateAll() {
-    clearBuildings();
+    //clearBuildings();
     drawGrid(width,height);
     for (int x = 0; x < width; x++) {
         for (int y = 0; y < height; y++) {
