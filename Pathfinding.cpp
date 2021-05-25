@@ -34,7 +34,9 @@ PFMask::PFMask(CellulaireAutomaat& cellAutomaat, Transport* transport) : width(c
         for (int col = 0; col < width; col++) {
             bool passable;
 
-            if (cellAutomaat(row, col).getState() == ERoad || (cellAutomaat(row, col).getState() == EVegetation && transport->getState() == ECitizen)) {
+            if (cellAutomaat(row, col).getState() == ERoad ||
+                (cellAutomaat(row, col).getState() == EVegetation && transport->getState() == ECitizen) ||
+                    transport->getGoal()->getPos() == pair<int, int>(row, col)) {
                 passable = true;
             } else {
                 passable = false;
@@ -46,13 +48,21 @@ PFMask::PFMask(CellulaireAutomaat& cellAutomaat, Transport* transport) : width(c
     }
 }
 
+int PFMask::getWidth() const {
+    return width;
+}
+
+int PFMask::getHeight() const {
+    return height;
+}
+
 PFCell &PFMask::getCell(int row, int col) {
     REQUIRE(0 <= row && row < width, "Row is out of bounds!");
     REQUIRE(0 <= col && col < height, "Column is out of bounds!");
     return mask[row][col];
 }
 
-std::vector<int> PFMask::getNeigbourInts(int row, int col) {
+std::vector<int> PFMask::getNeighbourInts(int row, int col) {
     std::vector<int> ints(4);
 
     ints[0] = this->getCell(row - 1, col).getValue();
@@ -63,6 +73,17 @@ std::vector<int> PFMask::getNeigbourInts(int row, int col) {
     return ints;
 }
 
+std::vector<PFCell *> PFMask::getNeighbours(int row, int col) {
+    std::vector<PFCell*> neighbours(4);
+
+    neighbours[0] = &this->getCell(row - 1, col);
+    neighbours[1] = &this->getCell(row, col + 1);
+    neighbours[2] = &this->getCell(row + 1, col);
+    neighbours[3] = &this->getCell(row, col - 1);
+
+    return neighbours;
+}
+
 bool PFMask::update() {
     bool changeMade = false;
 
@@ -70,8 +91,8 @@ bool PFMask::update() {
         for (int col = 0; col < width; col++) {
             PFCell currCell = this->getCell(row, col);
 
-            int min = this->getNeigbourInts(row, col)[0];
-            for (int el : this->getNeigbourInts(row, col)) {
+            int min = this->getNeighbourInts(row, col)[0];
+            for (int el : this->getNeighbourInts(row, col)) {
                 if (el < min) {
                     min = el;
                 }
@@ -84,4 +105,10 @@ bool PFMask::update() {
     }
 
     return changeMade;
+}
+
+void PFMask::generateMask() {
+    while (update()) {
+        // ** Does nothing here ** //
+    }
 }

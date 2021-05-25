@@ -12,6 +12,7 @@ Transport::Transport() {
     location = nullptr;
     goal = nullptr;
 
+    mask = new PFMask(0, 0);
     route = "";
     progress = 0;
     direction = 'N';
@@ -21,6 +22,7 @@ Transport::Transport(Cell *loc, Cell *g) {
     location = loc;
     goal = g;
 
+    mask = new PFMask(0, 0);
     route = "";
     progress = 0;
     direction = 'N';
@@ -44,6 +46,14 @@ void Transport::setGoal(Cell *cell) {
     ENSURE(this->getGoal() == cell, "setGoal post condition failure");
 }
 
+PFMask *Transport::getMask() {
+    return mask;
+}
+
+void Transport::setMask(PFMask *m) {
+    mask = m;
+}
+
 string Transport::getRoute() {
     return route;
 }
@@ -54,10 +64,52 @@ void Transport::setRoute(string r) {
     this->changeDirection();
 }
 
-void Transport::calculateRoute(PFMask mask) {
+void Transport::calculateRoute() {
     pair<int, int> goalPoss = this->getGoal()->getPos();
-    REQUIRE(mask.getCell(goalPoss.first, goalPoss.second).getValue() == 0, "incompatible PFMask for this Transport.");
+    REQUIRE(this->getMask()->getCell(goalPoss.first, goalPoss.second).getValue() == 0, "incompatible PFMask for this Transport.");
     //TODO implementatie
+
+    string result;
+
+    pair<int, int> locCoord = this->getLocation()->getPos();
+    PFCell* currCell = &this->getMask()->getCell(locCoord.first, locCoord.second);
+
+    while (currCell->getValue() != 0) {
+        pair<int, int> currPos = currCell->getPos();
+        vector<int> ints = this->getMask()->getNeighbourInts(currPos.first, currPos.second);
+
+        int min = ints[0];
+        for (int el : ints) {
+            if (el < min) {
+                min = el;
+            }
+        }
+
+        //Prioriseert eerst bewegen naar rechts, gevolgd door onder, links en tenslotte boven. (Als buren zelfde min int value hebben).
+        if (currPos.second + 1 < this->getMask()->getWidth() && this->getMask()->getCell(currPos.first, currPos.second + 1).getValue() == min) {
+            result += "E";
+
+            currCell = &this->getMask()->getCell(currPos.first, currPos.second + 1);
+            continue;
+        } else if (currPos.first + 1 < this->getMask()->getHeight() && this->getMask()->getCell(currPos.first + 1, currPos.second).getValue() == min) {
+            result += "S";
+
+            currCell = &this->getMask()->getCell(currPos.first + 1, currPos.second);
+            continue;
+        } else if (currPos.second - 1 >= 0 && this->getMask()->getCell(currPos.first, currPos.second - 1).getValue() == min) {
+            result += "W";
+
+            currCell = &this->getMask()->getCell(currPos.first, currPos.second - 1);
+            continue;
+        } else if (currPos.first - 1 >= 0 && this->getMask()->getCell(currPos.first - 1, currPos.second).getValue() == min) {
+            result += "N";
+
+            currCell = &this->getMask()->getCell(currPos.first - 1, currPos.second);
+            continue;
+        }
+    }
+
+    route = result;
 }
 
 int Transport::getProgress() {
@@ -125,3 +177,5 @@ void Transport::update(CellulaireAutomaat& city) {
         this->setRoute("");
     }
 }
+
+

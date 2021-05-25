@@ -62,6 +62,20 @@ public:
     void setGoal(Cell* cell);
 
     /**
+     * Geeft de PFMask van het Transport terug.
+     *
+     * @return PFMask class pointer
+     */
+    PFMask* getMask();
+
+    /**
+     * Stelt een nieuw PFMask in.
+     *
+     * @param m : nieuwe PFMask voor het Transport.
+     */
+    void setMask(PFMask* m);
+
+    /**
      * Geeft de huidige route van het Transport terug.
      * @return string
      */
@@ -77,9 +91,10 @@ public:
      * Berekent de route voor het Transport adv het gegeven PFMask.
      * @param mask : Pathfinding mask om de route mee te berekenen.
      *
+     * @pre Transport must have a corresponding PFMask before calling calculateRoute.
      * REQUIRE(mask.getCell(goalPoss.first, goalPoss.second).getValue() == 0, "incompatible PFMask for this Transport.")
      */
-    void calculateRoute(PFMask mask);
+    void calculateRoute();
 
     /**
      * Geeft de huidige progress doorheen de route terug.
@@ -140,6 +155,7 @@ private:
     Cell* location;
 
     Cell* goal;
+    PFMask* mask;
     string route;
 
     int progress;

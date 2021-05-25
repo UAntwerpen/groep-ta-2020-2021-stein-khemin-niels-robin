@@ -33,6 +33,20 @@ public:
     PFMask(CellulaireAutomaat& cellAutomaat, Transport* transport);
 
     /**
+     * Geeft de width van de PFMask terug.
+     *
+     * @return integer
+     */
+    int getWidth() const;
+
+    /**
+     * Geeft de height van de PFMask terug.
+     *
+     * @return integer
+     */
+    int getHeight() const;
+
+    /**
      * geeft de cell op rij kolom terug
      * @param row rij van de cell
      * @param column kolom can de cell
@@ -51,7 +65,17 @@ public:
      *
      * @return vector van integers
      */
-    std::vector<int> getNeigbourInts(int row, int col);
+    std::vector<int> getNeighbourInts(int row, int col);
+
+    /**
+     * Geeft de buren van de PFCell terug.
+     *
+     * @param row : rij index van de PFCell waarvoor de integer values van de buren worden opgevraagd
+     * @param col : kolom index van de PFCell waarvoor de integer values van de buren worden opgevraagd
+     *
+     * @return vector van PFCell class pointers
+     */
+    std::vector<PFCell*> getNeighbours(int row, int col);
 
     /**
      * Updates het PFMask door iedere PFCell 1 transitie te laten maken volgens volgende regels.
@@ -63,6 +87,11 @@ public:
      * @return boolean : true indien er een verandering gemaakt is, anders false.
      */
      bool update();
+
+     /**
+      * Het PFMask update zichzelf totdat er geen veranderingen meer optreden.
+      */
+     void generateMask();
 
 
 private:
