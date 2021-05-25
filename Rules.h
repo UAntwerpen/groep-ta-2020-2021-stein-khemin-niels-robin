@@ -85,7 +85,16 @@ public:
         }
         return std::make_pair(G1_cross, G2_cross);
     }
+
+    std::string to_string(){
+        std::string s;
+        for (char c: this){
+            s += c;
+        }
+        return s;
+    }
 };
+
 
 using Population = std::array<Genome<GENOME_SIZE>*, POPULATION_SIZE>;
 using Weights = std::array<double, POPULATION_SIZE>;
