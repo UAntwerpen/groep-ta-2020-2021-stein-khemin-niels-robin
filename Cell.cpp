@@ -78,7 +78,7 @@ EStates Vegetation::getState() const {
 }
 
 void Vegetation::update() {
-
+    this->updateDaysUntilExpired();
 }
 
 float StoreZone::getHappiness() const {
@@ -146,7 +146,7 @@ EStates Road::getState() const {
 }
 
 void Road::update() {
-
+    this->updateDaysUntilExpired();
 }
 
 std::pair<int, std::string> Road::getPixelArt() {
@@ -251,7 +251,7 @@ EStates ResidentialZone::getState() const {
 }
 
 void ResidentialZone::update() {
-
+    this->updateDaysUntilExpired();
 }
 
 float ResidentialZone::getHappiness() const {
@@ -283,13 +283,13 @@ float ResidentialZone::getHappiness() const {
 }
 
 ResidentialZone::ResidentialZone(int row, int col, CellulaireAutomaat *cellulaireAutomaat) : Cell(row, col, cellulaireAutomaat) {
-    building = new House();
+    building = House();
 }
 
 std::pair<int, std::string> ResidentialZone::getPixelArt() {
     if(this->isExpired())
-        return std::pair<int, std::string>(0, this->building->getExpiredPixelArt());
-    return std::pair<int, std::string>(0, this->building->getPixelArt());
+        return std::pair<int, std::string>(0, this->building.getExpiredPixelArt());
+    return std::pair<int, std::string>(0, this->building.getPixelArt());
 }
 
 ResidentialZone::ResidentialZone(const Cell &p2): Cell(p2.getPos().first, p2.getPos().second, p2.getCellulaireAutomaat()) {
@@ -301,7 +301,7 @@ EStates IndustrialZone::getState() const {
 }
 
 void IndustrialZone::update() {
-
+    this->updateDaysUntilExpired();
 }
 
 float IndustrialZone::getHappiness() const {
@@ -331,13 +331,13 @@ float IndustrialZone::getHappiness() const {
 }
 
 IndustrialZone::IndustrialZone(int row, int col, CellulaireAutomaat *cellulaireAutomaat) : Cell(row, col, cellulaireAutomaat) {
-    building = new Workplace();
+    building = Workplace();
 }
 
 std::pair<int, std::string> IndustrialZone::getPixelArt() {
     if(this->isExpired())
-        return std::pair<int, std::string>(0, this->building->getExpiredPixelArt());
-    return std::pair<int, std::string>(0, this->building->getPixelArt());
+        return std::pair<int, std::string>(0, this->building.getExpiredPixelArt());
+    return std::pair<int, std::string>(0, this->building.getPixelArt());
 }
 
 IndustrialZone::IndustrialZone(const Cell &p2): Cell(p2.getPos().first, p2.getPos().second, p2.getCellulaireAutomaat()) {
@@ -349,17 +349,17 @@ EStates StoreZone::getState() const {
 }
 
 void StoreZone::update() {
-
+    this->updateDaysUntilExpired();
 }
 
 StoreZone::StoreZone(int row, int col, CellulaireAutomaat *cellulaireAutomaat) : Cell(row, col, cellulaireAutomaat) {
-    building = new Store();
+    building = Store();
 }
 
 std::pair<int, std::string> StoreZone::getPixelArt() {
     if(this->isExpired())
-        return std::pair<int, std::string>(0, this->building->getExpiredPixelArt());
-    return std::pair<int, std::string>(0, this->building->getPixelArt());
+        return std::pair<int, std::string>(0, this->building.getExpiredPixelArt());
+    return std::pair<int, std::string>(0, this->building.getPixelArt());
 }
 
 StoreZone::StoreZone(const Cell &p2): Cell(p2.getPos().first, p2.getPos().second, p2.getCellulaireAutomaat()) {

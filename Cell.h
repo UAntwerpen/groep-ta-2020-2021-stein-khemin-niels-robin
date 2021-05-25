@@ -121,7 +121,6 @@ public:
 
     void update() override;
 
-
     std::pair<int, std::string> getPixelArt() override;
 
     float getHappiness() const override;
@@ -140,7 +139,6 @@ public:
     EStates getState() const override;
 
     void update() override;
-
 
     std::pair<int, std::string> getPixelArt() override;
 
@@ -171,7 +169,7 @@ private:
 
 class ResidentialZone : public Cell{
 private:
-    House* building;
+    House building;
 public:
     ResidentialZone(const Cell &p2);
 
@@ -188,7 +186,7 @@ public:
 
 class IndustrialZone : public Cell{
 private:
-    Workplace* building;
+    Workplace building;
 public:
     IndustrialZone(const Cell &p2);
 
@@ -205,7 +203,7 @@ public:
 
 class StoreZone : public Cell{
 private:
-    Store* building;
+    Store building;
 public:
     StoreZone(const Cell &p2);
 
