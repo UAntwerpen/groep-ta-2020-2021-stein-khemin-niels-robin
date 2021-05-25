@@ -21,6 +21,7 @@ int main(int argc, char *argv[]){
     for(char c: *rule){
         s += c;
     }
-    runSimulation(s);
+    CitySimulation city;
+    city.runSimulation(s);
     return QApplication::exec();
 }
