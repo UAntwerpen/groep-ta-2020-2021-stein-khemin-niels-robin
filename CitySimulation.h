@@ -6,13 +6,15 @@
 #include <string>
 #include "CellulaireAutomaat.h"
 
-float runSimulation(const string& rules){
+float runSimulation(const std::string& rules){
     int it = 0;
     int max = 2000;
-    CellulaireAutomaat automaat(50, 50, rules);
-    automaat.changeCell(0, 25, new Cell)
+    CellulaireAutomaat automaat(10, 10, rules);
+    automaat.changeCell(0, 5, new Road(0, 5, &automaat));
     while (it < max){
         automaat.updateRules();
+        automaat.updateCells();
+        automaat.draw();
         it++;
     }
 }

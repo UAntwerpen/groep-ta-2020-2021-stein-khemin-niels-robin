@@ -92,8 +92,8 @@ using Weights = std::array<double, POPULATION_SIZE>;
 
 class GeneticAlgorith{
 public:
-    template<int genomeSize, int populationSize>
-    GeneticAlgorith();
+
+    GeneticAlgorith(int genomeSize, int populationSize);
 
     Genome<GENOME_SIZE>* generateGenome();
 

@@ -94,63 +94,70 @@ CellulaireAutomaat::~CellulaireAutomaat() {
 Cell* CellulaireAutomaat::operator()(int row, int column) const {
     REQUIRE(0 <= row && row < width, "Row is out of bounds!");
     REQUIRE(0 <= column && column < height, "Column is out of bounds!");
-    return matrix[(row + 1) * height + (column + 1)];//TODO waarom +1?
+    return matrix[row * height + column];
 }
 
 std::vector<Cell *> CellulaireAutomaat::getNeighbourhood(int row, int col) {
-    REQUIRE(0 <= row && row < width, "Row is out of bounds!");
-    REQUIRE(0 <= col && col < height, "Column is out of bounds!");
+    REQUIRE(0 <= row && row < height, "Row is out of bounds!");
+    REQUIRE(0 <= col && col < width, "Column is out of bounds!");
     std::vector<Cell *> neighbourhood(8);
-    neighbourhood[0] = (*this)(row - 1, col - 1);
-    neighbourhood[1] = (*this)(row - 1, col);
-    neighbourhood[2] = (*this)(row - 1, col + 1);
-    neighbourhood[3] = (*this)(row, col + 1);
-    neighbourhood[4] = (*this)(row + 1, col + 1);
-    neighbourhood[5] = (*this)(row + 1, col);
-    neighbourhood[6] = (*this)(row + 1, col - 1);
-    neighbourhood[7] = (*this)(row, col - 1);
+
+    neighbourhood[0] = 0 <= row && 0 <= col ? (*this)(row - 1, col - 1) : nullptr;
+    neighbourhood[1] = 0 <= row ? (*this)(row - 1, col) : nullptr;
+    neighbourhood[2] = 0 <= row && col < width ? (*this)(row - 1, col + 1) : nullptr;
+    neighbourhood[3] = col < width ? (*this)(row, col + 1) : nullptr;
+    neighbourhood[4] = row < height && col < width ? (*this)(row + 1, col + 1) : nullptr;
+    neighbourhood[5] = row < height ? (*this)(row + 1, col) : nullptr;
+    neighbourhood[6] = row < height && 0 <= col ? (*this)(row + 1, col - 1) : nullptr;
+    neighbourhood[7] = 0 <= col ? (*this)(row, col - 1) : nullptr;
     return neighbourhood;
 }
 
 int CellulaireAutomaat::getNeighbourhoodValue(int row, int col) {
-    REQUIRE(0 <= row && row < width, "Row is out of bounds!");
-    REQUIRE(0 <= col && col < height, "Column is out of bounds!");
+    REQUIRE(0 <= row && row < height, "Row is out of bounds!");
+    REQUIRE(0 <= col && col < width, "Column is out of bounds!");
     int value = 0;
     static int powers[8] = {static_cast<int>(pow(5, 7)), static_cast<int>(pow(5, 6)), static_cast<int>(pow(5, 5)),
                             static_cast<int>(pow(5, 4)), static_cast<int>(pow(5, 3)),
                             static_cast<int>(pow(5, 2)), 5, 1};
 
-    value += ((*this)(row - 1, col - 1))->getState() * powers[0];
-    value += ((*this)(row - 1, col))->getState() * powers[1];
-    value += ((*this)(row - 1, col + 1))->getState() * powers[2];
-    value += ((*this)(row, col + 1))->getState() * powers[3];
-    value += ((*this)(row + 1, col + 1))->getState() * powers[4];
-    value += ((*this)(row + 1, col))->getState() * powers[5];
-    value += ((*this)(row + 1, col - 1))->getState() * powers[6];
-    value += ((*this)(row, col - 1))->getState() * powers[7];
+    value += (0 <= row && 0 <= col ? ((*this)(row - 1, col - 1))->getState() : 0) * powers[0];
+    value += (0 <= row ? ((*this)(row - 1, col))->getState() : 0) * powers[1];
+    value += (0 <= row && col < width ? ((*this)(row - 1, col + 1))->getState(): 0) * powers[2];
+    value += (col < width ? ((*this)(row, col + 1))->getState() : 0) * powers[3];
+    value += (row < height && col < width ? ((*this)(row + 1, col + 1))->getState() : 0) * powers[4];
+    value += (row < height ? ((*this)(row + 1, col))->getState() : 0) * powers[5];
+    value += (row < height && 0 <= col ? ((*this)(row + 1, col - 1))->getState() : 0) * powers[6];
+    value += (0 <= col ? ((*this)(row, col - 1))->getState() : 0) * powers[7];
     return value;
 }
 
 void CellulaireAutomaat::changeCell(int row, int column, Cell *to) {
-    REQUIRE(0 <= row && row < width, "Row is out of bounds!");
-    REQUIRE(0 <= column && column < height, "Column is out of bounds!");
+    REQUIRE(0 <= row && row < height, "Row is out of bounds!");
+    REQUIRE(0 <= column && column < width, "Column is out of bounds!");
     REQUIRE(to != nullptr, "De gegeven cell is een nullptr!");
     delete matrix[row * height + column];
     matrix[row * height + column] = to;
 }
 
 void CellulaireAutomaat::updateRules() {
+    CellFactorySingleton& factory = CellFactorySingleton::getInstance();
     for (int col = 0; col < width; col++) {
         for (int row = 0; row < height; row++) {
             EStates state = static_cast<EStates>(rules[getNeighbourhoodValue(row, col)]);
             if (state == (*this)(row, col)->getState()) {
-                (*this)(row, col)->update();
-                if (state == (*this)(row, col)->getState()) {
-                    continue;
-                }
-                Cell *new_cell = new Vegetation(row, col, this); //TODO
-                changeCell(row, col, new_cell);
+                continue;
             }
+            Cell *new_cell = factory.getCell(state);
+            changeCell(row, col, new_cell);
+        }
+    }
+}
+
+void CellulaireAutomaat::updateCells() {
+    for (int col = 0; col < width; col++) {
+        for (int row = 0; row < height; row++) {
+            (*this)(row, col)->update();
         }
     }
     w->UpdateAll();
@@ -207,9 +214,25 @@ std::map<EStates, int> CellulaireAutomaat::count_all() const {
     }
 
     void CellulaireAutomaat::draw() {
-//    for (int col = 0; col < width; col++){
-//        for (int row = 0; row < height; row++){
-//            w->drawTile(row, col, 0, (*this)(row, col).getPixelArt());
-//        }
-//    }
+    for (int col = 0; col < width; col++){
+        for (int row = 0; row < height; row++){
+            switch ((*this)(row, col)->getState()) {
+                case 1:
+                    std::cout << "r ";
+                case 2:
+                    std::cout << "R ";
+                    break;
+                case 3:
+                    std::cout << "I ";
+                    break;
+                case 4:
+                    std::cout << "S ";
+                case 0:
+                default:
+                    std::cout << "V ";
+                    break;
+            }
+        }
+        std::cout << std::endl;
+    }
     }

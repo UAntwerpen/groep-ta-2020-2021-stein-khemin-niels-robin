@@ -400,26 +400,21 @@ Cell *CellFactorySingleton::getCell(EStates state, Cell* old){
 
     switch (state) {
         case 1:
-            ret = new Road;
+            ret = new Road(*old);
             break;
         case 2:
-            ret = new ResidentialZone;
+            ret = new ResidentialZone(*old);
             break;
         case 3:
-            ret = new IndustrialZone;
+            ret = new IndustrialZone(*old);
             break;
         case 4:
-            ret = new StoreZone;
+            ret = new StoreZone(*old);
         case 0:
         default:
-            ret = new Vegetation;
+            ret = new Vegetation(*old);
             break;
     }
 
-    ret->setPos(old->getPos());
-    for (const auto &ped: old->getPersons()) {
-        ret->addPerson(ped);
-    }
-    //        objects.emplace_back(ret);
     return ret;
 }

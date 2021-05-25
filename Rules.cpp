@@ -2,10 +2,11 @@
 
 #include "Rules.h"
 #include "Utils.h"
+#include "CitySimulation.h"
 
 
-template<int genomeSize, int populationSize>
-GeneticAlgorith::GeneticAlgorith() {
+
+GeneticAlgorith::GeneticAlgorith(int genomeSize, int populationSize) {
     population_size = populationSize;
     genome_size = genomeSize;
     std::srand(time(NULL));
@@ -34,7 +35,7 @@ Genome<GENOME_SIZE> *GeneticAlgorith::generateGenome() {
 Genome<GENOME_SIZE> GeneticAlgorith::run(int max_gen) {
     for (int _ = 0; _ < GENERATION_LIMIT && fitness[indices[0]] != 1; _++){
         std::cout << "Running Generation: " << _ << std::endl;
-#pragma omp parallel for
+#pragma omp parallel for if (PARALLELISM_ENABLED)
         for (int i = 0; i < POPULATION_SIZE; i++){
             fitness[i] = calc_fitness(*population[i]);
         }
@@ -73,5 +74,9 @@ Genome<GENOME_SIZE> GeneticAlgorith::run(int max_gen) {
 }
 
 float GeneticAlgorith::calc_fitness(Genome<GENOME_SIZE> &G) {
-    return 0;
+    std::string rules;
+    for (char c: G){
+        rules += c;
+    }
+    return runSimulation(rules);
 }

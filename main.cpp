@@ -15,7 +15,8 @@ int main(int argc, char *argv[]){
     MainWindow w(100,100);
     w.show();
     w.showView();
-
+//    GeneticAlgorith algo(GENOME_SIZE, 10);
+//    algo.run(10);
     //CellulaireAutomaat A("../Maps/map001.txt");
 
     return QApplication::exec();

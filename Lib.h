@@ -5,7 +5,7 @@
 
 #define GENOME_SIZE 390624
 #define POPULATION_SIZE 100
-#define PARALLELISM_ENABLED true
+#define PARALLELISM_ENABLED false
 #define GENERATION_LIMIT 2500
 
 enum EDirections: char{noord, oost, zuid, west};
