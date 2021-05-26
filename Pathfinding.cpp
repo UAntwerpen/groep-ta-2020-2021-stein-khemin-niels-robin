@@ -63,23 +63,46 @@ PFCell &PFMask::getCell(int row, int col) {
 }
 
 std::vector<int> PFMask::getNeighbourInts(int row, int col) {
-    std::vector<int> ints(4);
+    std::vector<int> ints;
 
-    ints[0] = this->getCell(row - 1, col).getValue();
-    ints[1] = this->getCell(row, col + 1).getValue();
-    ints[2] = this->getCell(row + 1, col).getValue();
-    ints[3] = this->getCell(row, col - 1).getValue();
+    if (row - 1 >= 0){
+        ints.push_back(this->getCell(row - 1, col).getValue());
+    }
+
+    if (col + 1 < this->getWidth()){
+        ints.push_back(this->getCell(row, col + 1).getValue());
+    }
+
+    if (row + 1 < this->getHeight()) {
+        ints.push_back(this->getCell(row + 1, col).getValue());
+    }
+
+    if (col - 1 >= 0) {
+        ints.push_back(this->getCell(row, col - 1).getValue());
+    }
+
 
     return ints;
 }
 
 std::vector<PFCell *> PFMask::getNeighbours(int row, int col) {
-    std::vector<PFCell*> neighbours(4);
+    std::vector<PFCell*> neighbours;
 
-    neighbours[0] = &this->getCell(row - 1, col);
-    neighbours[1] = &this->getCell(row, col + 1);
-    neighbours[2] = &this->getCell(row + 1, col);
-    neighbours[3] = &this->getCell(row, col - 1);
+    if (row - 1 >= 0){
+        neighbours.push_back(&this->getCell(row - 1, col));
+    }
+
+    if (col + 1 < this->getWidth()){
+        neighbours.push_back(&this->getCell(row, col + 1));
+    }
+
+    if (row + 1 < this->getHeight()) {
+        neighbours.push_back(&this->getCell(row + 1, col));
+    }
+
+    if (col - 1 >= 0) {
+        neighbours.push_back(&this->getCell(row, col - 1));
+    }
 
     return neighbours;
 }
