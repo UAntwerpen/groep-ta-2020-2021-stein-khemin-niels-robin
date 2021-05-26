@@ -4,6 +4,10 @@
 
 #include "Citizen.h"
 
+Citizen::Citizen() : Transport() {}
+
+Citizen::Citizen(Cell *location, Cell *g) : Transport(location, g) {}
+
 float Citizen::getHappiness() {
     return happiness;
 }
@@ -17,6 +21,6 @@ EStates Citizen::getState() const {
     return ECitizen;
 }
 
-Citizen::Citizen() : Transport() {}
-
-Citizen::Citizen(Cell *location, Cell *g) : Transport(location, g) {}
+void Citizen::updateAsPassenger(Cell *cell) {
+    this->setLocation(cell);
+}

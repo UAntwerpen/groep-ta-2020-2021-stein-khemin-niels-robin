@@ -7,7 +7,6 @@
 
 #include "PFCell.h"
 #include "CellulaireAutomaat.h"
-#include "Transport.h"
 #include <list>
 
 class PFMask {
@@ -24,13 +23,14 @@ public:
      * Initialiseert het PFMask.
      *
      * @param cellAutomaat : PFMask wordt geinitialiseerd adv de gegevens van deze CellulaireAutomaat.
+     * @param vehicle : Vehicle waarvoor PFMask wordt geinitialiseerd.
      *
      * REQUIRE(1 < width, "Width is too small(must be at least 2)!")
      * REQUIRE(1 < height, "Height is too small(must be at least 2)!")
      * REQUIRE(transport->getLocation() != nullptr, "transport must exist in a loaction.")
      * REQUIRE(transport->getGoal() != nullptr, "transport must have a goal.")
      */
-    PFMask(CellulaireAutomaat& cellAutomaat, Transport* transport);
+    PFMask(CellulaireAutomaat& cellAutomaat, Cell* goal, bool isCar = false);
 
     /**
      * Geeft de width van de PFMask terug.

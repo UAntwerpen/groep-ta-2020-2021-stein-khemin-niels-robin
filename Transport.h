@@ -13,9 +13,6 @@ class PFMask;
 
 using namespace std;
 
-class Cell;
-class CellulaireAutomaat;
-
 class Transport {
 public:
     /**
@@ -101,7 +98,7 @@ public:
      * Geeft de huidige progress doorheen de route terug.
      * @return integer : index van de route string waar het transport zich momenteel bevindt.
      */
-    int getProgress();
+    int getProgress() const;
 
     /**
      * Stelt de progress van het transport in op de gegeven index.
@@ -120,7 +117,7 @@ public:
      * Geeft de huidige richting van het Transport terug.
      * @return : character : Richting waarin het Transport momenteel beweegt.
      */
-    char getDirection();
+    char getDirection() const;
 
     /**
      * Stelt de richting van het Transport in op het gegeven character.
@@ -149,7 +146,6 @@ public:
      * @return enum waarde
      */
     virtual EStates getState() const = 0;
-
 
 private:
     // not owner of cell, Don't delete!

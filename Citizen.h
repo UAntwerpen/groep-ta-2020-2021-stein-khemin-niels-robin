@@ -8,9 +8,10 @@
 #include "Transport.h"
 #include "lib/DesignByContract.h"
 
+using namespace std;
+
 class Citizen : public Transport {
 public:
-
     /**
      * Default constructor
      */
@@ -39,7 +40,6 @@ public:
     EStates getState() const override;
 
 private:
-    //TODO nog aan te passen adv happiness implementatie
     float happiness = 0;
 };
 

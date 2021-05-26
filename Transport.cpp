@@ -67,7 +67,6 @@ void Transport::setRoute(string r) {
 void Transport::calculateRoute() {
     pair<int, int> goalPoss = this->getGoal()->getPos();
     REQUIRE(this->getMask()->getCell(goalPoss.first, goalPoss.second).getValue() == 0, "incompatible PFMask for this Transport.");
-    //TODO implementatie
 
     string result;
 
@@ -112,7 +111,7 @@ void Transport::calculateRoute() {
     route = result;
 }
 
-int Transport::getProgress() {
+int Transport::getProgress() const {
     return progress;
 }
 
@@ -130,7 +129,7 @@ void Transport::increaseProgress(){
     }
 }
 
-char Transport::getDirection() {
+char Transport::getDirection() const {
     return direction;
 }
 
