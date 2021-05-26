@@ -19,11 +19,10 @@ PFMask::PFMask(int width, int height) : width(width), height(height) {
     }
 }
 
-PFMask::PFMask(CellulaireAutomaat& cellAutomaat, Transport* transport) : width(cellAutomaat.getWidth()), height(cellAutomaat.getHeight()) {
+PFMask::PFMask(CellulaireAutomaat& cellAutomaat, Cell* goal, bool isCar) : width(cellAutomaat.getWidth()), height(cellAutomaat.getHeight()) {
     REQUIRE(1 < width, "Width is too small(must be at least 2)!");
     REQUIRE(1 < height, "Height is too small(must be at least 2)!");
-    REQUIRE(transport->getLocation() != nullptr, "transport must exist in a loaction.");
-    REQUIRE(transport->getGoal() != nullptr, "transport must have a goal.");
+    REQUIRE(goal != nullptr, "Mask must have a non nullptr goal.");
 
     mask = new PFCell *[height];
     for (int i = 0; i < height; i++){
@@ -35,15 +34,15 @@ PFMask::PFMask(CellulaireAutomaat& cellAutomaat, Transport* transport) : width(c
             bool passable;
 
             if (cellAutomaat(row, col).getState() == ERoad ||
-                (cellAutomaat(row, col).getState() == EVegetation && transport->getState() == ECitizen) ||
-                    transport->getGoal()->getPos() == pair<int, int>(row, col)) {
+                (cellAutomaat(row, col).getState() == EVegetation && !isCar) ||
+                    goal->getPos() == std::pair<int, int>(row, col)) {
                 passable = true;
             } else {
                 passable = false;
             }
-            bool goal = transport->getGoal()->getPos() == pair<int, int>(row, col);
+            bool isGoal = goal->getPos() == std::pair<int, int>(row, col);
 
-            this->getCell(row, col) = PFCell(passable, row, col, goal);
+            this->getCell(row, col) = PFCell(passable, row, col, isGoal);
         }
     }
 }

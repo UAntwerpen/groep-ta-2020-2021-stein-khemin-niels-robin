@@ -3,6 +3,8 @@
 //
 
 #include "Vehicle.h"
+#include "Citizen.h"
+#include <utility>
 
 Vehicle::Vehicle() : Transport() {
     people = vector<Citizen*>();
@@ -13,11 +15,11 @@ Vehicle::Vehicle(Cell *location, Cell *g) : Transport(location, g) {
 }
 
 void Vehicle::setPeople(vector<Citizen *> pass) {
-
+    people = std::move(pass);
 }
 
 vector<Citizen *> Vehicle::getPeople() {
-    return vector<Citizen *>();
+    return people;
 }
 
 Citizen *Vehicle::operator[](unsigned int ind) {
@@ -26,10 +28,6 @@ Citizen *Vehicle::operator[](unsigned int ind) {
 
 void Vehicle::addPerson(Citizen *person) {
     people.push_back(person);
-}
-
-EStates Vehicle::getState() const {
-    return EVehicle;
 }
 
 void Vehicle::update(CellulaireAutomaat &city) {
@@ -61,4 +59,8 @@ void Vehicle::update(CellulaireAutomaat &city) {
         this->setProgress(0);
         this->setRoute("");
     }
+}
+
+EStates Vehicle::getState() const {
+    return EVehicle;
 }

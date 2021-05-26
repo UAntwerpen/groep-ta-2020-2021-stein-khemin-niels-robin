@@ -6,10 +6,9 @@
 #define TA_VEHICLE_H
 
 #include "Transport.h"
-#include "Citizen.h"
 #include <vector>
 
-class Citizen;
+using namespace std;
 
 class Vehicle : public Transport {
 public:
@@ -60,6 +59,5 @@ public:
 private:
     vector<Citizen*> people;
 };
-
 
 #endif //TA_VEHICLE_H
