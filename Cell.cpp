@@ -151,19 +151,19 @@ bool Cell::isConnectedTo(int row, int col, std::vector<std::pair<int,int>>* road
     std::vector<Cell*> neighborsRoad;
 
     if(neighborsRoadsBool[0])
-        neighborsRoad.push_back((*cellulaireAutomaat)(row - 1, col));
+        neighborsRoad.push_back((*cellulaireAutomaat)(this->row - 1, this->col));
 
     if(neighborsRoadsBool[1])
-        neighborsRoad.push_back((*cellulaireAutomaat)(row, col + 1));
+        neighborsRoad.push_back((*cellulaireAutomaat)(this->row, this->col + 1));
 
     if(neighborsRoadsBool[2])
-        neighborsRoad.push_back((*cellulaireAutomaat)(row + 1, col));
+        neighborsRoad.push_back((*cellulaireAutomaat)(this->row + 1, this->col));
 
     if(neighborsRoadsBool[3])
-        neighborsRoad.push_back((*cellulaireAutomaat)(row, col - 1));
+        neighborsRoad.push_back((*cellulaireAutomaat)(this->row, this->col - 1));
 
     for(auto it = neighborsRoad.begin(); it != neighborsRoad.end(); it++){
-        std::cout << "check: " << (*it)->row << "," << (*it)->col <<std::endl;
+        std::cout << "check: " << row << " (+,-1):" << (*it)->row << "," <<  col << " (+,-1): "<<  (*it)->col <<std::endl;
         if (std::find(roads->begin(), roads->end(), std::pair<int,int>((*it)->row, (*it)->col)) == roads->end()) {
             roads->push_back(std::pair<int,int>((*it)->row, (*it)->col));
             if ((*it)->isConnectedTo(row, col, roads)) {
