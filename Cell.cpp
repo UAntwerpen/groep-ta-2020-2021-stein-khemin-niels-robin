@@ -73,6 +73,37 @@ Cell::Cell(const Cell &p2): Cell(p2.row, p2.col, p2.cellulaireAutomaat) {
     this->people = p2.people;
 }
 
+std::vector<bool> Cell::getNeighborsRoads() {
+    int row = this->getPos().first;
+    int col = this->getPos().second;
+    CellulaireAutomaat* cellulaireAutomaat = this->getCellulaireAutomaat();
+
+    /*
+     * Geeft aan welke zijde verbonden moet worden;
+     *  [0]: links        [0]
+     *  [1]: rechts      xxxxx
+     *  [2]: boven  [3]  xxxxx  [1]
+     *  [3]: onder       xxxxx
+     *                    [2]
+     */
+    std::vector<bool> road = {false, false, false, false};
+
+
+    if(row < cellulaireAutomaat->getHeight() && col + 1 < cellulaireAutomaat->getWidth())
+        road[1] = (*cellulaireAutomaat)(row, col + 1)->getState() == ERoad;
+
+    if(row >= 0 && col - 1 >= 0)
+        road[3] = (*cellulaireAutomaat)(row, col - 1)->getState() == ERoad;
+
+    if(row + 1 < cellulaireAutomaat->getHeight() && col < cellulaireAutomaat->getWidth())
+        road[2] = (*cellulaireAutomaat)(row + 1, col)->getState() == ERoad;
+
+    if(row - 1 >= 0 && col >= 0)
+        road[0] = (*cellulaireAutomaat)(row - 1, col)->getState() == ERoad;
+
+    return road;
+}
+
 EStates Vegetation::getState() const {
     return EVegetation;
 }
@@ -105,6 +136,44 @@ float StoreZone::getHappiness() const {
     if(value < -1) value = -1;
     if(value > 1) value = 1;
     return value;
+}
+
+bool Cell::isConnectedTo(int row, int col, std::vector<std::pair<int,int>>* roads) {
+    if(this->row == row && this->col == col){
+        return true;
+    }
+
+    if(roads == nullptr){
+        roads = new std::vector<std::pair<int,int>>();
+    }
+
+    std::vector<bool> neighborsRoadsBool = this->getNeighborsRoads();
+    std::vector<Cell*> neighborsRoad;
+
+    if(neighborsRoadsBool[0])
+        neighborsRoad.push_back((*cellulaireAutomaat)(row - 1, col));
+
+    if(neighborsRoadsBool[1])
+        neighborsRoad.push_back((*cellulaireAutomaat)(row, col + 1));
+
+    if(neighborsRoadsBool[2])
+        neighborsRoad.push_back((*cellulaireAutomaat)(row + 1, col));
+
+    if(neighborsRoadsBool[3])
+        neighborsRoad.push_back((*cellulaireAutomaat)(row, col - 1));
+
+    for(auto it = neighborsRoad.begin(); it != neighborsRoad.end(); it++){
+        std::cout << "check: " << (*it)->row << "," << (*it)->col <<std::endl;
+        if (std::find(roads->begin(), roads->end(), std::pair<int,int>((*it)->row, (*it)->col)) == roads->end()) {
+            roads->push_back(std::pair<int,int>((*it)->row, (*it)->col));
+            if ((*it)->isConnectedTo(row, col, roads)) {
+                delete roads;
+                return true;
+            }
+        }
+    }
+
+    return false;
 }
 
 
@@ -184,37 +253,6 @@ std::pair<int, std::string> Road::getCorrectRoad(std::vector<bool> &roadConnectP
         }
         rotations++;
     }
-}
-
-std::vector<bool> Road::getNeighborsRoads() {
-    int row = this->getPos().first;
-    int col = this->getPos().second;
-    CellulaireAutomaat* cellulaireAutomaat = this->getCellulaireAutomaat();
-
-    /*
-     * Geeft aan welke zijde verbonden moet worden;
-     *  [0]: links        [0]
-     *  [1]: rechts      xxxxx
-     *  [2]: boven  [3]  xxxxx  [1]
-     *  [3]: onder       xxxxx
-     *                    [2]
-     */
-    std::vector<bool> road = {false, false, false, false};
-
-
-    if(row < cellulaireAutomaat->getHeight() && col + 1 < cellulaireAutomaat->getWidth())
-        road[1] = (*cellulaireAutomaat)(row, col + 1)->getState() == ERoad;
-
-    if(row >= 0 && col - 1 >= 0)
-        road[3] = (*cellulaireAutomaat)(row, col - 1)->getState() == ERoad;
-
-    if(row + 1 < cellulaireAutomaat->getHeight() && col < cellulaireAutomaat->getWidth())
-        road[2] = (*cellulaireAutomaat)(row + 1, col)->getState() == ERoad;
-
-    if(row - 1 >= 0 && col >= 0)
-        road[0] = (*cellulaireAutomaat)(row - 1, col)->getState() == ERoad;
-
-    return road;
 }
 
 std::vector<Vehicle *> Road::getVehicles() const {

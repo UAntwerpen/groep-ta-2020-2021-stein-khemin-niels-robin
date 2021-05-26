@@ -82,6 +82,19 @@ void MainWindow::pause(){
     pauseButton->setText("Resume");
     disconnect(pauseButton, &QPushButton::released, this, &MainWindow::pause);
     connect(pauseButton, &QPushButton::released, this, &MainWindow::resume);
+
+    int rowFrom;
+    int colFrom;
+    int rowTo;
+    int colTo;
+    cout << "give row col, from:" << endl;
+    std::cin >> rowFrom;
+    std::cin >> colFrom;
+    cout << "give row col, To:" << endl;
+    std::cin >> rowTo;
+    std::cin >> colTo;
+
+    cout << (*c)(rowFrom, colFrom)->isConnectedTo(rowTo, colTo) << endl;
 }
 
 void MainWindow::resume(){

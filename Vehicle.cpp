@@ -43,7 +43,7 @@ void Vehicle::update(CellulaireAutomaat &city) {
 
     pair<int, int> currPos = this->getLocation()->getPos();
     pair<int, int> newPos = pair<int, int>(currPos.first + dy, currPos.second + dx);
-    Cell& newLoc = city(newPos.first, newPos.second);
+    Cell& newLoc = *city(newPos.first, newPos.second);
 
     this->setLocation(&newLoc);
 

@@ -95,6 +95,14 @@ public:
 
     bool isExpired();
 
+
+    /*
+     * Controleert of huidige cell is verbonden met de weg op locatie row, col
+     */
+    bool isConnectedTo(int row, int col,  std::vector<std::pair<int,int>>* roads = nullptr);
+
+    std::vector<bool> getNeighborsRoads();
+
     /*
      * int: rotation, string: pad to pixel art
      */
@@ -141,8 +149,6 @@ public:
     void update() override;
 
     std::pair<int, std::string> getPixelArt() override;
-
-    std::vector<bool> getNeighborsRoads();
 
     /*!
      * geeft alle auto's terug die op de cell staan

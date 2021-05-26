@@ -34,8 +34,8 @@ PFMask::PFMask(CellulaireAutomaat& cellAutomaat, Transport* transport) : width(c
         for (int col = 0; col < width; col++) {
             bool passable;
 
-            if (cellAutomaat(row, col).getState() == ERoad ||
-                (cellAutomaat(row, col).getState() == EVegetation && transport->getState() == ECitizen) ||
+            if (cellAutomaat(row, col)->getState() == ERoad ||
+                (cellAutomaat(row, col)->getState() == EVegetation && transport->getState() == ECitizen) ||
                     transport->getGoal()->getPos() == pair<int, int>(row, col)) {
                 passable = true;
             } else {

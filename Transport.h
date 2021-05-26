@@ -8,7 +8,8 @@
 #include <string>
 #include "CellulaireAutomaat.h"
 #include "Lib.h"
-#include "Pathfinding.h"
+class pathFinding;
+class PFMask;
 
 using namespace std;
 
