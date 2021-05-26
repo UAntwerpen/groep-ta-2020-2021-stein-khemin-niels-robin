@@ -16,7 +16,7 @@ PFCell::PFCell(bool passable, int row, int col, bool goal) : Cell(row, col, null
     }
     else if (passable) {
 
-        //Random int tussen 0 en 10000
+        //Random int tussen 1 en 10000
         std::random_device rd;
         std::mt19937 gen(rd());
         std::uniform_int_distribution<> distr(1, 10000);

@@ -16,3 +16,7 @@ void Citizen::setHappiness(float h) {
 EStates Citizen::getState() const {
     return ECitizen;
 }
+
+Citizen::Citizen() : Transport() {}
+
+Citizen::Citizen(Cell *location, Cell *g) : Transport(location, g) {}

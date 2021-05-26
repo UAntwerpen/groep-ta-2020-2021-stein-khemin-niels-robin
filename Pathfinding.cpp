@@ -22,6 +22,9 @@ PFMask::PFMask(int width, int height) : width(width), height(height) {
 PFMask::PFMask(CellulaireAutomaat& cellAutomaat, Transport* transport) : width(cellAutomaat.getWidth()), height(cellAutomaat.getHeight()) {
     REQUIRE(1 < width, "Width is too small(must be at least 2)!");
     REQUIRE(1 < height, "Height is too small(must be at least 2)!");
+    REQUIRE(transport->getLocation() != nullptr, "transport must exist in a loaction.");
+    REQUIRE(transport->getGoal() != nullptr, "transport must have a goal.");
+
     mask = new PFCell *[height];
     for (int i = 0; i < height; i++){
         mask[i] = new PFCell[width];
@@ -31,18 +34,26 @@ PFMask::PFMask(CellulaireAutomaat& cellAutomaat, Transport* transport) : width(c
         for (int col = 0; col < width; col++) {
             bool passable;
 
-            //TODO geeft error
-            /*
-            if (cellAutomaat(row, col).getState() == ERoad || (cellAutomaat(row, col).getState() == EVegetation && transport->getState() == ECitizen)) {
+            if (cellAutomaat(row, col).getState() == ERoad ||
+                (cellAutomaat(row, col).getState() == EVegetation && transport->getState() == ECitizen) ||
+                    transport->getGoal()->getPos() == pair<int, int>(row, col)) {
                 passable = true;
             } else {
                 passable = false;
-            }*/
+            }
             bool goal = transport->getGoal()->getPos() == pair<int, int>(row, col);
 
             this->getCell(row, col) = PFCell(passable, row, col, goal);
         }
     }
+}
+
+int PFMask::getWidth() const {
+    return width;
+}
+
+int PFMask::getHeight() const {
+    return height;
 }
 
 PFCell &PFMask::getCell(int row, int col) {
@@ -51,15 +62,49 @@ PFCell &PFMask::getCell(int row, int col) {
     return mask[row][col];
 }
 
-std::vector<int> PFMask::getNeigbourInts(int row, int col) {
-    std::vector<int> ints(4);
+std::vector<int> PFMask::getNeighbourInts(int row, int col) {
+    std::vector<int> ints;
 
-    ints[0] = this->getCell(row - 1, col).getValue();
-    ints[1] = this->getCell(row, col + 1).getValue();
-    ints[2] = this->getCell(row + 1, col).getValue();
-    ints[3] = this->getCell(row, col - 1).getValue();
+    if (row - 1 >= 0){
+        ints.push_back(this->getCell(row - 1, col).getValue());
+    }
+
+    if (col + 1 < this->getWidth()){
+        ints.push_back(this->getCell(row, col + 1).getValue());
+    }
+
+    if (row + 1 < this->getHeight()) {
+        ints.push_back(this->getCell(row + 1, col).getValue());
+    }
+
+    if (col - 1 >= 0) {
+        ints.push_back(this->getCell(row, col - 1).getValue());
+    }
+
 
     return ints;
+}
+
+std::vector<PFCell *> PFMask::getNeighbours(int row, int col) {
+    std::vector<PFCell*> neighbours;
+
+    if (row - 1 >= 0){
+        neighbours.push_back(&this->getCell(row - 1, col));
+    }
+
+    if (col + 1 < this->getWidth()){
+        neighbours.push_back(&this->getCell(row, col + 1));
+    }
+
+    if (row + 1 < this->getHeight()) {
+        neighbours.push_back(&this->getCell(row + 1, col));
+    }
+
+    if (col - 1 >= 0) {
+        neighbours.push_back(&this->getCell(row, col - 1));
+    }
+
+    return neighbours;
 }
 
 bool PFMask::update() {
@@ -69,8 +114,8 @@ bool PFMask::update() {
         for (int col = 0; col < width; col++) {
             PFCell currCell = this->getCell(row, col);
 
-            int min = this->getNeigbourInts(row, col)[0];
-            for (int el : this->getNeigbourInts(row, col)) {
+            int min = this->getNeighbourInts(row, col)[0];
+            for (int el : this->getNeighbourInts(row, col)) {
                 if (el < min) {
                     min = el;
                 }
@@ -83,4 +128,10 @@ bool PFMask::update() {
     }
 
     return changeMade;
+}
+
+void PFMask::generateMask() {
+    while (update()) {
+        // ** Does nothing here ** //
+    }
 }

@@ -10,6 +10,18 @@
 
 class Citizen : public Transport {
 public:
+
+    /**
+     * Default constructor
+     */
+    Citizen();
+
+    /**
+     * Initialiseert een Citizen op de gegeven loactie en optioneel met een gegeven goal.
+     * @param location
+     */
+    Citizen(Cell* location, Cell* g = nullptr);
+
     /**
      * Geeft de happiness van de Citizen terug adv een float.
      * @return float
@@ -27,7 +39,8 @@ public:
     EStates getState() const override;
 
 private:
-    float happiness;
+    //TODO nog aan te passen adv happiness implementatie
+    float happiness = 0;
 };
 
 

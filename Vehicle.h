@@ -6,12 +6,24 @@
 #define TA_VEHICLE_H
 
 #include "Transport.h"
+#include "Citizen.h"
 #include <vector>
 
 class Citizen;
 
 class Vehicle : public Transport {
 public:
+    /**
+     * Default constructor
+     */
+    Vehicle();
+
+    /**
+     * Initialiseert een Vehicle op de gegeven loactie en optioneel met een gegeven goal.
+     * @param location
+     */
+    Vehicle(Cell* location, Cell* g = nullptr);
+
     /**
      * Geeft personen in het Vehicle terug.
      * @return vector van Citizen class pointers
@@ -36,6 +48,12 @@ public:
      * @param person : persoon die aan het Vehicle wordt toegevoegd
      */
     void addPerson(Citizen* person);
+
+    /**
+    * Verplaatst het Vehicle 1 stap vooruit volgens zijn pad.
+    * @param city : De cellulaire automaat waardoor het Vehicle zich beweegt.
+    */
+    void update(CellulaireAutomaat& city) override;
 
     EStates getState() const override;
 
