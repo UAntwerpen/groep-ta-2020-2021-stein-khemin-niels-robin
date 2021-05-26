@@ -9,9 +9,9 @@
 void template_main(){
     CellulaireAutomaat* map;
 
-    auto* car = new Vehicle(&(*map)(2, 3), &(*map)(5,3));
+    auto* car = new Vehicle((*map)(2, 3), (*map)(5,3));
 
-    auto* person1 = new Citizen(&(*map)(2,3));
+    auto* person1 = new Citizen((*map)(2,3));
 
     car->addPerson(person1);
 

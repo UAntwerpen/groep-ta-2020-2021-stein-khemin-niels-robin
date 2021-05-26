@@ -33,8 +33,8 @@ PFMask::PFMask(CellulaireAutomaat& cellAutomaat, Cell* goal, bool isCar) : width
         for (int col = 0; col < width; col++) {
             bool passable;
 
-            if (cellAutomaat(row, col).getState() == ERoad ||
-                (cellAutomaat(row, col).getState() == EVegetation && !isCar) ||
+            if (cellAutomaat(row, col)->getState() == ERoad ||
+                (cellAutomaat(row, col)->getState() == EVegetation && !isCar) ||
                     goal->getPos() == std::pair<int, int>(row, col)) {
                 passable = true;
             } else {

@@ -39,6 +39,8 @@ public:
 
     EStates getState() const override;
 
+    void updateAsPassenger(Cell *cell);
+
 private:
     float happiness = 0;
 };
