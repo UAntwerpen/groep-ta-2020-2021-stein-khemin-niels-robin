@@ -4,6 +4,13 @@
 
 #include "Citizen.h"
 
+Citizen::Citizen(){
+    string pixArt = "Pedestrian";
+    int random = (rand()%3)+1;
+    pixArt = pixArt + to_string(random) + ".png";
+    pixelart = pixArt;
+}
+
 float Citizen::getHappiness() {
     return happiness;
 }
@@ -15,4 +22,8 @@ void Citizen::setHappiness(float h) {
 
 EStates Citizen::getState() const {
     return ECitizen;
+}
+
+const string &Citizen::getPixelart() const {
+    return pixelart;
 }

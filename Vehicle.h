@@ -12,6 +12,8 @@ class Citizen;
 
 class Vehicle : public Transport {
 public:
+    Vehicle();
+
     /**
      * Geeft personen in het Vehicle terug.
      * @return vector van Citizen class pointers
@@ -39,8 +41,11 @@ public:
 
     EStates getState() const override;
 
+    const string &getPixelart() const;
+
 private:
     vector<Citizen*> people;
+    string pixelart;
 };
 
 

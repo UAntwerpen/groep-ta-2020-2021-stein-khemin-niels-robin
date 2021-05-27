@@ -10,6 +10,8 @@
 
 class Citizen : public Transport {
 public:
+    Citizen();
+
     /**
      * Geeft de happiness van de Citizen terug adv een float.
      * @return float
@@ -26,8 +28,11 @@ public:
 
     EStates getState() const override;
 
+    const string &getPixelart() const;
+
 private:
     float happiness;
+    string pixelart;
 };
 
 

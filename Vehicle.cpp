@@ -4,6 +4,13 @@
 
 #include "Vehicle.h"
 
+Vehicle::Vehicle(){
+    string pixArt = "Car";
+    int random = (rand()%3)+1;
+    pixArt = pixArt + to_string(random) + ".png";
+    pixelart = pixArt;
+}
+
 void Vehicle::setPeople(vector<Citizen *> pass) {
 
 }
@@ -22,4 +29,8 @@ void Vehicle::addPerson(Citizen *person) {
 
 EStates Vehicle::getState() const {
     return EVehicle;
+}
+
+const string &Vehicle::getPixelart() const {
+    return pixelart;
 }
