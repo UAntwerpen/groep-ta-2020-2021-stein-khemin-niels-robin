@@ -108,19 +108,20 @@ std::vector<PFCell *> PFMask::getNeighbours(int row, int col) {
 
 bool PFMask::update() {
     bool changeMade = false;
+    PFMask copy = *this;
 
     for (int row = 0; row < height; row++) {
         for (int col = 0; col < width; col++) {
-            PFCell currCell = this->getCell(row, col);
+            PFCell* currCell = &this->getCell(row, col);
 
-            int min = this->getNeighbourInts(row, col)[0];
-            for (int el : this->getNeighbourInts(row, col)) {
+            int min = copy.getNeighbourInts(row, col)[0];
+            for (int el : copy.getNeighbourInts(row, col)) {
                 if (el < min) {
                     min = el;
                 }
             }
 
-            if (currCell.updatePFCell(min)) {
+            if (currCell->updatePFCell(min)) {
                 changeMade = true;
             }
         }
