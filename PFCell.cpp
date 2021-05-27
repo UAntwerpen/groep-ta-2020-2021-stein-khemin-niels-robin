@@ -15,13 +15,7 @@ PFCell::PFCell(bool passable, int row, int col, bool goal) : Cell(row, col, null
         value = 0;
     }
     else if (passable) {
-
-        //Random int tussen 1 en 10000
-        std::random_device rd;
-        std::mt19937 gen(rd());
-        std::uniform_int_distribution<> distr(1, 10000);
-
-        value = distr(gen);
+        value = rand()%10000 + 1;
     } else {
         value = std::numeric_limits<int>::max();
     }
@@ -42,7 +36,6 @@ void PFCell::setGoal(bool g) {
 }
 
 int PFCell::getValue() const {
-    REQUIRE(this->getPassable() == true, "Only passable PathfindingCells have integer values.");
     return value;
 }
 
@@ -52,11 +45,10 @@ void PFCell::setValue(int v) {
 }
 
 bool PFCell::updatePFCell(int min) {
-    if (passable && not goal) {
+    if (passable && !goal && min + 1 != this->getValue()) {
         this->value = min + 1;
         return true;
     }
-
     return false;
 }
 

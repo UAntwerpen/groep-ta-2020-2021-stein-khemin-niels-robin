@@ -66,12 +66,12 @@ void Transport::setRoute(string r) {
 
 void Transport::calculateRoute() {
     pair<int, int> goalPoss = this->getGoal()->getPos();
-    REQUIRE(this->getMask()->getCell(goalPoss.first, goalPoss.second).getValue() == 0, "incompatible PFMask for this Transport.");
+    REQUIRE(this->getMask()->getCell(goalPoss.first, goalPoss.second)->getValue() == 0, "incompatible PFMask for this Transport.");
 
     string result;
 
     pair<int, int> locCoord = this->getLocation()->getPos();
-    PFCell* currCell = &this->getMask()->getCell(locCoord.first, locCoord.second);
+    PFCell* currCell = this->getMask()->getCell(locCoord.first, locCoord.second);
 
     while (currCell->getValue() != 0) {
         pair<int, int> currPos = currCell->getPos();
@@ -85,25 +85,25 @@ void Transport::calculateRoute() {
         }
 
         //Prioriseert eerst bewegen naar rechts, gevolgd door onder, links en tenslotte boven. (Als buren zelfde min int value hebben).
-        if (currPos.second + 1 < this->getMask()->getWidth() && this->getMask()->getCell(currPos.first, currPos.second + 1).getValue() == min) {
+        if (currPos.second + 1 < this->getMask()->getWidth() && this->getMask()->getCell(currPos.first, currPos.second + 1)->getValue() == min) {
             result += "E";
 
-            currCell = &this->getMask()->getCell(currPos.first, currPos.second + 1);
+            currCell = this->getMask()->getCell(currPos.first, currPos.second + 1);
             continue;
-        } else if (currPos.first + 1 < this->getMask()->getHeight() && this->getMask()->getCell(currPos.first + 1, currPos.second).getValue() == min) {
+        } else if (currPos.first + 1 < this->getMask()->getHeight() && this->getMask()->getCell(currPos.first + 1, currPos.second)->getValue() == min) {
             result += "S";
 
-            currCell = &this->getMask()->getCell(currPos.first + 1, currPos.second);
+            currCell = this->getMask()->getCell(currPos.first + 1, currPos.second);
             continue;
-        } else if (currPos.second - 1 >= 0 && this->getMask()->getCell(currPos.first, currPos.second - 1).getValue() == min) {
+        } else if (currPos.second - 1 >= 0 && this->getMask()->getCell(currPos.first, currPos.second - 1)->getValue() == min) {
             result += "W";
 
-            currCell = &this->getMask()->getCell(currPos.first, currPos.second - 1);
+            currCell = this->getMask()->getCell(currPos.first, currPos.second - 1);
             continue;
-        } else if (currPos.first - 1 >= 0 && this->getMask()->getCell(currPos.first - 1, currPos.second).getValue() == min) {
+        } else if (currPos.first - 1 >= 0 && this->getMask()->getCell(currPos.first - 1, currPos.second)->getValue() == min) {
             result += "N";
 
-            currCell = &this->getMask()->getCell(currPos.first - 1, currPos.second);
+            currCell = this->getMask()->getCell(currPos.first - 1, currPos.second);
             continue;
         }
     }

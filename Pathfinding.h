@@ -13,9 +13,6 @@ class PFMask {
 public:
     /**
      * Default constructor
-     *
-     *  REQUIRE(1 < width, "Width is too small(must be at least 2)!")
-     *  REQUIRE(1 < height, "Height is too small(must be at least 2)!")
      */
     PFMask(int width, int height);
 
@@ -25,8 +22,6 @@ public:
      * @param cellAutomaat : PFMask wordt geinitialiseerd adv de gegevens van deze CellulaireAutomaat.
      * @param vehicle : Vehicle waarvoor PFMask wordt geinitialiseerd.
      *
-     * REQUIRE(1 < width, "Width is too small(must be at least 2)!")
-     * REQUIRE(1 < height, "Height is too small(must be at least 2)!")
      * REQUIRE(transport->getLocation() != nullptr, "transport must exist in a loaction.")
      * REQUIRE(transport->getGoal() != nullptr, "transport must have a goal.")
      */
@@ -55,7 +50,7 @@ public:
      * REQUIRE(0 <= row && row < width, "Row is out of bounds!")
      * REQUIRE(0 <= col && col < height, "Column is out of bounds!")
      */
-    PFCell& getCell(int row, int col);
+    PFCell* getCell(int row, int col);
 
     /**
      * Geeft de integer waarden van de buur Cellen terug.
@@ -98,7 +93,7 @@ private:
     int width;
     int height;
 
-    PFCell** mask;
+    std::vector<std::vector<PFCell*>> mask;
 };
 
 

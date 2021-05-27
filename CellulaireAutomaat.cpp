@@ -3,6 +3,7 @@
 #include "CellulaireAutomaat.h"
 #include "Lib.h"
 #include "Cell.h"
+#include <iostream>
 
 CellulaireAutomaat::CellulaireAutomaat(int width, int height, const std::string& rules) : width(width), height(height), rules(rules) {
     REQUIRE(1 < width, "Width is too small(must be at least 2)!");
@@ -43,6 +44,7 @@ CellulaireAutomaat::CellulaireAutomaat(const std::string &filename) {
             size_t xpos = line.find('x');
             int wi = std::stoi(line.substr(4, xpos - 4));
             int he = std::stoi(line.substr(7, line.length()));
+
             width = wi;
             height = he;
             matrix = std::vector<Cell*>(width * height);
