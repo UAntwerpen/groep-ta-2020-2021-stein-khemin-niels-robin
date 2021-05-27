@@ -71,9 +71,17 @@ void MainWindow::updateRoadUsers() {
     //clearRoadUsers();
     for (int x = 0; x < width; x++) {
         for (int y = 0; y < height; y++) {
-            //TODO fix enkel roadusers
-            //std::pair<int, std::string> pixart = c->operator()(x,y)->getPixelArt();
-            //drawTile(x,y,pixart.first, pixart.second);
+            Cell *cell = c->operator()(x,y);
+            if(cell->getState() == ERoad){
+                vector<Vehicle*> vehicles = cell->getVehicles();
+                for(auto it = vehicles.begin(); it != vehicles.end(); it++){
+                    //addCar(x,y,...);
+                }
+                vector<Citizen*> citizen = cell->getCitizen();
+                for(auto it = citizen.begin(); it != citizen.end(); it++){
+                    //addPedestrian(x,y,...);
+                }
+            }
         }
     }
 }
@@ -81,13 +89,13 @@ void MainWindow::updateRoadUsers() {
 void MainWindow::updateAll() {
     clearWalls();
     clearBuildings();
-    drawGrid(width,height);
-    /*for (int x = 0; x < width; x++) {
+    //drawGrid(width,height);
+    for (int x = 0; x < width; x++) {
         for (int y = 0; y < height; y++) {
             std::pair<int, std::string> pixart = (*c)(x,y)->getPixelArt();
             drawTile(x,y,pixart.first, pixart.second);
         }
-    }*/
+    }
     updateRoadUsers();
 }
 
@@ -247,8 +255,8 @@ void MainWindow::drawGrid(int _width, int _height) {
     addWalls(_width, _height);
     for (int i = 0; i < _width; i++) {
         for (int j = 0; j < _height; j++) {
-            //drawTile(i, j, 0, "../PixelArt/Default.png");
-            int random = rand() % 14;
+            drawTile(i, j, 0, "../PixelArt/Default.png");
+            /*int random = rand() % 14;
             int randomangle = rand() % 4;
             if (random == 0) {
                 drawTile(i, j, 0, "../PixelArt/Store.png");
@@ -288,7 +296,7 @@ void MainWindow::drawGrid(int _width, int _height) {
                 drawTile(i, j, 0, "../PixelArt/Road_Broken.png");
             }  else if(random == 13){
                 drawTile(i, j, 0, "../PixelArt/Park_Broken.png");
-            }
+            }*/
         }
     }
 }
