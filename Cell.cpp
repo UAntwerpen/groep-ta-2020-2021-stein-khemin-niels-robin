@@ -232,8 +232,12 @@ std::vector<bool> Road::getNeighborsRoads() {
     return road;
 }
 
-std::vector<Vehicle *> Road::getVehicles() const {
+std::vector<Vehicle *> Road::getVehicles() {
     return this->vehicles;
+}
+
+std::vector<Citizen *> Road::getCitizen() {
+    return this->citizen;
 }
 
 void Road::addVehicle(Vehicle * v) {
