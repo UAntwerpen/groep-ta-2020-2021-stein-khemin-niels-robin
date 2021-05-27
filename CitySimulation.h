@@ -8,18 +8,20 @@
 
 float runSimulation(const std::string& rules){
     int it = 0;
-    int max = 200;
-    CellulaireAutomaat automaat(10, 10, rules);
-    automaat.changeCell(0, 5, new Road(0, 5, &automaat));
-    automaat.draw();
-    QApplication::exec();
-//    while (it < max){
-//        automaat.updateRules();
-//        automaat.updateCells();
-//        automaat.draw();
-//        it++;
-//    }
-    return 0;
+    int max = 10;
+    float total_score = 0;
+    CellulaireAutomaat automaat(10, 10, rules, false);
+    automaat.addMainStreet(0, 5);
+//    QApplication::exec();
+    while (it < max){
+        automaat.updateRules();
+        automaat.updateCells();
+        if (it > 5)
+            total_score += automaat.getScore();
+        automaat.draw();
+        it++;
+    }
+    return total_score / (max + 1);
 }
 
 #endif //TA_CITYSIMULATION_H

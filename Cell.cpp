@@ -163,7 +163,7 @@ bool Cell::isConnectedTo(int row, int col, std::vector<std::pair<int,int>>* road
         neighborsRoad.push_back((*cellulaireAutomaat)(this->row, this->col - 1));
 
     for(auto it = neighborsRoad.begin(); it != neighborsRoad.end(); it++){
-        std::cout << "check: " << row << " (+,-1):" << (*it)->row << "," <<  col << " (+,-1): "<<  (*it)->col <<std::endl;
+//        std::cout << "check: " << row << " (+,-1):" << (*it)->row << "," <<  col << " (+,-1): "<<  (*it)->col <<std::endl;
         if (std::find(roads->begin(), roads->end(), std::pair<int,int>((*it)->row, (*it)->col)) == roads->end()) {
             roads->push_back(std::pair<int,int>((*it)->row, (*it)->col));
             if ((*it)->isConnectedTo(row, col, roads)) {

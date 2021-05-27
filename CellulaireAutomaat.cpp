@@ -4,7 +4,7 @@
 #include "Lib.h"
 #include "Cell.h"
 
-CellulaireAutomaat::CellulaireAutomaat(int width, int height, const std::string& rules) : width(width), height(height), rules(rules) {
+CellulaireAutomaat::CellulaireAutomaat(int width, int height, const std::string& rules, bool qt) : width(width), height(height), rules(rules), qt(qt) {
     REQUIRE(1 < width, "Width is too small(must be at least 2)!");
     REQUIRE(1 < height, "Height is too small(must be at least 2)!");
     matrix = std::vector<Cell*>(width * height);
@@ -25,14 +25,15 @@ CellulaireAutomaat::CellulaireAutomaat(int width, int height, const std::string&
         std::cerr << "couldn't open file!" << std::endl;
     }
     file.close();
-    //w = nullptr;
-    w = new MainWindow(width, height, this);
-    //draw();
-    w->show();
+    if (qt){
+        w = new MainWindow(width, height, this);
+        draw();
+        w->show();
+    } else
+        w = nullptr;
 }
 
 CellulaireAutomaat::CellulaireAutomaat(const std::string &filename) {
-    w = nullptr;
     std::ifstream file(filename);
     std::string line;
     bool map = false;
@@ -79,6 +80,9 @@ CellulaireAutomaat::CellulaireAutomaat(const std::string &filename) {
     }
 
     file.close();
+    w = new MainWindow(width, height, this);
+    draw();
+    w->show();
 }
 
 CellulaireAutomaat::~CellulaireAutomaat() {
@@ -92,8 +96,6 @@ CellulaireAutomaat::~CellulaireAutomaat() {
 }
 
 Cell* CellulaireAutomaat::operator()(int row, int column) const {
-    if (0 > row || row > width || 0 > column || column > height)
-        std::cout << "error";
     REQUIRE(0 <= row && row < width, "Row with is out of bounds!");
     REQUIRE(0 <= column && column < height, "Column is out of bounds!");
     return matrix[row * height + column];
@@ -141,21 +143,57 @@ int CellulaireAutomaat::getNeighbourhoodValue(int row, int col) {
     return value;
 }
 
+int CellulaireAutomaat::getNeighbourhoodValue(int row, int col, const std::vector<std::vector<EStates>>& map) {
+    REQUIRE(0 <= row && row < map.size(), "Row is out of bounds!");
+    REQUIRE(0 <= col && col < map[0].size(), "Column is out of bounds!");
+    int value = 0;
+    static int powers[8] = {static_cast<int>(pow(5, 7)), static_cast<int>(pow(5, 6)), static_cast<int>(pow(5, 5)),
+                            static_cast<int>(pow(5, 4)), static_cast<int>(pow(5, 3)),
+                            static_cast<int>(pow(5, 2)), 5, 1};
+    if (0 <= row - 1 && 0 <= col - 1)
+        value += map[row - 1][col - 1] * powers[0];
+    if (0 <= row - 1)
+        value += map[row - 1][col] * powers[1];
+    if (0 <= row - 1 && col + 1 < map[0].size())
+        value += map[row - 1][col + 1] * powers[2];
+    if (col + 1 < map[0].size())
+        value += map[row][col + 1] * powers[3];
+    if (row + 1 < map.size() && col + 1 < map[0].size())
+        value += map[row + 1][col + 1] * powers[4];
+    if (row + 1 < map.size())
+        value += map[row + 1][col] * powers[5];
+    if (row + 1 < map.size() && 0 <= col - 1)
+        value += map[row + 1][col - 1] * powers[6];
+    if (0 <= col - 1)
+        value += map[row][col - 1] * powers[7];
+    return value;
+}
+
 void CellulaireAutomaat::changeCell(int row, int column, Cell *to) {
     REQUIRE(0 <= row && row < height, "Row is out of bounds!");
     REQUIRE(0 <= column && column < width, "Column is out of bounds!");
     REQUIRE(to != nullptr, "De gegeven cell is een nullptr!");
     delete matrix[row * height + column];
-    //matrix[row * height + column] = to;
-    matrix[(row) * height + (column)] = to;
+    matrix[row * height + column] = to;
 }
 
 void CellulaireAutomaat::updateRules() {
     CellFactorySingleton& factory = CellFactorySingleton::getInstance();
+    std::vector<std::vector<EStates>> old;
+    old.resize(height);
+    for (int row = 0; row < height; row++) {
+        old[row].resize(width);
+        for (int col = 0; col < width; col++) {
+            old[row][col] = (*this)(row, col)->getState();
+        }
+    }
+
     for (int col = 0; col < width; col++) {
         for (int row = 0; row < height; row++) {
-            EStates state = static_cast<EStates>(rules[getNeighbourhoodValue(row, col)]);
-            if (state == (*this)(row, col)->getState()) {
+            if (std::make_pair(row, col) == main_street) continue;
+
+            EStates state = static_cast<EStates>(rules[getNeighbourhoodValue(row, col, old)]);
+            if (state == old[row][col]) {
                 continue;
             }
             switch (state) {
@@ -177,16 +215,19 @@ void CellulaireAutomaat::updateRules() {
             }
         }
     }
-    w->updateAll();
+    draw();
 }
 
 void CellulaireAutomaat::updateCells() {
     for (int col = 0; col < width; col++) {
         for (int row = 0; row < height; row++) {
+            if (!(*this)(row, col)->isConnectedTo(main_street.first, main_street.second) ){
+                changeCell(row, col, new Vegetation(*(*this)(row, col)));
+            }
             (*this)(row, col)->update();
         }
     }
-    w->updateAll();
+    draw();
 }
 
 int CellulaireAutomaat::count(const EStates &state) const {
@@ -240,7 +281,8 @@ std::map<EStates, int> CellulaireAutomaat::count_all() const {
     }
 
     void CellulaireAutomaat::draw() {
-        w->updateAll();
+        if (qt)
+            w->updateAll();
         /*for (int col = 0; col < width; col++){
             for (int row = 0; row < height; row++){
                 switch ((*this)(row, col)->getState()) {
@@ -263,3 +305,16 @@ std::map<EStates, int> CellulaireAutomaat::count_all() const {
             std::cout << std::endl;
         }*/
     }
+
+void CellulaireAutomaat::addMainStreet(int row, int col) {
+    REQUIRE(0 <= row && row < height, "Row is out of bounds!");
+    REQUIRE(0 <= col && col < width, "Column is out of bounds!");
+    changeCell(row, col, new Road(0, 5, this));
+    main_street = {row, col};
+    draw();
+}
+
+float CellulaireAutomaat::getScore() const {
+    std::map<EStates, int> count_ = count_all();
+    return count_[EIndustrialZone] + count_[EStoreZone] + count_[EResidentialZone] * 2 + count_[EVegetation] * 0.75 + count_[ERoad] * count_[ERoad];
+}

@@ -73,6 +73,7 @@ void MainWindow::temporaryNextDay(){
     cout<<"Button pushed."<<endl;
     c->updateRules();
     c->updateCells();
+    std::cout << c->getScore() << std::endl;
 }
 
 void MainWindow::pause(){

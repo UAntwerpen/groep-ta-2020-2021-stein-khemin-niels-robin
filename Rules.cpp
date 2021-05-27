@@ -5,12 +5,11 @@
 
 
 
-GeneticAlgorith::GeneticAlgorith(int genomeSize, int populationSize) {
-    population_size = populationSize;
-    genome_size = genomeSize;
-    std::srand(std::time(nullptr));
+GeneticAlgorith::GeneticAlgorith() {
+    unsigned int seed = std::time(nullptr);
+    std::cout << seed << std::endl;
+    std::srand(seed);
     mt = new std::mt19937(std::rand());
-    std::cout << (*mt)() << std::endl;
     generatePopulation();
     for (int i = 0; i < POPULATION_SIZE;i++) indices[i] = i;
 }
@@ -33,10 +32,11 @@ Genome<GENOME_SIZE> *GeneticAlgorith::generateGenome() {
 }
 
 Genome<GENOME_SIZE> GeneticAlgorith::run(int max_gen) {
-    for (int _ = 0; _ < GENERATION_LIMIT && fitness[indices[0]] != 1; _++){
+    for (int _ = 0; _ < max_gen && fitness[indices[0]] != 1; _++){
         std::cout << "Running Generation: " << _ << std::endl;
 //#pragma omp parallel for if (PARALLELISM_ENABLED)
         for (int i = 0; i < POPULATION_SIZE; i++){
+//            std::cout << "Running Simulation: " << i << std::endl;
             fitness[i] = calc_fitness(*population[i]);
         }
         std::sort(indices.begin(), indices.end(), [this](int first, int second){return fitness[first] > fitness[second];});
@@ -67,9 +67,9 @@ Genome<GENOME_SIZE> GeneticAlgorith::run(int max_gen) {
         }
         population = next_gen;
     }
-    for (const auto& s: *(population[0])){
-        std::cout << s;
-    }
+//    for (const auto& s: *(population[0])){
+//        std::cout << s;
+//    }
     return *(population[0]);
 }
 

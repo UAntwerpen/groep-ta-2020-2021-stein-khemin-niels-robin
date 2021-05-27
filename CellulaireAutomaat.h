@@ -21,7 +21,7 @@ public:
      * REQUIRE(1 < width, "Width is too small(must be at least 2)!");
      * REQUIRE(1 < height, "Height is too small(must be at least 2)!");
      */
-    CellulaireAutomaat(int width, int height, const std::string& rules);
+    CellulaireAutomaat(int width, int height, const std::string& rules, bool qt = true);
 
     CellulaireAutomaat(const std::string& filename);
 
@@ -44,16 +44,6 @@ public:
      * REQUIRE(0 <= column && column < height, "Column is out of bounds!");
      */
     std::vector<Cell*> getNeighbourhood(int row, int col);
-
-    /*!
-     * geeft de neighbourhood van een cell terug
-     * @param row rij van de cell
-     * @param col kolom van de cell
-     * @return geeft een vector van de cellen terug van linksboven in klokwijze manier
-     * REQUIRE(0 <= row && row < width, "Row is out of bounds!");
-     * REQUIRE(0 <= column && column < height, "Column is out of bounds!");
-     */
-    int getNeighbourhoodValue(int row, int col);
 
     /*!
      * veranderd de cell naar een nieuwe cell
@@ -117,12 +107,47 @@ public:
      */
     void draw();
 
+    /*!
+     * adds a main street that can't be changed
+     * @param row int
+     * @param col int
+     */
+    void addMainStreet(int row, int col);
+
+    /*!
+     * @return returns the score of the city
+     */
+    float getScore() const;
+
 private:
+    /*!
+    * geeft de neighbourhood van een cell terug
+    * @param row rij van de cell
+    * @param col kolom van de cell
+    * @return geeft een vector van de cellen terug van linksboven in klokwijze manier
+    * REQUIRE(0 <= row && row < width, "Row is out of bounds!");
+    * REQUIRE(0 <= column && column < height, "Column is out of bounds!");
+    */
+    int getNeighbourhoodValue(int row, int col);
+
+    /*!
+    * geeft de neighbourhood van een cell terug
+    * @param row rij van de cell
+    * @param col kolom van de cell
+     * @param map: map van de Estates
+    * @return geeft een vector van de cellen terug van linksboven in klokwijze manier
+    * REQUIRE(0 <= row && row < width, "Row is out of bounds!");
+    * REQUIRE(0 <= column && column < height, "Column is out of bounds!");
+    */
+    static int getNeighbourhoodValue(int row, int col, const std::vector<std::vector<EStates>>& map);
+
     int width;
     int height;
     std::vector<Cell*> matrix;
     std::string rules;
     MainWindow* w;
+    std::pair<int, int> main_street;
+    bool qt;
 };
 
 #endif //TA_CELLULAIREAUTOMAAT_H
