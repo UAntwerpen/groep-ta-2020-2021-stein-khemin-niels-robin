@@ -167,10 +167,8 @@ bool Cell::isConnectedTo(int row, int col, std::vector<std::pair<int,int>>* road
         if (std::find(roads->begin(), roads->end(), std::pair<int,int>((*it)->row, (*it)->col)) == roads->end()) {
             roads->push_back(std::pair<int,int>((*it)->row, (*it)->col));
             if ((*it)->isConnectedTo(row, col, roads)) {
-                if(roads != nullptr){
-                    delete roads;
-                    roads = nullptr;
-                }
+                delete roads;
+                roads = nullptr;
                 return true;
             }
         }
