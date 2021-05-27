@@ -14,13 +14,20 @@
 using namespace std;
 int main(int argc, char *argv[]){
     QApplication a(argc, argv);
-    GeneticAlgorith algo;
+//    GeneticAlgorith algo;
+//
+//    Genome<GENOME_SIZE> rule = algo.run(200);
+//    string s;
+//    for(char c: rule){
+//        s += c;
+//    }
 
-    Genome<GENOME_SIZE> rule = algo.run(10);
     string s;
-    for(char c: rule){
-        s += c;
+    std::ifstream file("149.txt", std::ifstream::binary);
+    while (file.good()){
+        s += std::to_string(file.get());
     }
+
     CellulaireAutomaat A(10,10, s);
     A.addMainStreet(0, 5);
     A.draw();

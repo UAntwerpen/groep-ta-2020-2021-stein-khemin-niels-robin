@@ -99,7 +99,7 @@ public:
     /*
      * Controleert of huidige cell is verbonden met de weg op locatie row, col
      */
-    bool isConnectedTo(int row, int col,  std::vector<std::pair<int,int>>* roads = nullptr);
+    bool isConnectedTo(int row, int col,  std::vector<std::pair<int,int>>* roads = nullptr, bool main = true);
 
     std::vector<bool> getNeighborsRoads();
 

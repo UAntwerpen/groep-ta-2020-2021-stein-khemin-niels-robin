@@ -9,19 +9,17 @@
 float runSimulation(const std::string& rules){
     int it = 0;
     int max = 10;
-    float total_score = 0;
     CellulaireAutomaat automaat(10, 10, rules, false);
     automaat.addMainStreet(0, 5);
+    float prev_score = automaat.getScore();
 //    QApplication::exec();
-    while (it < max){
+    while (!it || prev_score != automaat.getScore()){
+        prev_score = automaat.getScore();
         automaat.updateRules();
         automaat.updateCells();
-        if (it > 5)
-            total_score += automaat.getScore();
-        automaat.draw();
         it++;
     }
-    return total_score / (max + 1);
+    return automaat.getScore();
 }
 
 #endif //TA_CITYSIMULATION_H

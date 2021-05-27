@@ -8,6 +8,7 @@
 #include <string>
 #include <iostream>
 #include <map>
+#include <queue>
 
 #include "Cell.h"
 #include "MainWindow.h"
@@ -141,6 +142,8 @@ private:
     */
     static int getNeighbourhoodValue(int row, int col, const std::vector<std::vector<EStates>>& map);
 
+    void updateRulesHelper(int row, int col);
+
     int width;
     int height;
     std::vector<Cell*> matrix;
@@ -148,6 +151,8 @@ private:
     MainWindow* w;
     std::pair<int, int> main_street;
     bool qt;
+    std::vector<std::pair<int, int>> seen_cells;
+    std::vector<std::pair<int, int>> branches;
 };
 
 #endif //TA_CELLULAIREAUTOMAAT_H
