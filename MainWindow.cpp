@@ -3,8 +3,8 @@
 //
 
 #include "MainWindow.h"
-#include <iostream>
 #include <string>
+#include "lib/DesignByContract.h"
 
 using namespace std;
 
@@ -12,6 +12,8 @@ using namespace std;
 MainWindow::MainWindow(int w, int h, CellulaireAutomaat *cellulaireAutomaat) {
     width = w;
     height = h;
+    REQUIRE(1 < width, "Width is too small(must be at least 2)!");
+    REQUIRE(1 < height, "Height is too small(must be at least 2)!");
     c = cellulaireAutomaat;
     scene = new QGraphicsScene();
     drawGrid(w, h);
@@ -41,58 +43,29 @@ MainWindow::MainWindow(int w, int h, CellulaireAutomaat *cellulaireAutomaat) {
     dayint = 0;
     day = daytext;
 
-    QPushButton* button = new QPushButton();
-    button->setText("Next day");
-    button->setGeometry(30,100,200,50);
-    connect(button, &QPushButton::released, this, &MainWindow::temporaryNextDay);
-
     QPushButton* pauseBtn = new QPushButton();
     pauseBtn->setText("Pause");
-    pauseBtn->setGeometry(30,160,200,50);
+    pauseBtn->setGeometry(30,80,200,50);
     pauseButton = pauseBtn;
     connect(pauseBtn, &QPushButton::released, this, &MainWindow::pressedPause);
 
 
     QPushButton* zoomOutBtn = new QPushButton();
     zoomOutBtn->setText("-");
-    zoomOutBtn->setGeometry(30,220,90,50);
+    zoomOutBtn->setGeometry(30,140,90,50);
     connect(zoomOutBtn, &QPushButton::released, this, &MainWindow::zoomOut);
 
     QPushButton* zoomInBtn = new QPushButton();
     zoomInBtn->setText("+");
-    zoomInBtn->setGeometry(140,220,90,50);
+    zoomInBtn->setGeometry(140,140,90,50);
     connect(zoomInBtn, &QPushButton::released, this, &MainWindow::zoomIn);
 
     settingsDock->layout()->addWidget(daytext);
-    settingsDock->layout()->addWidget(button);
     settingsDock->layout()->addWidget(pauseBtn);
     settingsDock->layout()->addWidget(zoomOutBtn);
     settingsDock->layout()->addWidget(zoomInBtn);
 
 }
-
-void MainWindow::temporaryNextDay(){
-    dayint++;
-    string str = "day: "+ to_string(dayint);
-    QString time = QString::fromStdString(str);
-    day->setText(time);
-    c->updateRules();
-}
-
-void MainWindow::pressedPause(){
-    pause = true;
-    pauseButton->setText("Resume");
-    disconnect(pauseButton, &QPushButton::released, this, &MainWindow::pressedPause);
-    connect(pauseButton, &QPushButton::released, this, &MainWindow::pressedResume);
-}
-
-void MainWindow::pressedResume(){
-    pause = false;
-    pauseButton->setText("Pause");
-    disconnect(pauseButton, &QPushButton::released, this, &MainWindow::pressedResume);
-    connect(pauseButton, &QPushButton::released, this, &MainWindow::pressedPause);
-}
-
 
 void MainWindow::updateRoadUsers() {
     //clearRoadUsers();
@@ -125,6 +98,15 @@ void MainWindow::addDay() {
     day->setText(time);
 }
 
+bool MainWindow::getPause(){
+    return pause;
+}
+
+MainWindow::~MainWindow() {
+    clearBuildings();
+    clearRoadUsers();
+    clearWalls();
+}
 
 void MainWindow::drawTile(int row, int col, int rot, const std::string pixelart) {
     QString filename = pixelart.c_str();
@@ -201,6 +183,66 @@ void MainWindow::addPedestrian(int row, int col, int rot, const std::string pixe
     roadUsers.push_back(item);
 }
 
+void MainWindow::pressedPause(){
+    pause = true;
+    pauseButton->setText("Resume");
+    disconnect(pauseButton, &QPushButton::released, this, &MainWindow::pressedPause);
+    connect(pauseButton, &QPushButton::released, this, &MainWindow::pressedResume);
+}
+
+void MainWindow::pressedResume(){
+    pause = false;
+    pauseButton->setText("Pause");
+    disconnect(pauseButton, &QPushButton::released, this, &MainWindow::pressedResume);
+    connect(pauseButton, &QPushButton::released, this, &MainWindow::pressedPause);
+}
+
+void MainWindow::clearBuildings() {
+    for (auto it = buildings.begin(); it != buildings.end(); it++) {
+        delete *it;
+    }
+    buildings = {};
+}
+
+void MainWindow::clearRoadUsers() {
+    for (auto it = roadUsers.begin(); it != roadUsers.end(); it++) {
+        delete *it;
+    }
+    roadUsers = {};
+}
+
+void MainWindow::clearWalls() {
+    for (auto it = walls.begin(); it != walls.end(); it++) {
+        delete *it;
+    }
+    walls = {};
+}
+
+void MainWindow::zoomOut() {
+    zoomTile/=2;
+    updateAll();
+}
+
+void MainWindow::zoomIn() {
+    zoomTile*=2;
+    updateAll();
+}
+
+void MainWindow::addWalls(int _width, int _height){
+    drawTile(-1,-1, 0, "../PixelArt/Border_hoek.png");
+    drawTile(-1,_width, 1, "../PixelArt/Border_hoek.png");
+    drawTile(_height,_width, 2, "../PixelArt/Border_hoek.png");
+    drawTile(_height,-1, 3, "../PixelArt/Border_hoek.png");
+    for(int  i = 0; i < _width; i++){
+        drawTile(-1,i, 0, "../PixelArt/Border_lang.png");
+        drawTile(_height,i, 2, "../PixelArt/Border_lang.png");
+    }
+    for(int  i = 0; i < _height; i++){
+        drawTile(i,-1, 3, "../PixelArt/Border_lang.png");
+        drawTile(i,_width, 1, "../PixelArt/Border_lang.png");
+    }
+}
+
 void MainWindow::drawGrid(int _width, int _height) {
     addWalls(_width, _height);
     for (int i = 0; i < _width; i++) {
@@ -251,59 +293,10 @@ void MainWindow::drawGrid(int _width, int _height) {
     }
 }
 
-void MainWindow::addWalls(int _width, int _height){
-    drawTile(-1,-1, 0, "../PixelArt/Border_hoek.png");
-    drawTile(-1,_width, 1, "../PixelArt/Border_hoek.png");
-    drawTile(_height,_width, 2, "../PixelArt/Border_hoek.png");
-    drawTile(_height,-1, 3, "../PixelArt/Border_hoek.png");
-    for(int  i = 0; i < _width; i++){
-        drawTile(-1,i, 0, "../PixelArt/Border_lang.png");
-        drawTile(_height,i, 2, "../PixelArt/Border_lang.png");
-    }
-    for(int  i = 0; i < _height; i++){
-        drawTile(i,-1, 3, "../PixelArt/Border_lang.png");
-        drawTile(i,_width, 1, "../PixelArt/Border_lang.png");
-    }
-}
-
-void MainWindow::clearBuildings() {
-    for (auto it = buildings.begin(); it != buildings.end(); it++) {
-        delete *it;
-    }
-    buildings = {};
-}
-
-void MainWindow::clearRoadUsers() {
-    for (auto it = roadUsers.begin(); it != roadUsers.end(); it++) {
-        delete *it;
-    }
-    roadUsers = {};
-}
-
-void MainWindow::clearWalls() {
-    for (auto it = walls.begin(); it != walls.end(); it++) {
-        delete *it;
-    }
-    walls = {};
-}
-
-MainWindow::~MainWindow() {
-    clearBuildings();
-    clearRoadUsers();
-    clearWalls();
-}
-
-bool MainWindow::getPause(){
-    return pause;
-}
 
 
-void MainWindow::zoomOut() {
-    zoomTile/=2;
-    updateAll();
-}
 
-void MainWindow::zoomIn() {
-    zoomTile*=2;
-    updateAll();
-}
+
+
+
+
