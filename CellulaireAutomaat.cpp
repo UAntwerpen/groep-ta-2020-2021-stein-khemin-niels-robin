@@ -25,14 +25,9 @@ CellulaireAutomaat::CellulaireAutomaat(int width, int height, const std::string&
         std::cerr << "couldn't open file!" << std::endl;
     }
     file.close();
-    //w = nullptr;
-    w = new MainWindow(width, height, this);
-    //draw();
-    w->show();
 }
 
 CellulaireAutomaat::CellulaireAutomaat(const std::string &filename) {
-    w = nullptr;
     std::ifstream file(filename);
     std::string line;
     bool map = false;
@@ -88,7 +83,6 @@ CellulaireAutomaat::~CellulaireAutomaat() {
     std::string filename = ss.str() + ".txt";
 
     std::remove(filename.c_str());
-    delete w;
 }
 
 Cell* CellulaireAutomaat::operator()(int row, int column) const {
@@ -160,7 +154,6 @@ void CellulaireAutomaat::updateRules() {
             changeCell(row, col, new_cell);
         }
     }
-    w->updateAll();
 }
 
 void CellulaireAutomaat::updateCells() {

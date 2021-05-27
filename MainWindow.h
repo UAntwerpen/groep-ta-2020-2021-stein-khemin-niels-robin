@@ -5,7 +5,6 @@
 #ifndef TA_MAINWINDOW_H
 #define TA_MAINWINDOW_H
 
-#include <string>
 #include <QMainWindow>
 #include <QGraphicsScene>
 #include <QGraphicsView>
@@ -25,6 +24,8 @@ public:
 
     virtual ~MainWindow();
 
+    bool getPause();
+
 
 
     //private maken
@@ -32,8 +33,8 @@ public:
     void addCar(int row, int col, int rotation, const std::string pixelart);
     void addPedestrian(int row, int col, int rotation, const std::string pixelart);
     void temporaryNextDay();
-    void pause();
-    void resume();
+    void pressedPause();
+    void pressedResume();
 private slots:
     void clicked();
 private:
@@ -65,6 +66,7 @@ private:
     QPushButton* pauseButton;
     QLabel* day;
     int dayint;
+    bool pause = false;
 };
 
 #endif //TA_MAINWINDOW_H

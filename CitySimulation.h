@@ -8,11 +8,12 @@
 #include <string>
 #include <QTime>
 #include "CellulaireAutomaat.h"
+#include "MainWindow.h"
 #include <iostream>
 
 class CitySimulation {
 public:
-    void delay();
+    void delay(double time);
     float runSimulation(const std::string &rules);
 };
 

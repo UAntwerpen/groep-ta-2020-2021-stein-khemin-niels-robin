@@ -3,7 +3,6 @@
 //
 
 #include "MainWindow.h"
-#include <QtWidgets>
 #include <iostream>
 #include <string>
 
@@ -51,7 +50,7 @@ MainWindow::MainWindow(int w, int h, CellulaireAutomaat *cellulaireAutomaat) {
     pauseBtn->setText("Pause");
     pauseBtn->setGeometry(30,160,200,50);
     pauseButton = pauseBtn;
-    connect(pauseBtn, &QPushButton::released, this, &MainWindow::pause);
+    connect(pauseBtn, &QPushButton::released, this, &MainWindow::pressedPause);
 
 
     QPushButton* zoomOutBtn = new QPushButton();
@@ -80,25 +79,23 @@ void MainWindow::temporaryNextDay(){
     c->updateRules();
 }
 
-void MainWindow::pause(){
-    //TODO pause in CitySimulation.h
-    cout<<"Paused"<<endl;
+void MainWindow::pressedPause(){
+    pause = true;
     pauseButton->setText("Resume");
-    disconnect(pauseButton, &QPushButton::released, this, &MainWindow::pause);
-    connect(pauseButton, &QPushButton::released, this, &MainWindow::resume);
+    disconnect(pauseButton, &QPushButton::released, this, &MainWindow::pressedPause);
+    connect(pauseButton, &QPushButton::released, this, &MainWindow::pressedResume);
 }
 
-void MainWindow::resume(){
-    //TODO resume in CitySimulation.h
-    cout<<"Resumed"<<endl;
+void MainWindow::pressedResume(){
+    pause = false;
     pauseButton->setText("Pause");
-    disconnect(pauseButton, &QPushButton::released, this, &MainWindow::resume);
-    connect(pauseButton, &QPushButton::released, this, &MainWindow::pause);
+    disconnect(pauseButton, &QPushButton::released, this, &MainWindow::pressedResume);
+    connect(pauseButton, &QPushButton::released, this, &MainWindow::pressedPause);
 }
 
 
 void MainWindow::updateRoadUsers() {
-    clearRoadUsers();
+    //clearRoadUsers();
     for (int x = 0; x < width; x++) {
         for (int y = 0; y < height; y++) {
             //TODO fix enkel roadusers
@@ -109,24 +106,23 @@ void MainWindow::updateRoadUsers() {
 }
 
 void MainWindow::updateAll() {
-    dayint++;
-    string str = "day: "+ to_string(dayint);
-    QString time = QString::fromStdString(str);
-    day->setText(time);
     clearWalls();
     clearBuildings();
     drawGrid(width,height);
-    for (int x = 0; x < width; x++) {
+    /*for (int x = 0; x < width; x++) {
         for (int y = 0; y < height; y++) {
             std::pair<int, std::string> pixart = (*c)(x,y)->getPixelArt();
             drawTile(x,y,pixart.first, pixart.second);
         }
-    }
+    }*/
     updateRoadUsers();
 }
 
 void MainWindow::addDay() {
-
+    dayint++;
+    string str = "day: "+ to_string(dayint);
+    QString time = QString::fromStdString(str);
+    day->setText(time);
 }
 
 
@@ -209,7 +205,7 @@ void MainWindow::drawGrid(int _width, int _height) {
     addWalls(_width, _height);
     for (int i = 0; i < _width; i++) {
         for (int j = 0; j < _height; j++) {
-            /*drawTile(i, j, 0, "../PixelArt/Default.png");
+            //drawTile(i, j, 0, "../PixelArt/Default.png");
             int random = rand() % 14;
             int randomangle = rand() % 4;
             if (random == 0) {
@@ -251,7 +247,6 @@ void MainWindow::drawGrid(int _width, int _height) {
             }  else if(random == 13){
                 drawTile(i, j, 0, "../PixelArt/Park_Broken.png");
             }
-            */
         }
     }
 }
@@ -296,6 +291,10 @@ MainWindow::~MainWindow() {
     clearBuildings();
     clearRoadUsers();
     clearWalls();
+}
+
+bool MainWindow::getPause(){
+    return pause;
 }
 
 
