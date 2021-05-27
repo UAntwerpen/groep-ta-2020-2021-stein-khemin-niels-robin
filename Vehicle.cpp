@@ -15,6 +15,9 @@ Vehicle::Vehicle(Cell *location, Cell *g) : Transport(location, g) {
 }
 
 void Vehicle::setPeople(vector<Citizen *> pass) {
+    for (Citizen* citizen : pass) {
+        citizen->setLocation(this->getLocation());
+    }
     people = std::move(pass);
 }
 
@@ -27,6 +30,7 @@ Citizen *Vehicle::operator[](unsigned int ind) {
 }
 
 void Vehicle::addPerson(Citizen *person) {
+    person->setLocation(this->getLocation());
     people.push_back(person);
 }
 
@@ -41,13 +45,13 @@ void Vehicle::update(CellulaireAutomaat &city) {
 
     pair<int, int> currPos = this->getLocation()->getPos();
     pair<int, int> newPos = pair<int, int>(currPos.first + dy, currPos.second + dx);
-    Cell& newLoc = *city(newPos.first, newPos.second);
+    Cell* newLoc = city(newPos.first, newPos.second);
 
-    this->setLocation(&newLoc);
+    this->setLocation(newLoc);
 
     // locatie van alle inzittende mee aanpassen.
     for (Citizen* citizen : this->getPeople()){
-        citizen->setLocation(&newLoc);
+        citizen->setLocation(newLoc);
     }
 
     this->increaseProgress();

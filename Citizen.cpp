@@ -20,7 +20,3 @@ void Citizen::setHappiness(float h) {
 EStates Citizen::getState() const {
     return ECitizen;
 }
-
-void Citizen::updateAsPassenger(Cell *cell) {
-    this->setLocation(cell);
-}
