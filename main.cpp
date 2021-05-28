@@ -13,7 +13,6 @@
 #include "Vehicle.h"
 #include "Citizen.h"
 
-using namespace std;
 int main(int argc, char *argv[]){
 
     CellulaireAutomaat* map = new CellulaireAutomaat("Maps/map001.txt");
@@ -32,8 +31,13 @@ int main(int argc, char *argv[]){
 
     car->calculateRoute();
 
-    cout << car->getRoute() << endl;
-    cout << "======" << endl;
+    std::cout << car->getRoute() << std::endl;
+    std::cout << "=========================" << std::endl;
+
+    while (car->getRoute() != "") {
+        car->update(*map);
+        std::cout << car->getLocation()->getPos().first << ' ' << car->getLocation()->getPos().second << std::endl;
+    }
 
 
 //    QApplication a(argc, argv);

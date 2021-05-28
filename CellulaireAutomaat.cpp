@@ -69,13 +69,17 @@ CellulaireAutomaat::CellulaireAutomaat(const std::string &filename) {
                         changeCell(row, col, new StoreZone(row, col, this));
                         break;
                     case 'V':
-                    default:
                         changeCell(row, col, new Vegetation(row, col, this));
+                        break;
+                    default:
                         break;
                 }
                 ++col;
             }
             ++row;
+        }
+        if (line.empty()) {
+            break;
         }
         std::cout << line << std::endl;
     }
@@ -96,7 +100,7 @@ CellulaireAutomaat::~CellulaireAutomaat() {
 Cell* CellulaireAutomaat::operator()(int row, int column) const {
     if (0 > row || row > width || 0 > column || column > height)
         std::cout << "error";
-    REQUIRE(0 <= row && row < width, "Row with is out of bounds!");
+    REQUIRE(0 <= row && row < width, "Row width is out of bounds!");
     REQUIRE(0 <= column && column < height, "Column is out of bounds!");
     return matrix[row * height + column];
 }
