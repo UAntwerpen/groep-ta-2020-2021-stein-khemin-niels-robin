@@ -60,4 +60,6 @@ void PFCell::update() {
     //* Does Nothing *//
 }
 
+PFCell::~PFCell() = default;
+
 

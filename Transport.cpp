@@ -51,6 +51,7 @@ PFMask *Transport::getMask() {
 }
 
 void Transport::setMask(PFMask *m) {
+    delete mask;
     mask = m;
 }
 

@@ -27,6 +27,8 @@ public:
      */
     PFMask(CellulaireAutomaat& cellAutomaat, Cell* goal, bool isCar = false);
 
+    ~PFMask();
+
     /**
      * Geeft de width van de PFMask terug.
      *

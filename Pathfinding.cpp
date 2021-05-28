@@ -133,3 +133,13 @@ void PFMask::generateMask() {
         // ** Does nothing here ** //
     }
 }
+
+PFMask::~PFMask() {
+
+    for (std::vector<PFCell*>& row : mask) {
+        for (PFCell* cell : row) {
+            delete cell;
+        }
+    }
+
+}

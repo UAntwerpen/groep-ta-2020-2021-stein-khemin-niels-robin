@@ -30,6 +30,8 @@ public:
      */
     PFCell(bool passable, int row, int col, bool goal = false);
 
+    ~PFCell() override;
+
     /**
      * Geeft terug of de PFCell begaanbaar is, of niet
      *
