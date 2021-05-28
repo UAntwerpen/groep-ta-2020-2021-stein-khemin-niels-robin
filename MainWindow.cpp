@@ -5,6 +5,8 @@
 #include "MainWindow.h"
 #include <string>
 #include "lib/DesignByContract.h"
+#include "Vehicle.h"
+#include "Citizen.h"
 
 using namespace std;
 

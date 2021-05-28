@@ -11,8 +11,6 @@
 #include <QtWidgets>
 #include "Cell.h"
 #include "CellulaireAutomaat.h"
-#include "Vehicle.h"
-#include "Citizen.h"
 
 class MainWindow: public QMainWindow {
 public:
