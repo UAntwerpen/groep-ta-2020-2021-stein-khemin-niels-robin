@@ -26,7 +26,7 @@ float CitySimulation::runSimulationGUI(const std::string &rules){
 }
 
 void CitySimulation::delay(double time) {
-    QTime dieTime = QTime::currentTime().addSecs(time);
+    QTime dieTime = QTime::currentTime().addSecs(std::round(time));
     while (QTime::currentTime() < dieTime)
         QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
 }
