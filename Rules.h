@@ -27,12 +27,12 @@ public:
     }
 
     void mutate(std::mt19937& mt){
-        std::uniform_int_distribution<int> dist_pos(0, GENOME_SIZE);
+        std::uniform_int_distribution<int> dist_pos(0, GENOME_SIZE - 1);
         std::uniform_int_distribution<int> dist_switch(0, 4);
-        std::uniform_int_distribution<int> dist_times(0, 7);
+        std::uniform_int_distribution<int> dist_times(0, GENOME_SIZE * 0.001);
 
         for (int _ = 0, end = dist_times(mt); _ < end; _++){
-            (this)[dist_pos(mt)] = static_cast<EStates>(dist_switch(mt));
+            (*this)[dist_pos(mt)] = static_cast<EStates>(dist_switch(mt));
         }
     }
 
@@ -102,7 +102,9 @@ using Weights = std::array<double, POPULATION_SIZE>;
 class GeneticAlgorith{
 public:
 
-    GeneticAlgorith(int genomeSize, int populationSize);
+    GeneticAlgorith();
+
+    virtual ~GeneticAlgorith();
 
     Genome<GENOME_SIZE>* generateGenome();
 

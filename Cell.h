@@ -103,7 +103,7 @@ public:
     /*
      * Controleert of huidige cell is verbonden met de weg op locatie row, col
      */
-    bool isConnectedTo(int row, int col,  std::vector<std::pair<int,int>>* roads = nullptr);
+    bool isConnectedTo(int row, int col,  std::vector<std::pair<int,int>>* roads = nullptr, bool main = true);
 
     std::vector<bool> getNeighborsRoads();
 
@@ -161,6 +161,8 @@ public:
     std::vector<Vehicle*> getVehicles() override;
 
     std::vector<Citizen*> getCitizen() override;
+
+    std::vector<Citizen*> getCitizen() const {return std::vector<Citizen*>();};
 
     /*!
      * voeg auto toe aan cell

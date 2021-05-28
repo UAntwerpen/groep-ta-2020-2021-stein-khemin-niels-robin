@@ -1,11 +1,11 @@
+#include <algorithm>
 
 #include "lib/DesignByContract.h"
 #include "CellulaireAutomaat.h"
 #include "Lib.h"
 #include "Cell.h"
-#include <iostream>
 
-CellulaireAutomaat::CellulaireAutomaat(int width, int height, const std::string& rules) : width(width), height(height), rules(rules) {
+CellulaireAutomaat::CellulaireAutomaat(int width, int height, const std::string& rules, bool qt) : width(width), height(height), rules(rules), qt(qt) {
     REQUIRE(1 < width, "Width is too small(must be at least 2)!");
     REQUIRE(1 < height, "Height is too small(must be at least 2)!");
     matrix = std::vector<Cell*>(width * height);
@@ -15,17 +15,19 @@ CellulaireAutomaat::CellulaireAutomaat(int width, int height, const std::string&
         }
     }
 
-    const void * address = static_cast<const void*>(this);
-    std::stringstream ss;
-    ss << address;
-    std::string name = ss.str();
-    std::ofstream file(name + ".txt", std::ofstream ::trunc);
-    if (file.is_open()) {
-        file << rules;
-    } else {
-        std::cerr << "couldn't open file!" << std::endl;
+    if (qt) {
+        const void *address = static_cast<const void *>(this);
+        std::stringstream ss;
+        ss << address;
+        std::string name = ss.str();
+        std::ofstream file(name + ".txt", std::ofstream::trunc|std::ofstream::binary);
+        if (file.is_open()) {
+            file << rules;
+        } else {
+            std::cerr << "couldn't open file!" << std::endl;
+        }
+        file.close();
     }
-    file.close();
 }
 
 CellulaireAutomaat::CellulaireAutomaat(const std::string &filename) {
@@ -39,7 +41,6 @@ CellulaireAutomaat::CellulaireAutomaat(const std::string &filename) {
             size_t xpos = line.find('x');
             int wi = std::stoi(line.substr(4, xpos - 4));
             int he = std::stoi(line.substr(7, line.length()));
-
             width = wi;
             height = he;
             matrix = std::vector<Cell*>(width * height);
@@ -64,17 +65,13 @@ CellulaireAutomaat::CellulaireAutomaat(const std::string &filename) {
                         changeCell(row, col, new StoreZone(row, col, this));
                         break;
                     case 'V':
-                        changeCell(row, col, new Vegetation(row, col, this));
-                        break;
                     default:
+                        changeCell(row, col, new Vegetation(row, col, this));
                         break;
                 }
                 ++col;
             }
             ++row;
-        }
-        if (line.empty()) {
-            break;
         }
         std::cout << line << std::endl;
     }
@@ -83,12 +80,14 @@ CellulaireAutomaat::CellulaireAutomaat(const std::string &filename) {
 }
 
 CellulaireAutomaat::~CellulaireAutomaat() {
-    const void * address = static_cast<const void*>(this);
+/*    const void * address = static_cast<const void*>(this);
     std::stringstream ss;
     ss << address;
     std::string filename = ss.str() + ".txt";
 
-    std::remove(filename.c_str());
+    std::remove(filename.c_str());*/
+    for (const auto& cell: matrix)
+        delete cell;
 }
 
 Cell* CellulaireAutomaat::operator()(int row, int column) const {
@@ -139,51 +138,55 @@ int CellulaireAutomaat::getNeighbourhoodValue(int row, int col) {
     return value;
 }
 
+int CellulaireAutomaat::getNeighbourhoodValue(int row, int col, const std::vector<std::vector<EStates>>& map) {
+    REQUIRE(0 <= row && row < map.size(), "Row is out of bounds!");
+    REQUIRE(0 <= col && col < map[0].size(), "Column is out of bounds!");
+    int value = 0;
+    static int powers[8] = {static_cast<int>(pow(5, 7)), static_cast<int>(pow(5, 6)), static_cast<int>(pow(5, 5)),
+                            static_cast<int>(pow(5, 4)), static_cast<int>(pow(5, 3)),
+                            static_cast<int>(pow(5, 2)), 5, 1};
+    if (0 <= row - 1 && 0 <= col - 1)
+        value += map[row - 1][col - 1] * powers[0];
+    if (0 <= row - 1)
+        value += map[row - 1][col] * powers[1];
+    if (0 <= row - 1 && col + 1 < map[0].size())
+        value += map[row - 1][col + 1] * powers[2];
+    if (col + 1 < map[0].size())
+        value += map[row][col + 1] * powers[3];
+    if (row + 1 < map.size() && col + 1 < map[0].size())
+        value += map[row + 1][col + 1] * powers[4];
+    if (row + 1 < map.size())
+        value += map[row + 1][col] * powers[5];
+    if (row + 1 < map.size() && 0 <= col - 1)
+        value += map[row + 1][col - 1] * powers[6];
+    if (0 <= col - 1)
+        value += map[row][col - 1] * powers[7];
+    return value;
+}
+
 void CellulaireAutomaat::changeCell(int row, int column, Cell *to) {
     REQUIRE(0 <= row && row < height, "Row is out of bounds!");
     REQUIRE(0 <= column && column < width, "Column is out of bounds!");
     REQUIRE(to != nullptr, "De gegeven cell is een nullptr!");
-    delete matrix[row * height + column];
-    //matrix[row * height + column] = to;
-    matrix[(row) * height + (column)] = to;
+    delete matrix[row * width + column];
+    matrix[row * width + column] = to;
 }
 
 void CellulaireAutomaat::updateRules() {
-    CellFactorySingleton& factory = CellFactorySingleton::getInstance();
-    for (int col = 0; col < width; col++) {
-        for (int row = 0; row < height; row++) {
-            EStates state = static_cast<EStates>(rules[getNeighbourhoodValue(row, col)]);
-            if (state == (*this)(row, col)->getState()) {
-                continue;
-            }
-            switch (state) {
-                case EVegetation:
-                    changeCell(row, col, new Vegetation(*(*this)(row, col)));
-                    break;
-                case ERoad:
-                    changeCell(row, col, new Road(*(*this)(row, col)));
-                    break;
-                case EResidentialZone:
-                    changeCell(row, col, new ResidentialZone(*(*this)(row, col)));
-                    break;
-                case EIndustrialZone:
-                    changeCell(row, col, new IndustrialZone(*(*this)(row, col)));
-                    break;
-                case EStoreZone:
-                    changeCell(row, col, new StoreZone(*(*this)(row, col)));
-                    break;
-            }
-        }
+    for (const auto& pos: branches) {
+        updateRulesHelper(pos.first, pos.second);
     }
 }
 
 void CellulaireAutomaat::updateCells() {
     for (int col = 0; col < width; col++) {
         for (int row = 0; row < height; row++) {
+            if (!(*this)(row, col)->isConnectedTo(main_street.first, main_street.second) ){
+                changeCell(row, col, new Vegetation(*(*this)(row, col)));
+            }
             (*this)(row, col)->update();
         }
     }
-    w->updateAll();
 }
 
 int CellulaireAutomaat::count(const EStates &state) const {
@@ -259,3 +262,65 @@ std::map<EStates, int> CellulaireAutomaat::count_all() const {
             std::cout << std::endl;
         }*/
     }
+
+void CellulaireAutomaat::addMainStreet(int row, int col) {
+    REQUIRE(0 <= row && row < height, "Row is out of bounds!");
+    REQUIRE(0 <= col && col < width, "Column is out of bounds!");
+    changeCell(row, col, new Road(row, col, this));
+    main_street = {row, col};
+    branches.emplace_back(std::make_pair(row, col));
+    seen_cells.emplace_back(std::make_pair(row, col));
+    draw();
+}
+
+float CellulaireAutomaat::getScore() const {
+    std::map<EStates, int> count_ = count_all();
+    return count_[EIndustrialZone] + count_[EStoreZone] + count_[EResidentialZone] * 2 + count_[ERoad] * 1.5 - count_[EVegetation];
+}
+
+void CellulaireAutomaat::updateRulesHelper(int row, int col) {
+    CellFactorySingleton& factory = CellFactorySingleton::getInstance();
+    std::vector<std::vector<EStates>> old;
+    old.resize(3);
+    for (int drow = 0; drow <= 2; ++drow) {
+        old[drow].resize(3);
+        for (int dcol = 0; dcol <= 2; ++dcol) {
+            if (row + drow - 1 < 0 || row + drow - 1 >= height || col + dcol - 1 < 0 || col + dcol - 1 >= width)
+                old[drow][dcol] = EVegetation;
+            else
+                old[drow][dcol] = (*this)(row + drow - 1, col + dcol - 1)->getState();
+        }
+    }
+    for (int dcol = -1; dcol <= 1; ++dcol) {
+        for (int drow = -1; drow <= 1; ++drow) {
+            if (row + drow < 0 || row + drow >= height || col + dcol < 0 || col + dcol >= width) continue;
+            if (std::find(seen_cells.begin(), seen_cells.end(), std::make_pair(row + drow, col + dcol)) != seen_cells.end()) continue;
+            seen_cells.emplace_back(std::make_pair(row + drow, col + dcol));
+
+            EStates state = static_cast<EStates>(rules[getNeighbourhoodValue(drow + 1, dcol + 1, old)]);
+            if (state == old[drow + 1][dcol + 1]) {
+                continue;
+            }
+            switch (state) {
+                case EVegetation:
+                    changeCell(row + drow, col + dcol, new Vegetation(*(*this)(row + drow, col + dcol)));
+                    break;
+                case ERoad:
+                    changeCell(row + drow, col + dcol, new Road(*(*this)(row + drow, col + dcol)));
+                    branches.emplace_back(std::make_pair(row + drow + drow, col + dcol + dcol));
+                    break;
+                case EResidentialZone:
+                    changeCell(row + drow, col + dcol, new ResidentialZone(*(*this)(row + drow, col + dcol)));
+                    break;
+                case EIndustrialZone:
+                    changeCell(row + drow, col + dcol, new IndustrialZone(*(*this)(row + drow, col + dcol)));
+                    break;
+                case EStoreZone:
+                    changeCell(row + drow, col + dcol, new StoreZone(*(*this)(row + drow, col + dcol)));
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+}

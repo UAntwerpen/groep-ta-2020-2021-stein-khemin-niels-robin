@@ -6,14 +6,13 @@
 #include <string>
 #include <QTime>
 #include "CellulaireAutomaat.h"
-#include "MainWindow.h"
 #include <iostream>
 
 class CitySimulation {
 public:
     void delay(double time);
+    float runSimulationGUI(const std::string &rules);
     float runSimulation(const std::string &rules);
 };
-
 
 #endif //TA_CITYSIMULATION_H
