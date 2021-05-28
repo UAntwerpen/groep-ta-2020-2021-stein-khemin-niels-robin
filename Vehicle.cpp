@@ -35,8 +35,8 @@ void Vehicle::addPerson(Citizen *person) {
 }
 
 void Vehicle::update(CellulaireAutomaat &city) {
-    int dx;
-    int dy;
+    int dx = 0;
+    int dy = 0;
 
     if (this->getDirection() == 'N') { dx = 0; dy = -1; }
     if (this->getDirection() == 'E') { dx = 1; dy = 0; }
@@ -55,7 +55,6 @@ void Vehicle::update(CellulaireAutomaat &city) {
     }
 
     this->increaseProgress();
-    this->changeDirection();
 
     // Aangekomen op bestemming;
     if (this->getLocation() == this->getGoal()){

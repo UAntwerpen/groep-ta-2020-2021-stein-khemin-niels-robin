@@ -14,7 +14,7 @@ Transport::Transport() {
 
     mask = new PFMask(0, 0);
     route = "";
-    progress = 0;
+    progress = -1;
     direction = 'N';
 }
 
@@ -24,7 +24,7 @@ Transport::Transport(Cell *loc, Cell *g) {
 
     mask = new PFMask(0, 0);
     route = "";
-    progress = 0;
+    progress = -1;
     direction = 'N';
 }
 
@@ -109,6 +109,7 @@ void Transport::calculateRoute() {
     }
 
     route = result;
+    this->changeDirection();
 }
 
 int Transport::getProgress() const {
@@ -123,10 +124,7 @@ void Transport::setProgress(int i) {
 
 void Transport::increaseProgress(){
     progress += 1;
-
-    if (progress < this->getRoute().size()){
-        this->changeDirection();
-    }
+    this->changeDirection();
 }
 
 char Transport::getDirection() const {
@@ -140,9 +138,9 @@ void Transport::setDirection(char c) {
 }
 
 void Transport::changeDirection() {
-    REQUIRE(not this->getRoute().empty(), "Route is empty when calling changeDirection");
+//    REQUIRE(not this->getRoute().empty(), "Route is empty when calling changeDirection");
 
-    int index = this->getProgress();
+    int index = this->getProgress() + 1;
 
     if (index < this->getRoute().size()) {
         this->setDirection(this->getRoute()[index]);
@@ -153,8 +151,8 @@ void Transport::changeDirection() {
 }
 
 void Transport::update(CellulaireAutomaat& city) {
-    int dx;
-    int dy;
+    int dx = 0;
+    int dy = 0;
 
     if (this->getDirection() == 'N') { dx = 0; dy = -1; }
     if (this->getDirection() == 'E') { dx = 1; dy = 0; }
@@ -167,12 +165,11 @@ void Transport::update(CellulaireAutomaat& city) {
 
     this->setLocation(newLoc);
     this->increaseProgress();
-    this->changeDirection();
 
     // Aangekomen op bestemming;
     if (this->getLocation() == this->getGoal()){
         this->setGoal(nullptr);
-        this->setProgress(0);
+        this->setProgress(-1);
         this->setRoute("");
     }
 }

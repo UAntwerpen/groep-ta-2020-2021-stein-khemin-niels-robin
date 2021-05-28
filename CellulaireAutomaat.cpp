@@ -98,11 +98,9 @@ CellulaireAutomaat::~CellulaireAutomaat() {
 }
 
 Cell* CellulaireAutomaat::operator()(int row, int column) const {
-    if (0 > row || row > width || 0 > column || column > height)
-        std::cout << "error";
-    REQUIRE(0 <= row && row < width, "Row width is out of bounds!");
-    REQUIRE(0 <= column && column < height, "Column is out of bounds!");
-    return matrix[row * height + column];
+    REQUIRE(0 <= row && row < height, "Row with is out of bounds!");
+    REQUIRE(0 <= column && column < width, "Column is out of bounds!");
+    return matrix[row * width + column];
 }
 
 std::vector<Cell *> CellulaireAutomaat::getNeighbourhood(int row, int col) {

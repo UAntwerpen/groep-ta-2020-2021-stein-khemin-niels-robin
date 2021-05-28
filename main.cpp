@@ -34,6 +34,7 @@ int main(int argc, char *argv[]){
     std::cout << car->getRoute() << std::endl;
     std::cout << "=========================" << std::endl;
 
+    std::cout << car->getLocation()->getPos().first << ' ' << car->getLocation()->getPos().second << std::endl;
     while (car->getRoute() != "") {
         car->update(*map);
         std::cout << car->getLocation()->getPos().first << ' ' << car->getLocation()->getPos().second << std::endl;
