@@ -80,7 +80,7 @@ void MainWindow::updateRoadUsers() {
                 }
                 vector<Citizen*> citizen = cell->getCitizen();
                 for(auto it = citizen.begin(); it != citizen.end(); it++){
-                    //addPedestrian(x,y,...);
+                    //addPedestrian(x,y,..,(*it)->getPixelart());
                 }
             }
         }

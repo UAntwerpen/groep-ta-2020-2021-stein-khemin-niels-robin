@@ -12,7 +12,6 @@ using namespace std;
 
 class Vehicle : public Transport {
 public:
-    Vehicle();
 
     /**
      * Default constructor

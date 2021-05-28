@@ -9,7 +9,6 @@
 #include "CellulaireAutomaat.h"
 #include "Rules.h"
 #include "Pathfinding.h"
-#include "settingswindow.h"
 #include "CitySimulation.h"
 
 using namespace std;

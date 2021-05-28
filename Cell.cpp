@@ -258,7 +258,7 @@ std::pair<int, std::string> Road::getCorrectRoad(std::vector<bool> &roadConnectP
     }
 }
 
-std::vector<Vehicle *> Road::getVehicles() const {
+std::vector<Vehicle *> Road::getVehicles() {
     return this->vehicles;
 }
 
