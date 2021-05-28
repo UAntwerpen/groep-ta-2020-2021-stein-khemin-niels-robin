@@ -6,9 +6,9 @@
 
 float CitySimulation::runSimulationGUI(const std::string &rules){
     int it = 0;
-    CellulaireAutomaat automaat(10, 10, rules, true);
-    automaat.addMainStreet(0, 5);
-    MainWindow w(10, 10, &automaat);
+    CellulaireAutomaat automaat(25, 25, rules, true);
+    automaat.addMainStreet(0, 12);
+    MainWindow w(25, 25, &automaat);
     w.show();
     float prev_score = automaat.getScore();
     while (!it || prev_score != automaat.getScore()){
