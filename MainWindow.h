@@ -5,6 +5,7 @@
 #ifndef TA_MAINWINDOW_H
 #define TA_MAINWINDOW_H
 
+#include <string>
 #include <QMainWindow>
 #include <QGraphicsScene>
 #include <QGraphicsView>
@@ -20,9 +21,11 @@ public:
 
     void updateAll();
 
+    void addDay();
+
     virtual ~MainWindow();
 
-    void showView();
+
 
     //private maken
     void drawTile(int row, int col, int rotation, const std::string pixelart);
@@ -38,7 +41,6 @@ private:
     void clearRoadUsers();
     void clearBuildings();
     void clearWalls();
-    void scaleTiles(int zoom);
 
     void zoomOut();
     void zoomIn();
@@ -49,9 +51,9 @@ private:
     void drawGrid(int width, int height);
 
     CellulaireAutomaat* c;
-    std::vector<QGraphicsPixmapItem*> RoadUsers;
-    std::vector<QGraphicsPixmapItem*> Buildings;
-    std::vector<QGraphicsPixmapItem*> Walls;
+    std::vector<QGraphicsPixmapItem*> roadUsers;
+    std::vector<QGraphicsPixmapItem*> buildings;
+    std::vector<QGraphicsPixmapItem*> walls;
     QGraphicsScene *scene;
     QGraphicsView *view;
     QVBoxLayout* boxLayout;
@@ -59,8 +61,10 @@ private:
     QDockWidget* cityDock;
     int height;
     int width;
-    int zoomTile = 4;
+    double zoomTile = 2;
     QPushButton* pauseButton;
+    QLabel* day;
+    int dayint;
 };
 
 #endif //TA_MAINWINDOW_H

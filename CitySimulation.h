@@ -2,9 +2,17 @@
 
 #ifndef TA_CITYSIMULATION_H
 #define TA_CITYSIMULATION_H
-
+#include <QApplication>
 #include <string>
+#include <QTime>
 #include "CellulaireAutomaat.h"
+#include <iostream>
+
+class CitySimulation {
+public:
+    void delay();
+    float runSimulation(const std::string &rules);
+};
 
 float runSimulation(const std::string& rules){
     int it = 0;
@@ -21,5 +29,4 @@ float runSimulation(const std::string& rules){
     }
     return automaat.getScore();
 }
-
 #endif //TA_CITYSIMULATION_H

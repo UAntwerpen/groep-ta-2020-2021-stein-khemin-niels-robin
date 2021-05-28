@@ -173,8 +173,8 @@ void CellulaireAutomaat::changeCell(int row, int column, Cell *to) {
     REQUIRE(0 <= row && row < height, "Row is out of bounds!");
     REQUIRE(0 <= column && column < width, "Column is out of bounds!");
     REQUIRE(to != nullptr, "De gegeven cell is een nullptr!");
-    delete matrix[row * height + column];
-    matrix[row * height + column] = to;
+    delete matrix[row * width + column];
+    matrix[row * width + column] = to;
 }
 
 void CellulaireAutomaat::updateRules() {

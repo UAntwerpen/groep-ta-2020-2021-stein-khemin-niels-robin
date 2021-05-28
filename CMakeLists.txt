@@ -35,9 +35,10 @@ add_executable(TA main.cpp CellulaireAutomaat.cpp CellulaireAutomaat.h
         Pathfinding.cpp Pathfinding.h
         Building.cpp Building.h
         MainWindow.cpp MainWindow.h
-        Citizen.cpp
-        Citizen.h
         Template.cpp
-        )
+        CitySimulation.cpp CitySimulation.h
+        settingswindow.cpp
+        settingswindow.h
+        settingswindow.ui)
 
 qt5_use_modules(TA Core Widgets Gui)

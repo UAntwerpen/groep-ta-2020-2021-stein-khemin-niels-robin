@@ -26,6 +26,7 @@ MainWindow::MainWindow(int w, int h, CellulaireAutomaat *cellulaireAutomaat) {
     cityDock->setWidget(view);
     addDockWidget(Qt::RightDockWidgetArea, cityDock);
     view->setDragMode(QGraphicsView::DragMode::ScrollHandDrag);
+    view->setBackgroundBrush(QColor("#4CAF50"));
 
 
     QDockWidget *settingsDock;
@@ -37,40 +38,50 @@ MainWindow::MainWindow(int w, int h, CellulaireAutomaat *cellulaireAutomaat) {
 
     QVBoxLayout *boxLayout = new QVBoxLayout();
 
-    QPushButton *button = new QPushButton();
+    QLabel* daytext = new QLabel("day: 0");
+    daytext->setGeometry(30,30,200,50);
+    dayint = 0;
+    day = daytext;
+
+    QPushButton* button = new QPushButton();
     button->setText("Next day");
-    button->setGeometry(30, 30, 200, 50);
+    button->setGeometry(30,100,200,50);
     connect(button, &QPushButton::released, this, &MainWindow::temporaryNextDay);
-    QPushButton *nextDayBtn = new QPushButton();
+    QPushButton* nextDayBtn = new QPushButton();
     nextDayBtn->setText("Next day");
-    nextDayBtn->setGeometry(30, 30, 200, 50);
+    nextDayBtn->setGeometry(30,30,200,50);
     connect(nextDayBtn, &QPushButton::released, this, &MainWindow::temporaryNextDay);
 
     QPushButton *pauseBtn = new QPushButton();
     pauseBtn->setText("Pause");
-    pauseBtn->setGeometry(30, 80, 200, 50);
+    pauseBtn->setGeometry(30,160,200,50);
     pauseButton = pauseBtn;
     connect(pauseBtn, &QPushButton::released, this, &MainWindow::pause);
 
 
     QPushButton *zoomOutBtn = new QPushButton();
     zoomOutBtn->setText("-");
-    zoomOutBtn->setGeometry(30, 130, 90, 50);
+    zoomOutBtn->setGeometry(30,220,90,50);
     connect(zoomOutBtn, &QPushButton::released, this, &MainWindow::zoomOut);
 
     QPushButton *zoomInBtn = new QPushButton();
     zoomInBtn->setText("+");
-    zoomInBtn->setGeometry(140, 130, 90, 50);
+    zoomInBtn->setGeometry(140,220,90,50);
     connect(zoomInBtn, &QPushButton::released, this, &MainWindow::zoomIn);
 
-    settingsDock->layout()->addWidget(nextDayBtn);
+    settingsDock->layout()->addWidget(daytext);
+    settingsDock->layout()->addWidget(button);
     settingsDock->layout()->addWidget(pauseBtn);
     settingsDock->layout()->addWidget(zoomOutBtn);
     settingsDock->layout()->addWidget(zoomInBtn);
+
 }
 
-void MainWindow::temporaryNextDay() {
-    cout << "Button pushed." << endl;
+void MainWindow::temporaryNextDay(){
+    dayint++;
+    string str = "day: "+ to_string(dayint);
+    QString time = QString::fromStdString(str);
+    day->setText(time);
     c->updateRules();
     c->updateCells();
     std::cout << c->getScore() << std::endl;
@@ -108,7 +119,7 @@ void MainWindow::resume() {
 
 
 void MainWindow::updateRoadUsers() {
-    //clearRoadUsers();
+    clearRoadUsers();
     for (int x = 0; x < width; x++) {
         for (int y = 0; y < height; y++) {
             //TODO fix enkel roadusers
@@ -119,8 +130,13 @@ void MainWindow::updateRoadUsers() {
 }
 
 void MainWindow::updateAll() {
-    //clearBuildings();
-    drawGrid(width, height);
+    dayint++;
+    string str = "day: "+ to_string(dayint);
+    QString time = QString::fromStdString(str);
+    day->setText(time);
+    clearWalls();
+    clearBuildings();
+    drawGrid(width,height);
     for (int x = 0; x < width; x++) {
         for (int y = 0; y < height; y++) {
             std::pair<int, std::string> pixart = (*c)(x, y)->getPixelArt();
@@ -130,31 +146,34 @@ void MainWindow::updateAll() {
     updateRoadUsers();
 }
 
+void MainWindow::addDay() {
+
+}
+
 
 void MainWindow::drawTile(int row, int col, int rot, const std::string pixelart) {
     QString filename = pixelart.c_str();
     QGraphicsPixmapItem *item = new QGraphicsPixmapItem(QPixmap(filename));
     item->setPixmap(QPixmap(filename));
     item->setCacheMode(QGraphicsItem::NoCache);
-    //qreal scale = qMax(zoomTile, zoomTile);
-    qreal scale = qMax(2, 2);
+    qreal scale = qMax(zoomTile, zoomTile);
     item->setScale(scale);
     item->setRotation(rot * 90);
     rot = rot % 4;
     int ofsetx = 0;
     int ofsety = 0;
     if (rot == 1 || rot == 2) {
-        ofsetx = 64;
+        ofsetx = zoomTile*32;
     }
     if (rot == 3 || rot == 2) {
-        ofsety = 64;
+        ofsety = zoomTile*32;
     }
-    item->setPos(col * 64 + ofsetx, row * 64 + ofsety);
+    item->setPos(col * (32*zoomTile) + ofsetx, row * (32*zoomTile) + ofsety);
     scene->addItem(item);
-    if (pixelart.find("Border") != string::npos) {
-        Walls.push_back(item);
-    } else {
-        Buildings.push_back(item);
+    if(pixelart.find("Border") != string::npos){
+        walls.push_back(item);
+    } else{
+        buildings.push_back(item);
     }
 }
 
@@ -162,21 +181,21 @@ void MainWindow::addCar(int row, int col, int rot, const std::string pixelart) {
     QString filename = pixelart.c_str();
     QGraphicsPixmapItem *item = new QGraphicsPixmapItem(QPixmap(filename));
     item->setCacheMode(QGraphicsItem::NoCache);
-    qreal scale = qMax(1, 1);
+    qreal scale = qMax(zoomTile/2, zoomTile/2);
     item->setScale(scale);
     item->setRotation(rot * 90);
     rot = rot % 4;
     int ofsetx = 0;
     int ofsety = 0;
     if (rot == 1 || rot == 2) {
-        ofsetx = 64;
+        ofsetx = zoomTile*32;
     }
     if (rot == 3 || rot == 2) {
-        ofsety = 64;
+        ofsety = zoomTile*32;
     }
-    item->setPos(col * 64 + ofsetx, row * 64 + ofsety);
+    item->setPos(col * (32*zoomTile) + ofsetx, row * (32*zoomTile) + ofsety);
     scene->addItem(item);
-    RoadUsers.push_back(item);
+    roadUsers.push_back(item);
 }
 
 void MainWindow::addPedestrian(int row, int col, int rot, const std::string pixelart) {
@@ -185,29 +204,30 @@ void MainWindow::addPedestrian(int row, int col, int rot, const std::string pixe
     QGraphicsPixmapItem *item = new QGraphicsPixmapItem(QPixmap(filename));
     item->setPixmap(QPixmap(filename));
     item->setCacheMode(QGraphicsItem::NoCache);
-    qreal scale = qMax(1, 1);
+    qreal scale = qMax(zoomTile/2, zoomTile/2);
     item->setScale(scale);
     rot = rot % 4;
     int ofsetx = 0;
     int ofsety = 0;
     if (rot == 0 || rot == 1) {
-        ofsety = -27;
+        ofsety = -27*(zoomTile/2);
     }
     if (rot == 1 || rot == 2) {
-        ofsetx = 27;
+        ofsetx = 27*(zoomTile/2);
     }
     if (rot == 3 || rot == 2) {
-        ofsety = 27;
+        ofsety = 27*(zoomTile/2);
     }
     if (rot == 0 || rot == 3) {
-        ofsetx = -27;
+        ofsetx = -27*(zoomTile/2);
     }
-    item->setPos(col * 64 + ofsetx, row * 64 + ofsety);
+    item->setPos(col * (32*zoomTile) + ofsetx, row * (32*zoomTile) + ofsety);
     scene->addItem(item);
-    RoadUsers.push_back(item);
+    roadUsers.push_back(item);
 }
 
 void MainWindow::drawGrid(int _width, int _height) {
+    addWalls(_width, _height);
     for (int i = 0; i < _width; i++) {
         for (int j = 0; j < _height; j++) {
             drawTile(i, j, 0, "../PixelArt/Default.png");
@@ -278,21 +298,24 @@ void MainWindow::showView() {
 }
 
 void MainWindow::clearBuildings() {
-    for (auto it = Buildings.begin(); it != Buildings.end(); it++) {
+    for (auto it = buildings.begin(); it != buildings.end(); it++) {
         delete *it;
     }
+    buildings.clear();
 }
 
 void MainWindow::clearRoadUsers() {
-    for (auto it = RoadUsers.begin(); it != RoadUsers.end(); it++) {
+    for (auto it = roadUsers.begin(); it != roadUsers.end(); it++) {
         delete *it;
     }
+    roadUsers.clear();
 }
 
 void MainWindow::clearWalls() {
-    for (auto it = Walls.begin(); it != Walls.end(); it++) {
+    for (auto it = walls.begin(); it != walls.end(); it++) {
         delete *it;
     }
+    walls.clear();
 }
 
 MainWindow::~MainWindow() {
@@ -301,29 +324,13 @@ MainWindow::~MainWindow() {
     clearWalls();
 }
 
-void MainWindow::scaleTiles(int zoom) {
-    zoomTile = zoom;
-
-    //vervangen door code die elk vak van de cellulaire autmaat opnieuw tekent maar met de nieuwe schaal
-    //clearBuildings();
-    //clearRoadUsers();
-
-}
-
-void MainWindow::clicked() {
-
-}
 
 void MainWindow::zoomOut() {
-    if (zoomTile <= 0) {
-        scaleTiles(0);
-    } else {
-        zoomTile--;
-        scaleTiles(zoomTile);
-    }
+    zoomTile/=2;
+    updateAll();
 }
 
 void MainWindow::zoomIn() {
-    zoomTile++;
-    scaleTiles(zoomTile);
+    zoomTile*=2;
+    updateAll();
 }
