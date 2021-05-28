@@ -76,11 +76,11 @@ void MainWindow::updateRoadUsers() {
                 vector<Vehicle*> vehicles = cell->getVehicles();
                 //TODO
                 for(auto it = vehicles.begin(); it != vehicles.end(); it++){
-                    //addCar(x,y,0,(*it)->getPixelart());
+                    addCar(x,y,0,(*it)->getPixelart());
                 }
                 vector<Citizen*> citizen = cell->getCitizen();
                 for(auto it = citizen.begin(); it != citizen.end(); it++){
-                    //addPedestrian(x,y,..,(*it)->getPixelart());
+                    addPedestrian(x,y,0,(*it)->getPixelart());
                 }
             }
         }
