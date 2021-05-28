@@ -275,7 +275,7 @@ void CellulaireAutomaat::addMainStreet(int row, int col) {
 
 float CellulaireAutomaat::getScore() const {
     std::map<EStates, int> count_ = count_all();
-    return count_[EIndustrialZone] + count_[EStoreZone] + count_[EResidentialZone] * 2 + count_[ERoad] * 1.5 - count_[EVegetation];
+    return count_[EIndustrialZone] + count_[EStoreZone] + count_[EResidentialZone] * 2 + count_[ERoad] * 0.2 - count_[EVegetation];
 }
 
 void CellulaireAutomaat::updateRulesHelper(int row, int col) {

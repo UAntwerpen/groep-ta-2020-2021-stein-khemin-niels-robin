@@ -16,7 +16,7 @@ int main(int argc, char *argv[]){
     QApplication a(argc, argv);
     GeneticAlgorith algo;
 
-    Genome<GENOME_SIZE> rule = algo.run(5);
+    Genome<GENOME_SIZE> rule = algo.run(250);
     string s;
     for(char c: rule){
         s += c;

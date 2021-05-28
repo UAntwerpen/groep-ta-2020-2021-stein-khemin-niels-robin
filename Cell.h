@@ -87,9 +87,9 @@ public:
      */
     void setPos(int r, int c);
 
-    virtual std::vector<Vehicle*> getVehicles(){return {};}
+    virtual std::vector<Vehicle*> getVehicles() const {return {};}
 
-    virtual std::vector<Citizen*> getCitizen(){return {};}
+    virtual std::vector<Citizen*> getCitizen() const {return {};}
 
     /*!
      * verandert de positie van een cel
@@ -158,11 +158,10 @@ public:
      * geeft alle auto's terug die op de cell staan
      * @return
      */
-    std::vector<Vehicle*> getVehicles() override;
+    std::vector<Vehicle*> getVehicles() const override;
 
-    std::vector<Citizen*> getCitizen() override;
+    std::vector<Citizen*> getCitizen() const override;
 
-    std::vector<Citizen*> getCitizen() const {return std::vector<Citizen*>();};
 
     /*!
      * voeg auto toe aan cell
