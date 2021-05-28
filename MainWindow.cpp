@@ -22,7 +22,7 @@ MainWindow::MainWindow(int w, int h, CellulaireAutomaat *cellulaireAutomaat) {
     QDockWidget *cityDock;
     cityDock = new QDockWidget(tr("City"), this);
     cityDock->setAllowedAreas(Qt::LeftDockWidgetArea |
-                                Qt::RightDockWidgetArea);
+                              Qt::RightDockWidgetArea);
     cityDock->setWidget(view);
     addDockWidget(Qt::RightDockWidgetArea, cityDock);
     view->setDragMode(QGraphicsView::DragMode::ScrollHandDrag);
@@ -31,36 +31,36 @@ MainWindow::MainWindow(int w, int h, CellulaireAutomaat *cellulaireAutomaat) {
     QDockWidget *settingsDock;
     settingsDock = new QDockWidget(tr("Settings"), this);
     settingsDock->setAllowedAreas(Qt::LeftDockWidgetArea |
-                                 Qt::RightDockWidgetArea);
+                                  Qt::RightDockWidgetArea);
     addDockWidget(Qt::LeftDockWidgetArea, settingsDock);
     settingsDock->setFixedWidth(260);
 
-    QVBoxLayout* boxLayout = new QVBoxLayout();
+    QVBoxLayout *boxLayout = new QVBoxLayout();
 
-    QPushButton* button = new QPushButton();
+    QPushButton *button = new QPushButton();
     button->setText("Next day");
-    button->setGeometry(30,30,200,50);
+    button->setGeometry(30, 30, 200, 50);
     connect(button, &QPushButton::released, this, &MainWindow::temporaryNextDay);
-    QPushButton* nextDayBtn = new QPushButton();
+    QPushButton *nextDayBtn = new QPushButton();
     nextDayBtn->setText("Next day");
-    nextDayBtn->setGeometry(30,30,200,50);
+    nextDayBtn->setGeometry(30, 30, 200, 50);
     connect(nextDayBtn, &QPushButton::released, this, &MainWindow::temporaryNextDay);
 
-    QPushButton* pauseBtn = new QPushButton();
+    QPushButton *pauseBtn = new QPushButton();
     pauseBtn->setText("Pause");
-    pauseBtn->setGeometry(30,80,200,50);
+    pauseBtn->setGeometry(30, 80, 200, 50);
     pauseButton = pauseBtn;
     connect(pauseBtn, &QPushButton::released, this, &MainWindow::pause);
 
 
-    QPushButton* zoomOutBtn = new QPushButton();
+    QPushButton *zoomOutBtn = new QPushButton();
     zoomOutBtn->setText("-");
-    zoomOutBtn->setGeometry(30,130,90,50);
+    zoomOutBtn->setGeometry(30, 130, 90, 50);
     connect(zoomOutBtn, &QPushButton::released, this, &MainWindow::zoomOut);
 
-    QPushButton* zoomInBtn = new QPushButton();
+    QPushButton *zoomInBtn = new QPushButton();
     zoomInBtn->setText("+");
-    zoomInBtn->setGeometry(140,130,90,50);
+    zoomInBtn->setGeometry(140, 130, 90, 50);
     connect(zoomInBtn, &QPushButton::released, this, &MainWindow::zoomIn);
 
     settingsDock->layout()->addWidget(nextDayBtn);
@@ -69,17 +69,17 @@ MainWindow::MainWindow(int w, int h, CellulaireAutomaat *cellulaireAutomaat) {
     settingsDock->layout()->addWidget(zoomInBtn);
 }
 
-void MainWindow::temporaryNextDay(){
-    cout<<"Button pushed."<<endl;
+void MainWindow::temporaryNextDay() {
+    cout << "Button pushed." << endl;
     c->updateRules();
     c->updateCells();
     std::cout << c->getScore() << std::endl;
 }
 
-void MainWindow::pause(){
+void MainWindow::pause() {
     //TODO pause in CitySimulation.h
 
-    cout<<"Paused"<<endl;
+    cout << "Paused" << endl;
     pauseButton->setText("Resume");
     disconnect(pauseButton, &QPushButton::released, this, &MainWindow::pause);
     connect(pauseButton, &QPushButton::released, this, &MainWindow::resume);
@@ -98,9 +98,9 @@ void MainWindow::pause(){
     cout << (*c)(rowFrom, colFrom)->isConnectedTo(rowTo, colTo) << endl;
 }
 
-void MainWindow::resume(){
+void MainWindow::resume() {
     //TODO resume in CitySimulation.h
-    cout<<"Resumed"<<endl;
+    cout << "Resumed" << endl;
     pauseButton->setText("Pause");
     disconnect(pauseButton, &QPushButton::released, this, &MainWindow::resume);
     connect(pauseButton, &QPushButton::released, this, &MainWindow::pause);
@@ -112,19 +112,19 @@ void MainWindow::updateRoadUsers() {
     for (int x = 0; x < width; x++) {
         for (int y = 0; y < height; y++) {
             //TODO fix enkel roadusers
-            std::pair<int, std::string> pixart = c->operator()(x,y)->getPixelArt();
-            drawTile(x,y,pixart.first, pixart.second);
+            std::pair<int, std::string> pixart = c->operator()(x, y)->getPixelArt();
+            drawTile(x, y, pixart.first, pixart.second);
         }
     }
 }
 
 void MainWindow::updateAll() {
     //clearBuildings();
-    drawGrid(width,height);
+    drawGrid(width, height);
     for (int x = 0; x < width; x++) {
         for (int y = 0; y < height; y++) {
-            std::pair<int, std::string> pixart = (*c)(x,y)->getPixelArt();
-            drawTile(x,y,pixart.first, pixart.second);
+            std::pair<int, std::string> pixart = (*c)(x, y)->getPixelArt();
+            drawTile(x, y, pixart.first, pixart.second);
         }
     }
     updateRoadUsers();
@@ -151,9 +151,9 @@ void MainWindow::drawTile(int row, int col, int rot, const std::string pixelart)
     }
     item->setPos(col * 64 + ofsetx, row * 64 + ofsety);
     scene->addItem(item);
-    if(pixelart.find("Border") != string::npos){
+    if (pixelart.find("Border") != string::npos) {
         Walls.push_back(item);
-    } else{
+    } else {
         Buildings.push_back(item);
     }
 }
@@ -258,22 +258,22 @@ void MainWindow::drawGrid(int _width, int _height) {
     }
 }
 
-void MainWindow::addWalls(int _width, int _height){
-    drawTile(-1,-1, 0, "../PixelArt/Border_hoek.png");
-    drawTile(-1,_width, 1, "../PixelArt/Border_hoek.png");
-    drawTile(_height,_width, 2, "../PixelArt/Border_hoek.png");
-    drawTile(_height,-1, 3, "../PixelArt/Border_hoek.png");
-    for(int  i = 0; i < _width; i++){
-        drawTile(-1,i, 0, "../PixelArt/Border_lang.png");
-        drawTile(_height,i, 2, "../PixelArt/Border_lang.png");
+void MainWindow::addWalls(int _width, int _height) {
+    drawTile(-1, -1, 0, "../PixelArt/Border_hoek.png");
+    drawTile(-1, _width, 1, "../PixelArt/Border_hoek.png");
+    drawTile(_height, _width, 2, "../PixelArt/Border_hoek.png");
+    drawTile(_height, -1, 3, "../PixelArt/Border_hoek.png");
+    for (int i = 0; i < _width; i++) {
+        drawTile(-1, i, 0, "../PixelArt/Border_lang.png");
+        drawTile(_height, i, 2, "../PixelArt/Border_lang.png");
     }
-    for(int  i = 0; i < _height; i++){
-        drawTile(i,-1, 3, "../PixelArt/Border_lang.png");
-        drawTile(i,_width, 1, "../PixelArt/Border_lang.png");
+    for (int i = 0; i < _height; i++) {
+        drawTile(i, -1, 3, "../PixelArt/Border_lang.png");
+        drawTile(i, _width, 1, "../PixelArt/Border_lang.png");
     }
 }
 
-void MainWindow::showView(){
+void MainWindow::showView() {
     //view->show();
 }
 
@@ -315,10 +315,9 @@ void MainWindow::clicked() {
 }
 
 void MainWindow::zoomOut() {
-    if(zoomTile <= 0){
+    if (zoomTile <= 0) {
         scaleTiles(0);
-    }
-    else{
+    } else {
         zoomTile--;
         scaleTiles(zoomTile);
     }

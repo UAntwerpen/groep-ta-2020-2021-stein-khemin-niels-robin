@@ -96,11 +96,9 @@ CellulaireAutomaat::~CellulaireAutomaat() {
 }
 
 Cell* CellulaireAutomaat::operator()(int row, int column) const {
-    if (0 > row || row >= width ||0 > column || column >= height)
-        std::cout << "error";
-    REQUIRE(0 <= row && row < width, "Row with is out of bounds!");
-    REQUIRE(0 <= column && column < height, "Column is out of bounds!");
-    return matrix[row * height + column];
+    REQUIRE(0 <= row && row < height, "Row with is out of bounds!");
+    REQUIRE(0 <= column && column < width, "Column is out of bounds!");
+    return matrix[row * width + column];
 }
 
 std::vector<Cell *> CellulaireAutomaat::getNeighbourhood(int row, int col) {
@@ -277,9 +275,10 @@ std::map<EStates, int> CellulaireAutomaat::count_all() const {
 void CellulaireAutomaat::addMainStreet(int row, int col) {
     REQUIRE(0 <= row && row < height, "Row is out of bounds!");
     REQUIRE(0 <= col && col < width, "Column is out of bounds!");
-    changeCell(row, col, new Road(0, 5, this));
+    changeCell(row, col, new Road(row, col, this));
     main_street = {row, col};
     branches.emplace_back(std::make_pair(row, col));
+    seen_cells.emplace_back(std::make_pair(row, col));
     draw();
 }
 
@@ -307,7 +306,6 @@ void CellulaireAutomaat::updateRulesHelper(int row, int col) {
             if (std::find(seen_cells.begin(), seen_cells.end(), std::make_pair(row + drow, col + dcol)) != seen_cells.end()) continue;
             seen_cells.emplace_back(std::make_pair(row + drow, col + dcol));
 
-            std::cout << rules[getNeighbourhoodValue(drow + 1, dcol + 1, old)] << " " << static_cast<EStates>('4') << std::endl;
             EStates state = static_cast<EStates>(rules[getNeighbourhoodValue(drow + 1, dcol + 1, old)]);
             if (state == old[drow + 1][dcol + 1]) {
                 continue;

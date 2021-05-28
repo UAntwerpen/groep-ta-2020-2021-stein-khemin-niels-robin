@@ -14,23 +14,22 @@
 using namespace std;
 int main(int argc, char *argv[]){
     QApplication a(argc, argv);
-//    GeneticAlgorith algo;
-//
-//    Genome<GENOME_SIZE> rule = algo.run(200);
-//    string s;
-//    for(char c: rule){
-//        s += c;
-//    }
+    GeneticAlgorith algo;
 
+    Genome<GENOME_SIZE> rule = algo.run(500);
     string s;
-    std::ifstream file("149.txt", std::ifstream::binary);
-    while (file.good()){
-        s += std::to_string(file.get());
+    for(char c: rule){
+        s += c;
     }
 
-    CellulaireAutomaat A(10,10, s);
+//    string s;
+//    std::ifstream file("149.txt", std::ifstream::binary);
+//    while (file.good()){
+//        s += file.get();
+//    }
+
+    CellulaireAutomaat A(10, 10, s);
     A.addMainStreet(0, 5);
-    A.draw();
     std::cout << '\a';
     return QApplication::exec();
 }
