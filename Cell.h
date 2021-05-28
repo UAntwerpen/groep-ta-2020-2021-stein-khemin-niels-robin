@@ -87,6 +87,10 @@ public:
      */
     void setPos(int r, int c);
 
+    virtual std::vector<Vehicle*> getVehicles(){return {};}
+
+    virtual std::vector<Citizen*> getCitizen(){return {};}
+
     /*!
      * verandert de positie van een cel
      * @param pos std::pair<int, int> -> (row, col)
@@ -154,13 +158,21 @@ public:
      * geeft alle auto's terug die op de cell staan
      * @return
      */
-    std::vector<Vehicle*> getVehicles() const;
+    std::vector<Vehicle*> getVehicles() override;
+
+    std::vector<Citizen*> getCitizen() override;
 
     /*!
-    * voeg auto toe aan cell
-    * @return
-    */
+     * voeg auto toe aan cell
+     * @return
+     */
     void addVehicle(Vehicle*);
+
+    /*!
+     * voeg voetganger toe aan cell
+     * @return
+     */
+    void addCitizen(Vehicle*);
 
     void updateDaysUntilExpired() override;
 
@@ -171,6 +183,7 @@ private:
     std::pair<int, std::string> getCorrectRoad(std::vector<bool> &roadConnectPoint);
     std::string pixelArtVervallen = "../PixelArt/Road_Broken.png";
     std::vector<Vehicle*> vehicles;
+    std::vector<Citizen*> citizen;
 };
 
 class ResidentialZone : public Cell{

@@ -78,5 +78,6 @@ float GeneticAlgorith::calc_fitness(Genome<GENOME_SIZE> &G) {
     for (char c: G){
         rules += c;
     }
-    return runSimulation(rules);
+    CitySimulation city;
+    return city.runSimulation(rules);
 }

@@ -27,7 +27,7 @@ add_executable(TA main.cpp CellulaireAutomaat.cpp CellulaireAutomaat.h
         Lib.h lib/DesignByContract.h
         Rules.cpp Rules.h
         Utils.cpp Utils.h
-        CitySimulation.h
+        CitySimulation.cpp CitySimulation.h
         Vehicle.cpp Vehicle.h
         Citizen.cpp Citizen.h
         Transport.cpp Transport.h 
@@ -35,8 +35,6 @@ add_executable(TA main.cpp CellulaireAutomaat.cpp CellulaireAutomaat.h
         Pathfinding.cpp Pathfinding.h
         Building.cpp Building.h
         MainWindow.cpp MainWindow.h
-        Citizen.cpp
-        Citizen.h
         Template.cpp
         )
 

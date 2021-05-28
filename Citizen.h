@@ -8,8 +8,6 @@
 #include "Transport.h"
 #include "lib/DesignByContract.h"
 
-using namespace std;
-
 class Citizen : public Transport {
 public:
     /**
@@ -39,8 +37,11 @@ public:
 
     EStates getState() const override;
 
+    const string &getPixelart() const;
+
 private:
     float happiness = 0;
+    string pixelart;
 };
 
 

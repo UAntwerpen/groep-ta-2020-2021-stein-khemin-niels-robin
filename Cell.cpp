@@ -73,37 +73,6 @@ Cell::Cell(const Cell &p2): Cell(p2.row, p2.col, p2.cellulaireAutomaat) {
     this->people = p2.people;
 }
 
-std::vector<bool> Cell::getNeighborsRoads() {
-    int row = this->getPos().first;
-    int col = this->getPos().second;
-    CellulaireAutomaat* cellulaireAutomaat = this->getCellulaireAutomaat();
-
-    /*
-     * Geeft aan welke zijde verbonden moet worden;
-     *  [0]: links        [0]
-     *  [1]: rechts      xxxxx
-     *  [2]: boven  [3]  xxxxx  [1]
-     *  [3]: onder       xxxxx
-     *                    [2]
-     */
-    std::vector<bool> road = {false, false, false, false};
-
-
-    if(row < cellulaireAutomaat->getHeight() && col + 1 < cellulaireAutomaat->getWidth())
-        road[1] = (*cellulaireAutomaat)(row, col + 1)->getState() == ERoad;
-
-    if(row >= 0 && col - 1 >= 0)
-        road[3] = (*cellulaireAutomaat)(row, col - 1)->getState() == ERoad;
-
-    if(row + 1 < cellulaireAutomaat->getHeight() && col < cellulaireAutomaat->getWidth())
-        road[2] = (*cellulaireAutomaat)(row + 1, col)->getState() == ERoad;
-
-    if(row - 1 >= 0 && col >= 0)
-        road[0] = (*cellulaireAutomaat)(row - 1, col)->getState() == ERoad;
-
-    return road;
-}
-
 EStates Vegetation::getState() const {
     return EVegetation;
 }
@@ -255,8 +224,51 @@ std::pair<int, std::string> Road::getCorrectRoad(std::vector<bool> &roadConnectP
     }
 }
 
-std::vector<Vehicle *> Road::getVehicles() const {
+std::vector<bool> Road::getNeighborsRoads() {
+    int row = this->getPos().first;
+    int col = this->getPos().second;
+    CellulaireAutomaat* cellulaireAutomaat = this->getCellulaireAutomaat();
+
+    /*
+     * Geeft aan welke zijde verbonden moet worden;
+     *  [0]: links        [0]
+     *  [1]: rechts      xxxxx
+     *  [2]: boven  [3]  xxxxx  [1]
+     *  [3]: onder       xxxxx
+     *                    [2]
+     */
+    std::vector<bool> road = {false, false, false, false};
+
+
+    //TODO eerst checken of de offset niet out of bounds is!
+/*
+    road[1] = (*cellulaireAutomaat)(row, col + 1).getRoadConnectPoints()[0];
+    road[0] = (*cellulaireAutomaat)(row, col - 1).getRoadConnectPoints()[1];
+    road[3] = (*cellulaireAutomaat)(row + 1, col).getRoadConnectPoints()[2];
+    road[2] = (*cellulaireAutomaat)(row - 1, col).getRoadConnectPoints()[3];*/
+    if(row + 1 < cellulaireAutomaat->getHeight() && col + 1 < cellulaireAutomaat->getWidth())
+        road[1] = (*cellulaireAutomaat)(row, col + 1)->getState() == ERoad;
+    if(row- 1 > 0 && col - 1 > 0)
+        road[3] = (*cellulaireAutomaat)(row, col - 1)->getState() == ERoad;
+    if(row + 1 < cellulaireAutomaat->getHeight() && col + 1 < cellulaireAutomaat->getWidth())
+        road[2] = (*cellulaireAutomaat)(row + 1, col)->getState() == ERoad;
+    if(row - 1 >0 && col - 1 >0)
+        road[0] = (*cellulaireAutomaat)(row - 1, col)->getState() == ERoad;
+
+/*    road[1] = (*cellulaireAutomaat)(row, col + 1)->getState() == ERoad;
+    road[3] = (*cellulaireAutomaat)(row, col - 1)->getState() == ERoad;
+    road[2] = (*cellulaireAutomaat)(row + 1, col)->getState() == ERoad;
+    road[0] = (*cellulaireAutomaat)(row - 1, col)->getState() == ERoad;*/
+
+    return road;
+}
+
+std::vector<Vehicle *> Road::getVehicles() {
     return this->vehicles;
+}
+
+std::vector<Citizen *> Road::getCitizen() {
+    return this->citizen;
 }
 
 void Road::addVehicle(Vehicle * v) {

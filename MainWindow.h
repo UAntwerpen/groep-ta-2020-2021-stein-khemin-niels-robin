@@ -14,44 +14,119 @@
 
 class MainWindow: public QMainWindow {
 public:
+    /*!
+     * initialiseert de mainwindow
+     * @param width: breedte van de cell
+     * @param height: hoogte van de cell
+     * @param CellulaireAutomaat:automaat die mainwindow bestuurt
+     * REQUIRE(1 < width, "Width is too small(must be at least 2)!");
+     * REQUIRE(1 < height, "Height is too small(must be at least 2)!");
+     */
     MainWindow(int width, int height, CellulaireAutomaat *cellulaireAutomaat);
 
+    /*!
+     * update alle wegggebruikers
+     */
     void updateRoadUsers();
 
+    /*!
+     * update de stad
+     */
     void updateAll();
 
+    /*!
+     * voegt een dag toe aan de counter
+     */
+    void addDay();
+
+    /*!
+     * geeft weer of de simulatie gepauseerd moet worden of niet
+     * @return pause: true als het gepauseerd is, false als het niet gepauseerd is
+     */
+    bool getPause();
+
+    /*!
+     * destructor
+     */
     virtual ~MainWindow();
 
-    void showView();
-
-    //private maken
-    void drawTile(int row, int col, int rotation, const std::string pixelart);
-    void addCar(int row, int col, int rotation, const std::string pixelart);
-    void addPedestrian(int row, int col, int rotation, const std::string pixelart);
-    void temporaryNextDay();
-    void pause();
-    void resume();
-private slots:
-    void clicked();
 private:
+    /*!
+     * kleurt een cell in op het scherm
+     * @param row: rij positie
+     * @param col: kolom positie
+     * @param rotation: geeft hoeveel graden de afbeelding gedraaid moet worden
+     * @param pixelart: verwijzing naar afbeelding
+     */
+    void drawTile(int row, int col, int rotation, const std::string pixelart);
 
+    /*!
+     * plaatst een auto op de weg
+     * @param row: rij positie
+     * @param col: kolom positie
+     * @param rotation: geeft hoeveel graden de afbeelding gedraaid moet worden
+     * @param pixelart: verwijzing naar afbeelding
+     */
+    void addCar(int row, int col, int rotation, const std::string pixelart);
+
+    /*!
+     * plaatste een voetganger op de weg
+     * @param row: rij positie
+     * @param col: kolom positie
+     * @param rotation: geeft hoeveel graden de afbeelding gedraaid moet worden
+     * @param pixelart: verwijzing naar afbeelding
+     */
+    void addPedestrian(int row, int col, int rotation, const std::string pixelart);
+
+    /*!
+     * functie die wordt aangeroepen als er op de pauseknop wordt gedrukt, zet variabele pause op true
+     */
+    void pressedPause();
+
+    /*!
+     * functie die wordt aangeroepen als er op de pauseknop wordt gedrukt, zet variabele pause op false
+     */
+    void pressedResume();
+
+    /*!
+     * verwijdert alle weggebruikers
+     */
     void clearRoadUsers();
-    void clearBuildings();
-    void clearWalls();
-    void scaleTiles(int zoom);
 
+    /*!
+     * verwijdert alle gebouwen/wegen
+     */
+    void clearBuildings();
+
+    /*!
+     * verwijdert de muren rond te stad
+     */
+    void clearWalls();
+
+    /*!
+     * functie die wordt aangeroepen als er op de -knop wordt gedrukt, zet variabele zoom -1
+     */
     void zoomOut();
+
+    /*!
+     * functie die wordt aangeroepen als er op de +knop wordt gedrukt, zet variabele zoom +1
+     */
     void zoomIn();
 
+    /*!
+     * voegt muren toe aan de stad
+     */
     void addWalls(int width, int height);
 
-    //TODO weg doen
+    /*!
+     * zet alle cellen op default afbeeldingen
+     */
     void drawGrid(int width, int height);
 
     CellulaireAutomaat* c;
-    std::vector<QGraphicsPixmapItem*> RoadUsers;
-    std::vector<QGraphicsPixmapItem*> Buildings;
-    std::vector<QGraphicsPixmapItem*> Walls;
+    std::vector<QGraphicsPixmapItem*> roadUsers;
+    std::vector<QGraphicsPixmapItem*> buildings;
+    std::vector<QGraphicsPixmapItem*> walls;
     QGraphicsScene *scene;
     QGraphicsView *view;
     QVBoxLayout* boxLayout;
@@ -59,8 +134,11 @@ private:
     QDockWidget* cityDock;
     int height;
     int width;
-    int zoomTile = 4;
+    double zoomTile = 2;
     QPushButton* pauseButton;
+    QLabel* day;
+    int dayint;
+    bool pause = false;
 };
 
 #endif //TA_MAINWINDOW_H

@@ -122,7 +122,6 @@ private:
     int height;
     std::vector<Cell*> matrix;
     std::string rules;
-    MainWindow* w;
 };
 
 #endif //TA_CELLULAIREAUTOMAAT_H

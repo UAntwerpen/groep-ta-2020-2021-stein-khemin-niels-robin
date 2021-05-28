@@ -8,10 +8,18 @@
 
 Vehicle::Vehicle() : Transport() {
     people = vector<Citizen*>();
+    string pixArt = "Car";
+    int random = (rand()%3)+1;
+    pixArt = pixArt + to_string(random) + ".png";
+    pixelart = pixArt;
 }
 
 Vehicle::Vehicle(Cell *location, Cell *g) : Transport(location, g) {
     people = vector<Citizen*>();
+    string pixArt = "Car";
+    int random = (rand()%3)+1;
+    pixArt = pixArt + to_string(random) + ".png";
+    pixelart = pixArt;
 }
 
 void Vehicle::setPeople(vector<Citizen *> pass) {
@@ -66,4 +74,8 @@ void Vehicle::update(CellulaireAutomaat &city) {
 
 EStates Vehicle::getState() const {
     return EVehicle;
+}
+
+const string &Vehicle::getPixelart() const {
+    return pixelart;
 }

@@ -4,7 +4,12 @@
 
 #include "Citizen.h"
 
-Citizen::Citizen() : Transport() {}
+Citizen::Citizen() : Transport() {
+    string pixArt = "Pedestrian";
+    int random = (rand()%3)+1;
+    pixArt = pixArt + to_string(random) + ".png";
+    pixelart = pixArt;
+}
 
 Citizen::Citizen(Cell *location, Cell *g) : Transport(location, g) {}
 
@@ -19,4 +24,8 @@ void Citizen::setHappiness(float h) {
 
 EStates Citizen::getState() const {
     return ECitizen;
+}
+
+const string &Citizen::getPixelart() const {
+    return pixelart;
 }

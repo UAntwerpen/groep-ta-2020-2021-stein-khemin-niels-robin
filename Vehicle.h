@@ -12,6 +12,8 @@ using namespace std;
 
 class Vehicle : public Transport {
 public:
+    Vehicle();
+
     /**
      * Default constructor
      */
@@ -56,8 +58,11 @@ public:
 
     EStates getState() const override;
 
+    const string &getPixelart() const;
+
 private:
     vector<Citizen*> people;
+    string pixelart;
 };
 
 #endif //TA_VEHICLE_H
