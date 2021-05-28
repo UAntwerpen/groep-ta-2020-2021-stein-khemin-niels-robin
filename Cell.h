@@ -156,6 +156,8 @@ public:
      */
     std::vector<Vehicle*> getVehicles() const;
 
+    std::vector<Citizen*> getCitizen() const {return std::vector<Citizen*>();};
+
     /*!
     * voeg auto toe aan cell
     * @return

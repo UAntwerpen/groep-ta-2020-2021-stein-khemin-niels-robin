@@ -10,7 +10,8 @@
 
 class CitySimulation {
 public:
-    void delay();
+    void delay(double time);
+    float runSimulationGUI(const std::string &rules);
     float runSimulation(const std::string &rules);
 };
 

@@ -4,9 +4,35 @@
 
 #include "CitySimulation.h"
 
-float CitySimulation::runSimulation(const std::string &rules){
+float CitySimulation::runSimulationGUI(const std::string &rules){
     int it = 0;
-    int max = 10;
+    CellulaireAutomaat automaat(10, 10, rules, true);
+    automaat.addMainStreet(0, 5);
+    MainWindow w(10, 10, &automaat);
+    w.show();
+    float prev_score = automaat.getScore();
+    while (!it || prev_score != automaat.getScore()){
+        delay(1);
+        if(!w.getPause()){
+            prev_score = automaat.getScore();
+            automaat.updateRules();
+            automaat.updateCells();
+            w.addDay();
+            w.updateAll();
+        it++;
+        }
+    }
+    return automaat.getScore();
+}
+
+void CitySimulation::delay(double time) {
+    QTime dieTime = QTime::currentTime().addSecs(time);
+    while (QTime::currentTime() < dieTime)
+        QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+}
+
+float CitySimulation::runSimulation(const std::string &rules) {
+    int it = 0;
     CellulaireAutomaat automaat(10, 10, rules, false);
     automaat.addMainStreet(0, 5);
     float prev_score = automaat.getScore();
@@ -17,10 +43,4 @@ float CitySimulation::runSimulation(const std::string &rules){
         it++;
     }
     return automaat.getScore();
-}
-
-void CitySimulation::delay() {
-    QTime dieTime = QTime::currentTime().addSecs(1);
-    while (QTime::currentTime() < dieTime)
-        QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
 }

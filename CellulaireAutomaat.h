@@ -148,7 +148,6 @@ private:
     int height;
     std::vector<Cell*> matrix;
     std::string rules;
-    MainWindow* w;
     std::pair<int, int> main_street;
     bool qt;
     std::vector<std::pair<int, int>> seen_cells;

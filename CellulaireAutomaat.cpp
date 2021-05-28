@@ -27,11 +27,7 @@ CellulaireAutomaat::CellulaireAutomaat(int width, int height, const std::string&
             std::cerr << "couldn't open file!" << std::endl;
         }
         file.close();
-        w = new MainWindow(width, height, this);
-        draw();
-        w->show();
-    } else
-        w = nullptr;
+    }
 }
 
 CellulaireAutomaat::CellulaireAutomaat(const std::string &filename) {
@@ -81,9 +77,6 @@ CellulaireAutomaat::CellulaireAutomaat(const std::string &filename) {
     }
 
     file.close();
-    w = new MainWindow(width, height, this);
-    draw();
-    w->show();
 }
 
 CellulaireAutomaat::~CellulaireAutomaat() {
@@ -93,7 +86,6 @@ CellulaireAutomaat::~CellulaireAutomaat() {
     std::string filename = ss.str() + ".txt";
 
     std::remove(filename.c_str());*/
-    delete w;
     for (const auto& cell: matrix)
         delete cell;
 }
@@ -184,7 +176,6 @@ void CellulaireAutomaat::updateRules() {
     for (const auto& pos: branches) {
         updateRulesHelper(pos.first, pos.second);
     }
-    draw();
 }
 
 void CellulaireAutomaat::updateCells() {
@@ -196,7 +187,6 @@ void CellulaireAutomaat::updateCells() {
             (*this)(row, col)->update();
         }
     }
-    draw();
 }
 
 int CellulaireAutomaat::count(const EStates &state) const {
@@ -250,8 +240,6 @@ std::map<EStates, int> CellulaireAutomaat::count_all() const {
     }
 
     void CellulaireAutomaat::draw() {
-        if (qt)
-            w->updateAll();
         /*for (int col = 0; col < width; col++){
             for (int row = 0; row < height; row++){
                 switch ((*this)(row, col)->getState()) {

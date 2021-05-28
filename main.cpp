@@ -23,6 +23,6 @@ int main(int argc, char *argv[]){
         s += c;
     }
     CitySimulation city;
-    city.runSimulation(s);
+    city.runSimulationGUI(s);
     return QApplication::exec();
 }
