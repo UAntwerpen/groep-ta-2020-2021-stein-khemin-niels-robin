@@ -1,3 +1,4 @@
+#include <algorithm>
 
 #include "lib/DesignByContract.h"
 #include "CellulaireAutomaat.h"
@@ -93,6 +94,8 @@ CellulaireAutomaat::~CellulaireAutomaat() {
 
     std::remove(filename.c_str());*/
     delete w;
+    for (const auto& cell: matrix)
+        delete cell;
 }
 
 Cell* CellulaireAutomaat::operator()(int row, int column) const {

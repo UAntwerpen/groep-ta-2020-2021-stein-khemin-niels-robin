@@ -293,10 +293,6 @@ void MainWindow::addWalls(int _width, int _height) {
     }
 }
 
-void MainWindow::showView() {
-    //view->show();
-}
-
 void MainWindow::clearBuildings() {
     for (auto it = buildings.begin(); it != buildings.end(); it++) {
         delete *it;

@@ -81,3 +81,9 @@ float GeneticAlgorith::calc_fitness(Genome<GENOME_SIZE> &G) {
     CitySimulation city;
     return city.runSimulation(rules);
 }
+
+GeneticAlgorith::~GeneticAlgorith() {
+    for (int i = 0; i < POPULATION_SIZE;i++){
+        delete population[i];
+    }
+}

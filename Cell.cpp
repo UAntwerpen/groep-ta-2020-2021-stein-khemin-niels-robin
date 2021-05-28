@@ -1,11 +1,12 @@
 //
 // Created by nibor on 22/04/2021.
 //
+#include <random>
+#include <iostream>
+#include <algorithm>
 
 #include "Cell.h"
 #include "lib/DesignByContract.h"
-#include <random>
-#include <iostream>
 #include "MainWindow.h"
 #include "CellulaireAutomaat.h"
 

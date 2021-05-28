@@ -104,6 +104,8 @@ public:
 
     GeneticAlgorith();
 
+    virtual ~GeneticAlgorith();
+
     Genome<GENOME_SIZE>* generateGenome();
 
     void generatePopulation();

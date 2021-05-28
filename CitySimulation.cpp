@@ -4,19 +4,19 @@
 
 #include "CitySimulation.h"
 
-float CitySimulation::runSimulation(const std::string &rules) {
+float CitySimulation::runSimulation(const std::string &rules){
     int it = 0;
-    int max = 2000;
-    CellulaireAutomaat automaat(10, 10, rules);
-    automaat.changeCell(0, 5, new Road(0, 5, &automaat));
-    while (it < max) {
-        delay();
+    int max = 10;
+    CellulaireAutomaat automaat(10, 10, rules, false);
+    automaat.addMainStreet(0, 5);
+    float prev_score = automaat.getScore();
+    while (!it || prev_score != automaat.getScore()){
+        prev_score = automaat.getScore();
         automaat.updateRules();
         automaat.updateCells();
-        automaat.draw();
         it++;
     }
-    return 0;
+    return automaat.getScore();
 }
 
 void CitySimulation::delay() {
