@@ -51,6 +51,8 @@ public:
     virtual ~MainWindow();
 
 private:
+    int getRotation(char direction);
+
     /*!
      * kleurt een cell in op het scherm
      * @param row: rij positie
