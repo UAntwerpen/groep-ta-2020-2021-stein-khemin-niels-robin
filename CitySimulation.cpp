@@ -75,8 +75,6 @@ void CitySimulation::runTransportSimulation(CellulaireAutomaat& map, int steps) 
                 int randRow = rand() % rowDim;
                 int randCol = rand() % colDim;
 
-                std::cout << randRow << ' ' << randCol << std::endl;
-
                 if (map(row, col)->getState() == EResidentialZone){
                     Vehicle* car = map(row, col)->getCar();
 
@@ -108,8 +106,6 @@ void CitySimulation::runTransportSimulation(CellulaireAutomaat& map, int steps) 
                 }
             }
         }
-
-        std::cout << "=================================" << std::endl;
         w.updateAll();
         currentStep += 1;
         if (currentStep % 10 == 0) {
