@@ -1,33 +1,30 @@
-#include <iostream>
-#include <algorithm>
 #include <iomanip>
 #include <QApplication>
-#include <QTime>
 #include <array>
 
 #include "MainWindow.h"
 #include "CellulaireAutomaat.h"
-#include "Rules.h"
+#include "GeneticAlgorithm.h"
 #include "Pathfinding.h"
 #include "CitySimulation.h"
 
 using namespace std;
 int main(int argc, char *argv[]){
     QApplication a(argc, argv);
-    GeneticAlgorith algo;
-/*
-    Genome<GENOME_SIZE> rule = algo.run(100);
+//    GeneticAlgorith algo(390624, 50);
+//
+//    Genome rule = algo.run(10);
+//    string s;
+//    for(char c: rule){
+//        s += c;
+//    }
     string s;
-    for(char c: rule){
-        s += c;
-    }*/
-    string s;
-    std::ifstream file("0xfbad80.txt", std::ifstream::binary);
+    std::ifstream file("latest001.txt", std::ifstream::binary);
     while (file.good()){
         s += file.get();
     }
 
     CitySimulation city;
-    city.runSimulationGUI(s);
-    return QApplication::exec();
+    city.runSimulationGUI(20, 20, s);
+    return 0;
 }

@@ -19,11 +19,16 @@ public:
      * initialiseert de cell
      * @param width breedt van de cell
      * @param height hoogte van de cell
+     * @param save_rules als true dan worden de regels weggeschreven naar een file
      * REQUIRE(1 < width, "Width is too small(must be at least 2)!");
      * REQUIRE(1 < height, "Height is too small(must be at least 2)!");
      */
-    CellulaireAutomaat(int width, int height, const std::string& rules, bool qt = true);
+    CellulaireAutomaat(int width, int height, const std::string& rules, bool save_rules = true);
 
+    /*!
+     * initialiseert de cellulaire automaat met een gegeven map
+     * @param filename
+     */
     CellulaireAutomaat(const std::string& filename);
 
     virtual ~CellulaireAutomaat();
@@ -33,6 +38,9 @@ public:
      * @param row rij van de cell
      * @param column kolom can de cell
      * @return reference van de cell
+     * REQUIRE(0 <= row && row < height, "Row with is out of bounds!");
+     * REQUIRE(0 <= column && column < width, "Column is out of bounds!");
+     * \n ENSURE(ret != nullptr, "returned cell is a nullptr!");
      */
     Cell* operator()(int row, int column) const;
 
@@ -149,7 +157,7 @@ private:
     std::vector<Cell*> matrix;
     std::string rules;
     std::pair<int, int> main_street;
-    bool qt;
+    bool save_rules;
     std::vector<std::pair<int, int>> seen_cells;
     std::vector<std::pair<int, int>> branches;
 };
