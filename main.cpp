@@ -33,7 +33,7 @@ int main(int argc, char *argv[]){
 
     QApplication a(argc, argv);
     CitySimulation city;
-    CellulaireAutomaat c = CellulaireAutomaat("Maps/map001.txt");
+    CellulaireAutomaat c = CellulaireAutomaat("../Maps/map001.txt");
 
     city.runTransportSimulation(c, 100);
     QApplication::exit();

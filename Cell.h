@@ -116,6 +116,8 @@ public:
 
     virtual void setCar(Vehicle* vehicle);
 
+    void removeCitizen();
+
 protected:
     int row = 0;
     int col = 0;

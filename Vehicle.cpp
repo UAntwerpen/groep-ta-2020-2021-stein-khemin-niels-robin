@@ -10,7 +10,7 @@ Vehicle::Vehicle() : Transport() {
     people = vector<Citizen*>();
     home = nullptr;
 
-    string pixArt = "Car";
+    string pixArt = "../PixelArt/Car";
     int random = (rand()%3)+1;
     pixArt = pixArt + to_string(random) + ".png";
     pixelart = pixArt;
@@ -20,7 +20,7 @@ Vehicle::Vehicle(Cell *location, Cell *g) : Transport(location, g) {
     people = vector<Citizen*>();
     home = location;
 
-    string pixArt = "Car";
+    string pixArt = "../PixelArt/Car";
     int random = (rand()%3)+1;
     pixArt = pixArt + to_string(random) + ".png";
     pixelart = pixArt;

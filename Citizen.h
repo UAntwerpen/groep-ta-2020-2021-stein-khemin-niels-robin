@@ -39,6 +39,8 @@ public:
 
     const string &getPixelart() const;
 
+    void update(CellulaireAutomaat& city) override;
+
 private:
     float happiness = 0;
     string pixelart;

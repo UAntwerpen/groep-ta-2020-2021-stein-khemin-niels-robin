@@ -154,7 +154,7 @@ public:
      * Verplaatst het Transport 1 stap vooruit volgens zijn pad.
      * @param city : De cellulaire automaat waardoor het Tranport zich beweegt.
      */
-    virtual void update(CellulaireAutomaat& city);
+    virtual void update(CellulaireAutomaat& city) = 0;
 
     /*!
      * geeft de gepaste enum waarde terug
