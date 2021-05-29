@@ -180,6 +180,11 @@ bool Cell::isConnectedTo(int row, int col, std::vector<std::pair<int, int>> *roa
     return false;
 }
 
+Vehicle *Cell::getCar() {
+    return nullptr;
+}
+
+void Cell::setCar(Vehicle *vehicle) {}
 
 float Vegetation::getHappiness() const {
     float value = 0;
@@ -332,6 +337,14 @@ std::pair<int, std::string> ResidentialZone::getPixelArt() {
 ResidentialZone::ResidentialZone(const Cell &p2) : Cell(p2.getPos().first, p2.getPos().second,
                                                         p2.getCellulaireAutomaat()) {
     this->people = p2.getPersons();
+}
+
+Vehicle *ResidentialZone::getCar() {
+    return car;
+}
+
+void ResidentialZone::setCar(Vehicle *vehicle) {
+    car = vehicle;
 }
 
 EStates IndustrialZone::getState() const {

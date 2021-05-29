@@ -8,6 +8,8 @@
 
 Vehicle::Vehicle() : Transport() {
     people = vector<Citizen*>();
+    home = nullptr;
+
     string pixArt = "Car";
     int random = (rand()%3)+1;
     pixArt = pixArt + to_string(random) + ".png";
@@ -16,10 +18,16 @@ Vehicle::Vehicle() : Transport() {
 
 Vehicle::Vehicle(Cell *location, Cell *g) : Transport(location, g) {
     people = vector<Citizen*>();
+    home = location;
+
     string pixArt = "Car";
     int random = (rand()%3)+1;
     pixArt = pixArt + to_string(random) + ".png";
     pixelart = pixArt;
+}
+
+vector<Citizen *> Vehicle::getPeople() {
+    return people;
 }
 
 void Vehicle::setPeople(vector<Citizen *> pass) {
@@ -29,8 +37,8 @@ void Vehicle::setPeople(vector<Citizen *> pass) {
     people = std::move(pass);
 }
 
-vector<Citizen *> Vehicle::getPeople() {
-    return people;
+Cell *Vehicle::getHome() {
+    return home;
 }
 
 Citizen *Vehicle::operator[](unsigned int ind) {
@@ -65,10 +73,20 @@ void Vehicle::update(CellulaireAutomaat &city) {
     this->increaseProgress();
 
     // Aangekomen op bestemming;
-    if (this->getLocation() == this->getGoal()){
+    if (this->getLocation()->getPos() == this->getGoal()->getPos()){
         this->setGoal(nullptr);
         this->setProgress(0);
         this->setRoute("");
+        this->setStatus(false);
+
+        // Voegt citizens toe in de doelcell.
+        for (Citizen* pass : this->getPeople()){
+            this->getLocation()->addPerson(pass);
+
+            if (this->getLocation()->getPos() == this->getHome()->getPos()){
+                this->setPeople(vector<Citizen*>());
+            }
+        }
     }
 }
 

@@ -46,6 +46,14 @@ void Transport::setGoal(Cell *cell) {
     ENSURE(this->getGoal() == cell, "setGoal post condition failure");
 }
 
+bool Transport::getStatus() {
+    return inTransit;
+}
+
+void Transport::setStatus(bool status) {
+    inTransit = status;
+}
+
 PFMask *Transport::getMask() {
     return mask;
 }
@@ -61,7 +69,8 @@ string Transport::getRoute() {
 
 void Transport::setRoute(string r) {
     route = std::move(r);
-    progress = 0;
+    progress = -1;
+    inTransit = true;
     this->changeDirection();
 }
 
@@ -109,8 +118,7 @@ void Transport::calculateRoute() {
         }
     }
 
-    route = result;
-    this->changeDirection();
+    this->setRoute(result);
 }
 
 int Transport::getProgress() const {
@@ -168,11 +176,10 @@ void Transport::update(CellulaireAutomaat& city) {
     this->increaseProgress();
 
     // Aangekomen op bestemming;
-    if (this->getLocation() == this->getGoal()){
+    if (this->getLocation()->getPos() == this->getGoal()->getPos()){
         this->setGoal(nullptr);
         this->setProgress(-1);
         this->setRoute("");
+        this->setStatus(false);
     }
 }
-
-

@@ -37,6 +37,12 @@ public:
     void setPeople(vector<Citizen*> pass);
 
     /**
+     * Geeft de thuislocatie van het voertuig terug.
+     * @return Cell class pointer
+     */
+    Cell* getHome();
+
+    /**
      * Geeft een persoon in de auto terug adv de gegeven index.
      * @param index : unsigned integer
      * @return Citizen class pointer
@@ -61,6 +67,7 @@ public:
 
 private:
     vector<Citizen*> people;
+    Cell* home;
     string pixelart;
 };
 

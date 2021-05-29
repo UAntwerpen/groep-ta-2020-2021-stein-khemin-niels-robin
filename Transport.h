@@ -60,6 +60,21 @@ public:
     void setGoal(Cell* cell);
 
     /**
+     * Geeft de status van het voertuig terug.
+     * @return true als het voertuig onderweg is, anders false.
+     */
+    bool getStatus();
+
+    /**
+     * Stelt een nieuwe status in voor het voertuig.
+     *
+     * @param status : bool : nieuwe status van het voertuig. (true = onderweg, false = op bestemming)
+     *
+     * ENSURE(this->getStatus() == status, "setStatus post condition failure")
+     */
+    void setStatus(bool status);
+
+    /**
      * Geeft de PFMask van het Transport terug.
      *
      * @return PFMask class pointer
@@ -152,6 +167,7 @@ private:
     Cell* location;
 
     Cell* goal;
+    bool inTransit;
     PFMask* mask;
     string route;
 

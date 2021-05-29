@@ -3,6 +3,8 @@
 //
 
 #include "CitySimulation.h"
+#include "Vehicle.h"
+#include "Pathfinding.h"
 
 float CitySimulation::runSimulationGUI(const std::string &rules){
     int it = 0;
@@ -43,4 +45,63 @@ float CitySimulation::runSimulation(const std::string &rules) {
         it++;
     }
     return automaat.getScore();
+}
+
+void CitySimulation::runTransportSimulation(CellulaireAutomaat& map) {
+    MainWindow w(map.getWidth(), map.getHeight(), &map);
+    w.show();
+
+    int rowDim = map.getHeight();
+    int colDim = map.getWidth();
+
+    for (int row = 0; row < rowDim; row++){
+        for (int col = 0; col < colDim; col++){
+            Cell* currCell = map(row, col);
+
+            // Voegt auto per huis toe.
+            if (currCell->getState() == EResidentialZone){
+                Vehicle* car = new Vehicle(currCell);
+                currCell->setCar(car);
+            }
+        }
+    }
+
+    while(true){
+        for (int row = 0; row < rowDim; row++){
+            for (int col = 0; col < colDim; col++){
+                map(row, col)->update();
+                int randRow = rand() % rowDim;
+                int randCol = rand() % colDim;
+
+                if (map(row, col)->getState() == EResidentialZone){
+                    Vehicle* car = map(row, col)->getCar();
+
+                    if (car->getStatus()) {
+                        car->update(map);
+                    } else {
+                        if (car->getPeople().empty()) {
+                            car->addPerson(map(row, col)->getPersons()[rand() % map(row, col)->getPersons().size()]);
+                        }
+
+                        Cell* goal;
+                        if (map(row, col) != car->getHome()) {
+                            goal = car->getHome();
+                        } else {
+                            goal = map(randRow, randCol);
+                        }
+
+                        car->setGoal(goal);
+                        auto* mask = new PFMask(map, car->getGoal(), true);
+                        mask->generateMask();
+
+                        car->setMask(mask);
+                        car->calculateRoute();
+                        car->update(map);
+                    }
+                }
+            }
+        }
+    }
+
+
 }
