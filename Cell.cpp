@@ -16,15 +16,11 @@ Cell::~Cell() {
 
 Cell::Cell(int row, int col, CellulaireAutomaat *cellulaireAutomaat) : row(row), col(col),
                                                                        cellulaireAutomaat(cellulaireAutomaat) {
-    this->daysUntilExpired = 100;
+    this->daysUntilExpired = (rand() % 40) + 10;
 }
 
 std::pair<int, int> Cell::getPos() const {
     return std::make_pair(row, col);
-}
-
-float Cell::getHappiness() const {
-    return 0;
 }
 
 void Cell::setPos(int r, int c) {
@@ -64,7 +60,8 @@ void Cell::updateDaysUntilExpired() {
         if ((*it) != nullptr && (*it)->isExpired())
             neighborsExpired++;
     }
-    this->daysUntilExpired = 1.2 + (0.2 * neighborsExpired) - this->getHappiness();
+    this->daysUntilExpired -= (0.2 * neighborsExpired);
+    this->daysUntilExpired -= 5 - this->getHappiness();
 }
 
 bool Cell::isExpired() {
@@ -118,12 +115,22 @@ float StoreZone::getHappiness() const {
     float value = 0;
 
     //check for houses and other stores in radius
+    /*
     int stores = this->getCellulaireAutomaat()->count(EStoreZone, row, col, 10) - 1;
     int houses = this->getCellulaireAutomaat()->count(EResidentialZone, row, col, 10);
     value -= stores * 0.2;
     value += houses * 0.2;
     if (houses == 0) value -= 0.5;
-    if (stores == 0) value += 0.5;
+    if (stores == 0) value += 0.5;*/
+
+    //check for store zones and industrial zones
+    int stores = this->getCellulaireAutomaat()->count(EStoreZone, row, col, 10);
+    int houses = this->getCellulaireAutomaat()->count(EResidentialZone, row, col, 10);
+    value -= stores * 0.8;
+    value += houses * 0.2;
+    if (houses == 0) value -= 0.5;
+    if (stores == 0) value += 0.5 * houses;
+
     //check for road in neighbourhood
     std::vector<Cell *> neighbourhood = this->getCellulaireAutomaat()->getNeighbourhood(row, col);
     bool road = false;
@@ -135,8 +142,6 @@ float StoreZone::getHappiness() const {
     }
     if (!road) value -= 2;
 
-    if (value < -1) value = -1;
-    if (value > 1) value = 1;
     return value;
 }
 
@@ -180,13 +185,67 @@ bool Cell::isConnectedTo(int row, int col, std::vector<std::pair<int, int>> *roa
     return false;
 }
 
+Cell *Cell::bestAlternativeCell() {
+    Cell* newGround = nullptr;
+
+    Vegetation vegetationTestZone(this->row, this->col, this->getCellulaireAutomaat());
+    float vegetationHappiness = vegetationTestZone.getHappiness();
+
+    Road roadTestZone(this->row, this->col, this->getCellulaireAutomaat());
+    float roadHappiness = roadTestZone.getHappiness();
+
+    IndustrialZone industrialTestZone(this->row, this->col, this->getCellulaireAutomaat());
+    float IndustrialHappiness = industrialTestZone.getHappiness();
+
+    ResidentialZone residentialTestZone(this->row, this->col, this->getCellulaireAutomaat());
+    float residentialHappiness = residentialTestZone.getHappiness();
+
+    StoreZone storeTestZone(this->row, this->col, this->getCellulaireAutomaat());
+    float storeHappiness = storeTestZone.getHappiness();
+
+    if(vegetationHappiness > roadHappiness &&
+       vegetationHappiness > IndustrialHappiness &&
+       vegetationHappiness > residentialHappiness &&
+       vegetationHappiness > storeHappiness){
+        newGround = new Vegetation(this->row, this->col, this->getCellulaireAutomaat());
+    }
+    else if(IndustrialHappiness > vegetationHappiness &&
+            IndustrialHappiness > roadHappiness &&
+            IndustrialHappiness > residentialHappiness &&
+            IndustrialHappiness > storeHappiness){
+        newGround = new IndustrialZone(this->row, this->col, this->getCellulaireAutomaat());
+    }
+    else if(storeHappiness > vegetationHappiness &&
+            storeHappiness > roadHappiness &&
+            storeHappiness > residentialHappiness &&
+            storeHappiness > IndustrialHappiness){
+        newGround = new StoreZone(this->row, this->col, this->getCellulaireAutomaat());
+    }
+    else if(roadHappiness > vegetationHappiness &&
+            roadHappiness > IndustrialHappiness &&
+            roadHappiness > residentialHappiness &&
+            roadHappiness > storeHappiness){
+        newGround = new Road(this->row, this->col, this->getCellulaireAutomaat());
+    }
+    else{
+        newGround = new ResidentialZone(this->row, this->col, this->getCellulaireAutomaat());
+    }
+    return newGround;
+}
 
 float Vegetation::getHappiness() const {
-    float value = 0;
+    float value = 10;
     //check for workplaces in radius
+
+    int vegitation = this->getCellulaireAutomaat()->count(EVegetation, row, col, 10);
+    int stores = this->getCellulaireAutomaat()->count(EStoreZone, row, col, 10);
     int workplaces = this->getCellulaireAutomaat()->count(EIndustrialZone, row, col, 10);
-    value -= workplaces * 0.2;
-    if (workplaces == 0) value += 0.4;
+    int houses = this->getCellulaireAutomaat()->count(EResidentialZone, row, col, 10);
+    value += workplaces * 0.2;
+    value += stores * 0.01;
+    value += houses * 0.2;
+    value -= vegitation * 0.5;
+
     //check for road in neighbourhood
     std::vector<Cell *> neighbourhood = this->getCellulaireAutomaat()->getNeighbourhood(row, col);
     bool road = false;
@@ -196,10 +255,10 @@ float Vegetation::getHappiness() const {
             break;
         }
     }
-    if (!road) value -= 0.5;
-
+    if (!road) value -= 10;
+/*
     if (value < -1) value = -1;
-    if (value > 1) value = 1;
+    if (value > 1) value = 1;*/
     return value;
 }
 
@@ -224,7 +283,7 @@ void Road::update() {
 
 std::pair<int, std::string> Road::getPixelArt() {
     if (this->isExpired()) {
-        return std::pair<int, std::string>(0, pixelArtVervallen);
+        //return std::pair<int, std::string>(0, pixelArtVervallen);
     }
     std::vector<bool> neighborsRoads = getNeighborsRoads();
     return getCorrectRoad(neighborsRoads);
@@ -271,15 +330,26 @@ void Road::addVehicle(Vehicle * v) {
 }
 
 void Road::updateDaysUntilExpired() {
-    if (this->getCellulaireAutomaat()->count(ERoad, this->row, this->col, 1) <= 0) {
+    int roadCount = this->getCellulaireAutomaat()->count(ERoad, this->row, this->col, 1);
+    if (roadCount <= 0) {
         this->daysUntilExpired = 0;
-    } else {
-        Cell::updateDaysUntilExpired();
+    } else if(roadCount > 4){
+        this->daysUntilExpired -= 2;
     }
 }
 
 Road::Road(const Cell &p2) : Cell(p2.getPos().first, p2.getPos().second, p2.getCellulaireAutomaat()) {
     this->people = p2.getPersons();
+}
+
+float Road::getHappiness() const {
+    int roadCount = this->getCellulaireAutomaat()->count(ERoad, this->row, this->col, 1);
+    if (roadCount == 1) {
+        return +200;
+    } else if(roadCount > 5){
+        return -200;
+    }
+    return 1;
 }
 
 EStates ResidentialZone::getState() const {
@@ -297,11 +367,15 @@ float ResidentialZone::getHappiness() const {
     int stores = this->getCellulaireAutomaat()->count(EStoreZone, row, col, 10);
     int workplaces = this->getCellulaireAutomaat()->count(EIndustrialZone, row, col, 10);
     int parks = this->getCellulaireAutomaat()->count(EVegetation, row, col, 10);
-    value += stores * 0.2 + workplaces * 0.2 + parks * 0.1;
-    if (stores == 0) value -= 1;
-    if (workplaces == 0) value -= 1;
-    if (parks == 0) value -= 0.5;
+    int houses = this->getCellulaireAutomaat()->count(EResidentialZone, row, col, 10);
+    value += stores * 0.2;
+    value += workplaces * 0.2;
+    value += parks * 0.2;
+    value += houses * 0.2;
 
+    if(stores == 0){
+        value -= 1 * houses;
+    }
     //check for road in neighbourhood
     std::vector<Cell *> neighbourhood = this->getCellulaireAutomaat()->getNeighbourhood(row, col);
     bool road = false;
@@ -322,7 +396,6 @@ ResidentialZone::ResidentialZone(int row, int col, CellulaireAutomaat *cellulair
                                                                                                   cellulaireAutomaat) {
     building = House();
 }
-
 std::pair<int, std::string> ResidentialZone::getPixelArt() {
     if (this->isExpired())
         return std::pair<int, std::string>(0, this->building.getExpiredPixelArt());
@@ -361,10 +434,8 @@ float IndustrialZone::getHappiness() const {
             break;
         }
     }
-    if (!road) value -= 2;
+    if (!road) value -= 5;
 
-    if (value < -1) value = -1;
-    if (value > 1) value = 1;
     return value;
 }
 

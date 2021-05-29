@@ -65,7 +65,7 @@ public:
     /*!
      * updates every cell in the automat from top left to bottom right
      */
-    void updateCells();
+    void updateCells(bool noExpire = false);
 
     /*!
      * gives back how many states of the given state are in the automat

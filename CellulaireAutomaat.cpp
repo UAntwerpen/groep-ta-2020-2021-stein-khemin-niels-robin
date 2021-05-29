@@ -178,11 +178,26 @@ void CellulaireAutomaat::updateRules() {
     }
 }
 
-void CellulaireAutomaat::updateCells() {
+void CellulaireAutomaat::updateCells(bool noExpire) {
     for (int col = 0; col < width; col++) {
         for (int row = 0; row < height; row++) {
             if (!(*this)(row, col)->isConnectedTo(main_street.first, main_street.second) ){
                 changeCell(row, col, new Vegetation(*(*this)(row, col)));
+            }
+
+            if((*this)(row, col)->isExpired() && !noExpire){
+                Cell* newZone = (*this)(row, col)->bestAlternativeCell();
+                changeCell(row, col, newZone);
+
+                std::vector<Cell *>neighbourhood = this->getNeighbourhood(newZone->getPos().first, newZone->getPos().second);
+                for(auto it = neighbourhood.begin(); it != neighbourhood.end(); it++){
+                    if((*it) != nullptr){
+                        if(!(*it)->isConnectedTo(main_street.first, main_street.second)){
+                            Cell* createRoad = new Road(*(*this)(row, col));
+                            changeCell(row, col, createRoad);
+                        }
+                    }
+                }
             }
             (*this)(row, col)->update();
         }

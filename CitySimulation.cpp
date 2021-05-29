@@ -16,10 +16,19 @@ float CitySimulation::runSimulationGUI(const std::string &rules){
         if(!w.getPause()){
             prev_score = automaat.getScore();
             automaat.updateRules();
-            automaat.updateCells();
+            automaat.updateCells(true);
             w.addDay();
             w.updateAll();
         it++;
+        }
+    }
+    while(true){
+        delay(1);
+        if(!w.getPause()){
+            automaat.updateCells();
+            w.addDay();
+            w.updateAll();
+            it++;
         }
     }
     return automaat.getScore();
@@ -39,7 +48,7 @@ float CitySimulation::runSimulation(const std::string &rules) {
     while (!it || prev_score != automaat.getScore()){
         prev_score = automaat.getScore();
         automaat.updateRules();
-        automaat.updateCells();
+        automaat.updateCells(true);
         it++;
     }
     return automaat.getScore();

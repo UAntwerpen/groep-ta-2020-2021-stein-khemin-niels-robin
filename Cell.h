@@ -42,7 +42,7 @@ public:
      * geeft terug hoeveel happiness een bepaalde cell uitstoot (tussen -1 en 1)
      * @return float
      */
-    virtual float getHappiness() const;
+    virtual float getHappiness() const {return 0;};
 
     /*!
      * Geeft voor elke zijde weer of er een weg aan verbonden kan worden;
@@ -99,6 +99,7 @@ public:
 
     bool isExpired();
 
+    Cell* bestAlternativeCell();
 
     /*
      * Controleert of huidige cell is verbonden met de weg op locatie row, col
@@ -135,7 +136,7 @@ public:
 
     std::pair<int, std::string> getPixelArt() override;
 
-    float getHappiness() const override;
+    float getHappiness()  const override;
 
 private:
     std::string pixelArt = "../PixelArt/Park.png";
@@ -161,6 +162,8 @@ public:
     std::vector<Vehicle*> getVehicles() const override;
 
     std::vector<Citizen*> getCitizen() const override;
+
+    float getHappiness() const override;
 
 
     /*!
