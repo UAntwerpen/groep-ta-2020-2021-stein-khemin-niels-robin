@@ -47,7 +47,9 @@ float CitySimulation::runSimulation(const std::string &rules) {
     return automaat.getScore();
 }
 
-void CitySimulation::runTransportSimulation(CellulaireAutomaat& map) {
+void CitySimulation::runTransportSimulation(CellulaireAutomaat& map, int steps) {
+    int currentStep = 0;
+
     MainWindow w(map.getWidth(), map.getHeight(), &map);
     w.show();
 
@@ -66,42 +68,52 @@ void CitySimulation::runTransportSimulation(CellulaireAutomaat& map) {
         }
     }
 
-    while(true){
+    while(currentStep < steps){
         for (int row = 0; row < rowDim; row++){
             for (int col = 0; col < colDim; col++){
                 map(row, col)->update();
                 int randRow = rand() % rowDim;
                 int randCol = rand() % colDim;
 
+                std::cout << randRow << ' ' << randCol << std::endl;
+
                 if (map(row, col)->getState() == EResidentialZone){
                     Vehicle* car = map(row, col)->getCar();
 
                     if (car->getStatus()) {
                         car->update(map);
-                    } else {
+                    } else if ((rand() % 100) <= 50) {
                         if (car->getPeople().empty()) {
-                            car->addPerson(map(row, col)->getPersons()[rand() % map(row, col)->getPersons().size()]);
+                            int selectPerson = rand() % (map(row, col)->getPersons().size());
+                            car->addPerson(map(row, col)->getPersons()[selectPerson]);
                         }
 
-                        Cell* goal;
+                        Cell* goal = nullptr;
                         if (map(row, col) != car->getHome()) {
                             goal = car->getHome();
-                        } else {
+                        } else if (pair<int, int>(randRow, randCol) != car->getLocation()->getPos()) {
                             goal = map(randRow, randCol);
                         }
 
                         car->setGoal(goal);
-                        auto* mask = new PFMask(map, car->getGoal(), true);
-                        mask->generateMask();
+                        if (car->getGoal() != nullptr) {
+                            auto* mask = new PFMask(map, car->getGoal(), true);
+                            mask->generateMask();
 
-                        car->setMask(mask);
-                        car->calculateRoute();
-                        car->update(map);
+                            car->setMask(mask);
+                            car->calculateRoute();
+                            car->update(map);
+                        }
                     }
                 }
             }
         }
+
+        std::cout << "=================================" << std::endl;
+        w.updateAll();
+        currentStep += 1;
+        if (currentStep % 10 == 0) {
+            w.addDay();
+        }
     }
-
-
 }

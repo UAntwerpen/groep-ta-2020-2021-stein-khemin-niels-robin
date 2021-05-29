@@ -9,6 +9,7 @@
 #include "lib/DesignByContract.h"
 #include "MainWindow.h"
 #include "CellulaireAutomaat.h"
+#include "Citizen.h"
 
 Cell::~Cell() {
 
@@ -325,6 +326,10 @@ float ResidentialZone::getHappiness() const {
 
 ResidentialZone::ResidentialZone(int row, int col, CellulaireAutomaat *cellulaireAutomaat) : Cell(row, col,
                                                                                                   cellulaireAutomaat) {
+    for (int i = 0; i < 4; i++) {
+        Citizen* resident = new Citizen(this);
+        people.push_back(resident);
+    }
     building = House();
 }
 
@@ -336,7 +341,15 @@ std::pair<int, std::string> ResidentialZone::getPixelArt() {
 
 ResidentialZone::ResidentialZone(const Cell &p2) : Cell(p2.getPos().first, p2.getPos().second,
                                                         p2.getCellulaireAutomaat()) {
-    this->people = p2.getPersons();
+    if (p2.getPersons().empty()) {
+        for (int i = 0; i < 4; i++) {
+            Citizen* resident = new Citizen(this);
+            people.push_back(resident);
+        }
+    } else {
+        this->people = p2.getPersons();
+    }
+    building = House();
 }
 
 Vehicle *ResidentialZone::getCar() {

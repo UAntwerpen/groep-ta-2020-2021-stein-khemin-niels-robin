@@ -188,7 +188,7 @@ private:
 class ResidentialZone : public Cell{
 private:
     House building;
-    Vehicle* car;
+    Vehicle* car{};
 public:
     ResidentialZone(const Cell &p2);
 

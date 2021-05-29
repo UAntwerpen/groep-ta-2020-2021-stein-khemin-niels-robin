@@ -24,15 +24,16 @@ House::House() {
     maxPeopleAmount = 8;
     verval = 100;
     setPixelArt("../PixelArt/House.png");
+//    residents = people;
 }
 
-void House::addResident(Citizen *resident) {
-
-}
-
-void House::removeResident(Citizen *resident) {
-
-}
+//void House::addResident(Citizen *resident) {
+//
+//}
+//
+//void House::removeResident(Citizen *resident) {
+//
+//}
 
 Store::Store() {
     setPixelArt("../PixelArt/Store.png");

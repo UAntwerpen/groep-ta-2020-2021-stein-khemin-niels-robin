@@ -11,7 +11,12 @@ Citizen::Citizen() : Transport() {
     pixelart = pixArt;
 }
 
-Citizen::Citizen(Cell *location, Cell *g) : Transport(location, g) {}
+Citizen::Citizen(Cell *location, Cell *g) : Transport(location, g) {
+    string pixArt = "Pedestrian";
+    int random = (rand()%3)+1;
+    pixArt = pixArt + to_string(random) + ".png";
+    pixelart = pixArt;
+}
 
 float Citizen::getHappiness() {
     return happiness;

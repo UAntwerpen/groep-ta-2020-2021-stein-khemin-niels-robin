@@ -73,6 +73,9 @@ CellulaireAutomaat::CellulaireAutomaat(const std::string &filename) {
             }
             ++row;
         }
+        if (line.empty()){
+            break;
+        }
         std::cout << line << std::endl;
     }
 

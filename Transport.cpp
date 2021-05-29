@@ -11,6 +11,7 @@ Transport::Transport() {
 
     location = nullptr;
     goal = nullptr;
+    inTransit = false;
 
     mask = new PFMask(0, 0);
     route = "";
@@ -21,6 +22,7 @@ Transport::Transport() {
 Transport::Transport(Cell *loc, Cell *g) {
     location = loc;
     goal = g;
+    inTransit = false;
 
     mask = new PFMask(0, 0);
     route = "";

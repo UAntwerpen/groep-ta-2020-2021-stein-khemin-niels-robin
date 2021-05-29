@@ -13,7 +13,7 @@ public:
     void delay(double time);
     float runSimulationGUI(const std::string &rules);
     float runSimulation(const std::string &rules);
-    void runTransportSimulation(CellulaireAutomaat& map);
+    void runTransportSimulation(CellulaireAutomaat& map, int steps);
 };
 
 #endif //TA_CITYSIMULATION_H

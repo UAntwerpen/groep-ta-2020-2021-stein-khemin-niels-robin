@@ -73,17 +73,27 @@ void MainWindow::updateRoadUsers() {
     clearRoadUsers();
     for (int x = 0; x < width; x++) {
         for (int y = 0; y < height; y++) {
-            Cell *cell = c->operator()(x,y);
-            if(cell->getState() == ERoad){
-                vector<Vehicle*> vehicles = cell->getVehicles();
-                for(auto it = vehicles.begin(); it != vehicles.end(); it++){
-                    addCar(x,y,getRotation((*it)->getDirection()),(*it)->getPixelart());
-                }
-                vector<Citizen*> citizen = cell->getCitizen();
-                for(auto it = citizen.begin(); it != citizen.end(); it++){
-                    addPedestrian(x,y,getRotation((*it)->getDirection()),(*it)->getPixelart());
+            Cell *cell = (*c)(x,y);
+
+            if (cell->getState() == EResidentialZone) {
+                Vehicle* car = cell->getCar();
+                pair<int, int> carPos = car->getLocation()->getPos();
+
+                // enkel auto afbeelden als die onderweg is.
+                if (car->getStatus()){
+                    addCar(carPos.first, carPos.second, getRotation(car->getDirection()), car->getPixelart());
                 }
             }
+//            if(cell->getState() == ERoad){
+//                vector<Vehicle*> vehicles = cell->getVehicles();
+//                for(auto it = vehicles.begin(); it != vehicles.end(); it++){
+//                    addCar(x,y,getRotation((*it)->getDirection()),(*it)->getPixelart());
+//                }
+//                vector<Citizen*> citizen = cell->getCitizen();
+//                for(auto it = citizen.begin(); it != citizen.end(); it++){
+//                    addPedestrian(x,y,getRotation((*it)->getDirection()),(*it)->getPixelart());
+//                }
+//            }
         }
     }
 }

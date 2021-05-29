@@ -13,21 +13,29 @@
 
 using namespace std;
 int main(int argc, char *argv[]){
-    QApplication a(argc, argv);
-    GeneticAlgorith algo;
-
-    Genome<GENOME_SIZE> rule = algo.run(250);
-    string s;
-    for(char c: rule){
-        s += c;
-    }
+//    QApplication a(argc, argv);
+//    GeneticAlgorith algo;
+//
+//    Genome<GENOME_SIZE> rule = algo.run(250);
 //    string s;
-//    std::ifstream file("latest.txt", std::ifstream::binary);
-//    while (file.good()){
-//        s += file.get();
+//    for(char c: rule){
+//        s += c;
 //    }
+////    string s;
+////    std::ifstream file("latest.txt", std::ifstream::binary);
+////    while (file.good()){
+////        s += file.get();
+////    }
+//
+//    CitySimulation city;
+//    city.runSimulationGUI(s);
+//    return QApplication::exec();
 
+    QApplication a(argc, argv);
     CitySimulation city;
-    city.runSimulationGUI(s);
-    return QApplication::exec();
+    CellulaireAutomaat c = CellulaireAutomaat("Maps/map001.txt");
+
+    city.runTransportSimulation(c, 100);
+    QApplication::exit();
+    return 0;
 }
