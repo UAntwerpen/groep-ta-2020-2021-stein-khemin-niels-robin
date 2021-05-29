@@ -1,9 +1,5 @@
-//
-// Created by nibor on 22/04/2021.
-//
-
-#ifndef TA_RULES_H
-#define TA_RULES_H
+#ifndef TA_GENETICALGORITHM_H
+#define TA_GENETICALGORITHM_H
 
 #include <array>
 #include <cmath>
@@ -11,38 +7,32 @@
 #include <random>
 #include <vector>
 #include <iostream>
+
 #include "Lib.h"
-
-
+#include "lib/DesignByContract.h"
 
 // https://www.youtube.com/watch?v=nhT56blfRpE&t=76s&ab_channel=KieCodes
 
-template< std::size_t _Nm>
-class Genome: public std::array<EStates, _Nm> {
+class Genome: public std::vector<EStates> {
 public:
-    Genome() = default;
-
-    Genome(EStates states) {
-
-    }
 
     void mutate(std::mt19937& mt){
-        std::uniform_int_distribution<int> dist_pos(0, GENOME_SIZE - 1);
+        std::uniform_int_distribution<int> dist_pos(0, size() - 1);
         std::uniform_int_distribution<int> dist_switch(0, 4);
-        std::uniform_int_distribution<int> dist_times(0, GENOME_SIZE * 0.001);
+        std::uniform_int_distribution<int> dist_times(0, size() * 0.001);
 
         for (int _ = 0, end = dist_times(mt); _ < end; _++){
             (*this)[dist_pos(mt)] = static_cast<EStates>(dist_switch(mt));
         }
     }
 
-    std::pair<Genome<_Nm>, Genome<_Nm>> crossover(const Genome<_Nm>& G2, std::mt19937& mt){
-        Genome* G1_cross = new Genome(this);
+    std::pair<Genome*, Genome*> crossover(const Genome& G2, std::mt19937& mt){
+        Genome* G1_cross = new Genome(*this);
         Genome* G2_cross = new Genome(G2);
-        std::uniform_int_distribution<int> dist_pos(0, GENOME_SIZE);
+        std::uniform_int_distribution<int> dist_pos(0, size());
         for (int _ = 0; _ < 2; _++) {
             int crossover_point = dist_pos(mt);
-            if (crossover_point < GENOME_SIZE / 2) {
+            if (crossover_point < size() / 2) {
                 #pragma omp parallel for simd if (PARALLELISM_ENABLED)
                 for (int i = 0; i < crossover_point; i++) {
                     EStates temp = (*G1_cross)[i];
@@ -51,7 +41,7 @@ public:
                 }
             } else {
                 #pragma omp parallel for simd if (PARALLELISM_ENABLED)
-                for (int i = crossover_point; i < GENOME_SIZE; i++) {
+                for (int i = crossover_point; i < size(); i++) {
                     EStates temp = (*G1_cross)[i];
                     (*G1_cross)[i] = (*G2_cross)[i];
                     (*G2_cross)[i] = temp;
@@ -61,13 +51,14 @@ public:
         return std::make_pair(G1_cross, G2_cross);
     }
 
-    static std::pair<Genome<_Nm>*, Genome<_Nm>*> crossover(const Genome<_Nm>& G1, const Genome<_Nm>& G2, std::mt19937& mt){
+    static std::pair<Genome*, Genome*> crossover(const Genome& G1, const Genome& G2, std::mt19937& mt){
+        ENSURE(G1.size() == G2.size(), "Genomes are not of the same size!");
         Genome* G1_cross = new Genome(G1);
         Genome* G2_cross = new Genome(G2);
-        std::uniform_int_distribution<int> dist_pos(0, GENOME_SIZE);
+        std::uniform_int_distribution<int> dist_pos(0, G1.size());
         for (int _ = 0; _ < 2; _++) {
             int crossover_point = dist_pos(mt);
-            if (crossover_point < GENOME_SIZE / 2) {
+            if (crossover_point < G1.size() / 2) {
                 #pragma omp parallel for simd if (PARALLELISM_ENABLED)
                 for (int i = 0; i < crossover_point; i++) {
                     EStates temp = (*G1_cross)[i];
@@ -76,7 +67,7 @@ public:
                 }
             } else {
                 #pragma omp parallel for simd if (PARALLELISM_ENABLED)
-                for (int i = crossover_point; i < GENOME_SIZE; i++) {
+                for (int i = crossover_point; i < G1.size(); i++) {
                     EStates temp = (*G1_cross)[i];
                     (*G1_cross)[i] = (*G2_cross)[i];
                     (*G2_cross)[i] = temp;
@@ -88,7 +79,7 @@ public:
 
     std::string to_string(){
         std::string s;
-        for (char c: this){
+        for (char c: *this){
             s += c;
         }
         return s;
@@ -96,28 +87,28 @@ public:
 };
 
 
-using Population = std::array<Genome<GENOME_SIZE>*, POPULATION_SIZE>;
-using Weights = std::array<double, POPULATION_SIZE>;
+using Population = std::vector<Genome*>;
+using Weights = std::vector<double>;
 
 class GeneticAlgorith{
 public:
 
-    GeneticAlgorith();
+    GeneticAlgorith(int genomeSize, int populationSize);
 
     virtual ~GeneticAlgorith();
 
-    Genome<GENOME_SIZE>* generateGenome();
+    Genome* generateGenome();
 
     void generatePopulation();
 
-    Genome<GENOME_SIZE> run(int max_gen);
+    Genome run(int max_gen);
 
-    float calc_fitness(Genome<GENOME_SIZE>& G);
+    float calc_fitness(Genome& G);
 
 private:
     Population population;
     Weights fitness;
-    std::array<int, POPULATION_SIZE> indices;
+    std::vector<int> indices;
     int population_size;
     int genome_size;
     std::random_device rd;
@@ -125,4 +116,4 @@ private:
 };
 
 
-#endif //TA_RULES_H
+#endif //TA_GENETICALGORITHM_H

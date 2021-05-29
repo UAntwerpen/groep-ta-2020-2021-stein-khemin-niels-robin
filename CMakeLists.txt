@@ -25,7 +25,7 @@ find_package( Qt5Gui REQUIRED )
 add_executable(TA main.cpp CellulaireAutomaat.cpp CellulaireAutomaat.h
         Cell.cpp Cell.h
         Lib.h lib/DesignByContract.h
-        Rules.cpp Rules.h
+        GeneticAlgorithm.cpp GeneticAlgorithm.h
         Utils.cpp Utils.h
         CitySimulation.cpp CitySimulation.h
         Vehicle.cpp Vehicle.h
