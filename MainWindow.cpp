@@ -66,7 +66,7 @@ MainWindow::MainWindow(int w, int h, CellulaireAutomaat *cellulaireAutomaat) {
     settingsDock->layout()->addWidget(pauseBtn);
     settingsDock->layout()->addWidget(zoomOutBtn);
     settingsDock->layout()->addWidget(zoomInBtn);
-
+    this->pause = true;
 }
 
 void MainWindow::updateRoadUsers() {

@@ -23,7 +23,17 @@ float CitySimulation::runSimulationGUI(int width, int height, const std::string 
             automaat.updateRules();
             window->addDay();
             window->updateAll();
-        it++;
+            it++;
+        }
+    }
+    std::cout << "test" << std::endl;
+    while(true){
+        delay(500);
+        if(!window->getPause()){
+            automaat.updateCells();
+            window->addDay();
+            window->updateAll();
+            it++;
         }
     }
 #pragma omp parallel sections
@@ -58,6 +68,7 @@ float CitySimulation::runSimulation(int width, int height, const std::string &ru
     float prev_score = automaat.getScore();
     while (!it || prev_score != automaat.getScore()){
         prev_score = automaat.getScore();
+        automaat.updateCells(true);
         automaat.updateRules();
         it++;
     }

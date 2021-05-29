@@ -16,7 +16,7 @@ Cell::~Cell() {
 
 Cell::Cell(int row, int col, CellulaireAutomaat *cellulaireAutomaat) : row(row), col(col),
                                                                        cellulaireAutomaat(cellulaireAutomaat) {
-    this->daysUntilExpired = (rand() % 40) + 10;
+    this->daysUntilExpired = (rand() % 200) + 60;
 }
 
 std::pair<int, int> Cell::getPos() const {

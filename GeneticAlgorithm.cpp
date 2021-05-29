@@ -80,7 +80,7 @@ float GeneticAlgorith::calc_fitness(Genome &G) {
         rules += c;
     }
     CitySimulation city;
-    return city.runSimulation(10, 10, rules);
+    return city.runSimulation(25, 25, rules);
 }
 
 GeneticAlgorith::~GeneticAlgorith() {
