@@ -35,6 +35,18 @@ public:
      */
     void setHappiness(float h);
 
+    /**
+     * Geeft terug of de persoon momenteel in een auto zit.
+     * @return : bool : true als de Citizen in een auto zit, anders false.
+     */
+    bool getInCar();
+
+    /**
+     * Stelt een nieuwe status in voor de Citizen. true (in een auto geplaatst) false (uit een auto gestapt).
+     * @param b : nieuwe status van de Citizen.
+     */
+    void setInCar(bool b);
+
     EStates getState() const override;
 
     const string &getPixelart() const;
@@ -43,6 +55,7 @@ public:
 
 private:
     float happiness = 0;
+    bool inCar;
     string pixelart;
 };
 

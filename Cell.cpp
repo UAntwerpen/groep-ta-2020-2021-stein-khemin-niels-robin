@@ -187,12 +187,6 @@ Vehicle *Cell::getCar() {
 
 void Cell::setCar(Vehicle *vehicle) {}
 
-void Cell::removeCitizen() {
-    if (!people.empty()){
-        people.pop_back();
-    }
-}
-
 float Vegetation::getHappiness() const {
     float value = 0;
     //check for workplaces in radius

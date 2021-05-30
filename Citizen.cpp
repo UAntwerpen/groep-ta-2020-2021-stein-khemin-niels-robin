@@ -5,6 +5,7 @@
 #include "Citizen.h"
 
 Citizen::Citizen() : Transport() {
+    inCar = false;
     string pixArt = "../PixelArt/Pedestrian";
     int random = (rand()%3)+1;
     pixArt = pixArt + to_string(random) + ".png";
@@ -12,6 +13,7 @@ Citizen::Citizen() : Transport() {
 }
 
 Citizen::Citizen(Cell *location, Cell *g) : Transport(location, g) {
+    inCar = false;
     string pixArt = "../PixelArt/Pedestrian";
     int random = (rand()%3)+1;
     pixArt = pixArt + to_string(random) + ".png";
@@ -46,11 +48,12 @@ void Citizen::update(CellulaireAutomaat& city) {
 
     pair<int, int> currPos = this->getLocation()->getPos();
     pair<int, int> newPos = pair<int, int>(currPos.first + dy, currPos.second + dx);
+    std::cout << "newPos: " << newPos.first << ' ' << newPos.second << " currPos: " << currPos.first << ' ' << currPos.second << " progress: " << this->getProgress() << " route: " << this->getRoute()  << " goal: " << this->getGoal()->getPos().first << ' ' << this->getGoal()->getPos().second;
     Cell* newLoc = city(newPos.first, newPos.second);
+    std::cout << " newLoc:" << newLoc->getPos().first << ' ' << newLoc->getPos().second << std::endl;
 
     this->setLocation(newLoc);
     this->increaseProgress();
-    this->getLocation()->addPerson(this);
 
     // Aangekomen op bestemming;
     if (this->getLocation()->getPos() == this->getGoal()->getPos()){
@@ -59,4 +62,12 @@ void Citizen::update(CellulaireAutomaat& city) {
         this->setRoute("");
         this->setStatus(false);
     }
+}
+
+bool Citizen::getInCar() {
+    return inCar;
+}
+
+void Citizen::setInCar(bool b) {
+    inCar = b;
 }

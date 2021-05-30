@@ -83,8 +83,8 @@ void MainWindow::updateRoadUsers() {
                 if (car->getStatus()){
                     addCar(carPos.first, carPos.second, getRotation(car->getDirection()), car->getPixelart());
                 }
-                vector<Citizen*> citizen = cell->getCitizen();
-                for(auto it = citizen.begin(); it != citizen.end(); it++){
+                vector<Citizen*> citizens = cell->getPersons();
+                for(auto it = citizens.begin(); it != citizens.end(); it++){
                     pair<int, int> pedestrianPos = (*it)->getLocation()->getPos();
                     if((*it)->getStatus()){
                         addPedestrian(pedestrianPos.first, pedestrianPos.second, getRotation((*it)->getDirection()), (*it)->getPixelart());

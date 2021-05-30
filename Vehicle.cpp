@@ -47,6 +47,7 @@ Citizen *Vehicle::operator[](unsigned int ind) {
 
 void Vehicle::addPerson(Citizen *person) {
     person->setLocation(this->getLocation());
+    person->setInCar(true);
     people.push_back(person);
 }
 
@@ -79,13 +80,8 @@ void Vehicle::update(CellulaireAutomaat &city) {
         this->setRoute("");
         this->setStatus(false);
 
-        // Voegt citizens toe in de doelcell.
-        for (Citizen* pass : this->getPeople()){
-            this->getLocation()->addPerson(pass);
-
-            if (this->getLocation()->getPos() == this->getHome()->getPos()){
-                this->setPeople(vector<Citizen*>());
-            }
+        if (this->getLocation()->getPos() == this->getHome()->getPos()){
+            this->removePassengers();
         }
     }
 }
@@ -96,4 +92,11 @@ EStates Vehicle::getState() const {
 
 const string &Vehicle::getPixelart() const {
     return pixelart;
+}
+
+void Vehicle::removePassengers() {
+    for (Citizen* pass : this->getPeople()) {
+        pass->setInCar(false);
+    }
+    this->setPeople(vector<Citizen*>());
 }

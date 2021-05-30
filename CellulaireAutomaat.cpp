@@ -94,7 +94,7 @@ CellulaireAutomaat::~CellulaireAutomaat() {
 }
 
 Cell* CellulaireAutomaat::operator()(int row, int column) const {
-    REQUIRE(0 <= row && row < height, "Row with is out of bounds!");
+    REQUIRE(0 <= row && row < height, "Row is out of bounds!");
     REQUIRE(0 <= column && column < width, "Column is out of bounds!");
     return matrix[row * width + column];
 }

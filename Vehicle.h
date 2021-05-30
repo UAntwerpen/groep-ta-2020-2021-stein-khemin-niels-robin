@@ -56,6 +56,11 @@ public:
     void addPerson(Citizen* person);
 
     /**
+     * @brief removePassengers
+     */
+    void removePassengers();
+
+    /**
     * Verplaatst het Vehicle 1 stap vooruit volgens zijn pad.
     * @param city : De cellulaire automaat waardoor het Vehicle zich beweegt.
     */

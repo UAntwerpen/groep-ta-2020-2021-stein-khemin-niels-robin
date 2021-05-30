@@ -49,6 +49,10 @@ float CitySimulation::runSimulation(const std::string &rules) {
 }
 
 void CitySimulation::runTransportSimulation(CellulaireAutomaat& map, int steps) {
+    int carChance = 20;
+    int pedestrianChance = 15;
+    int pedestrianRange = 5;
+
     int currentStep = 0;
 
     MainWindow w(map.getWidth(), map.getHeight(), &map);
@@ -81,17 +85,19 @@ void CitySimulation::runTransportSimulation(CellulaireAutomaat& map, int steps) 
 
                     if (car->getStatus()) {
                         car->update(map);
-                    } else if ((rand() % 100) <= 20) {
+                    } else if ((rand() % 100) <= carChance) {
                         // Voeg een passagier toe aan de auto als de auto leeg is.
                         if (car->getPeople().empty() && !map(row, col)->getPersons().empty()) {
-                            car->addPerson(map(row, col)->getPersons().back());
-                            map(row, col)->removeCitizen();
+                            int selectPerson = rand() % map(row, col)->getPersons().size();
+                            if (!map(row, col)->getPersons()[selectPerson]->getStatus()){
+                                car->addPerson(map(row, col)->getPersons()[selectPerson]);
+                            }
                         }
 
                         Cell* goal = nullptr;
-                        if (map(row, col) != car->getHome()) {
+                        if (map(row, col) != car->getHome() && !car->getPeople().empty()) {
                             goal = car->getHome();
-                        } else if (pair<int, int>(randRow, randCol) != car->getLocation()->getPos()) {
+                        } else if (pair<int, int>(randRow, randCol) != car->getLocation()->getPos()&& !car->getPeople().empty()) {
                             goal = map(randRow, randCol);
                         }
 
@@ -103,47 +109,38 @@ void CitySimulation::runTransportSimulation(CellulaireAutomaat& map, int steps) 
                             car->setMask(mask);
                             car->calculateRoute();
                             car->update(map);
-                        } else {
-                            // Auto verplaatst niet. Passagiers worden terug binnen gezet.
-                            for (Citizen* pass : car->getPeople()){
-                                car->getLocation()->addPerson(pass);
+                        }
+                    }
+                    for (int i = 0; i < map(row, col)->getPersons().size(); i++) {
+                        Citizen* person = map(row, col)->getPersons()[i];
+                        pair<int, int> personPos = person->getLocation()->getPos();
 
-                                if (car->getLocation()->getPos() == car->getHome()->getPos()){
-                                    car->setPeople(vector<Citizen*>());
-                                }
+                        if (person->getStatus()) {
+                            person->update(map);
+                        } else if (!person->getInCar() && (rand() % 100) <= pedestrianChance
+                                        && abs(randRow - personPos.first) < pedestrianRange
+                                            && abs(randCol - personPos.second) < pedestrianRange) {
+
+                            Cell* goal = nullptr;
+                            if (pair<int, int>(randRow, randCol) != person->getLocation()->getPos()) {
+                                goal = map(randRow, randCol);
+                            }
+
+                            person->setGoal(goal);
+                            if (person->getGoal() != nullptr) {
+                                auto* mask = new PFMask(map, person->getGoal(), false);
+                                mask->generateMask();
+
+                                person->setMask(mask);
+                                person->calculateRoute();
+                                person->update(map);
                             }
                         }
                     }
                 }
-//                for (int i = 0; i < map(row, col)->getPersons().size(); i++) {
-//                    Citizen* person = map(row, col)->getPersons()[i];
-
-//                    if (person->getStatus()) {
-//                        person->update(map);
-//                    }
-//                }
-//                if (randRow < 5 && randCol < 5 && (rand() % 100) <= 15 && !map(row, col)->getPersons().empty()) {
-//                    Citizen* person = map(row, col)->getPersons().back();
-
-
-//                    Cell* goal = nullptr;
-//                    if (pair<int, int>(randRow, randCol) != person->getLocation()->getPos()) {
-//                        goal = map(randRow, randCol);
-//                    }
-
-//                    person->setGoal(goal);
-//                    if (person->getGoal() != nullptr) {
-//                        map(row, col)->removeCitizen();
-//                        auto* mask = new PFMask(map, person->getGoal(), false);
-//                        mask->generateMask();
-
-//                        person->setMask(mask);
-//                        person->calculateRoute();
-//                        person->update(map);
-//                    }
-//                }
             }
         }
+        std::cout << "" << std::endl;
         w.updateRoadUsers();
         delay(1);
         w.moveCars();
