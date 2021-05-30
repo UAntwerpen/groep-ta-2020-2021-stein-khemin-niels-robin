@@ -16,6 +16,10 @@
 class Genome: public std::vector<EStates> {
 public:
 
+    /*!
+     * switches the value on random locations to random value (between 0-4)
+     * @param mt random device
+     */
     void mutate(std::mt19937& mt){
         std::uniform_int_distribution<int> dist_pos(0, size() - 1);
         std::uniform_int_distribution<int> dist_switch(0, 4);
@@ -26,7 +30,13 @@ public:
         }
     }
 
-    std::pair<Genome*, Genome*> crossover(const Genome& G2, std::mt19937& mt){
+    /*!
+     * crosses over this and G2, using random device mt
+     * @param G2 second genome
+     * @param mt random device
+     * @return std::pair<Genome*, Genome*>
+     */
+    std::pair<Genome*, Genome*> crossover(const Genome& G2, std::mt19937& mt) const{
         Genome* G1_cross = new Genome(*this);
         Genome* G2_cross = new Genome(G2);
         std::uniform_int_distribution<int> dist_pos(0, size());
@@ -51,32 +61,21 @@ public:
         return std::make_pair(G1_cross, G2_cross);
     }
 
+    /*!
+     * crosses over G1 and G2, using random device mt
+     * @param G1 first genome
+     * @param G2 second genome
+     * @param mt random device
+     * @return std::pair<Genome*, Genome*>
+     */
     static std::pair<Genome*, Genome*> crossover(const Genome& G1, const Genome& G2, std::mt19937& mt){
-        ENSURE(G1.size() == G2.size(), "Genomes are not of the same size!");
-        Genome* G1_cross = new Genome(G1);
-        Genome* G2_cross = new Genome(G2);
-        std::uniform_int_distribution<int> dist_pos(0, G1.size());
-        for (int _ = 0; _ < 2; _++) {
-            int crossover_point = dist_pos(mt);
-            if (crossover_point < G1.size() / 2) {
-                #pragma omp parallel for simd if (PARALLELISM_ENABLED)
-                for (int i = 0; i < crossover_point; i++) {
-                    EStates temp = (*G1_cross)[i];
-                    (*G1_cross)[i] = (*G2_cross)[i];
-                    (*G2_cross)[i] = temp;
-                }
-            } else {
-                #pragma omp parallel for simd if (PARALLELISM_ENABLED)
-                for (int i = crossover_point; i < G1.size(); i++) {
-                    EStates temp = (*G1_cross)[i];
-                    (*G1_cross)[i] = (*G2_cross)[i];
-                    (*G2_cross)[i] = temp;
-                }
-            }
-        }
-        return std::make_pair(G1_cross, G2_cross);
+        return G1.crossover(G2, mt);
     }
 
+    /*!
+     * converts the array of chars to a string
+     * @return string
+     */
     std::string to_string(){
         std::string s;
         for (char c: *this){
@@ -97,21 +96,38 @@ public:
 
     virtual ~GeneticAlgorith();
 
-    Genome* generateGenome();
-
-    void generatePopulation();
-
+    /*!
+     * trains a population to generate a genome
+     * @param max_gen the number of generations for which the generation is ran
+     * @return Genome
+     */
     Genome run(int max_gen);
 
+private:
+    /*!
+     * creates a random genome
+     * @return Genome*
+     */
+    Genome* generateGenome();
+
+    /*!
+     * generates a random population
+     */
+    void generatePopulation();
+
+    /*!
+     * calculates the fitness of a genome
+     * @param G
+     * @return
+     */
     float calc_fitness(Genome& G);
 
-private:
+
     Population population;
     Weights fitness;
     std::vector<int> indices;
     int population_size;
     int genome_size;
-    std::random_device rd;
     std::mt19937* mt;
 };
 

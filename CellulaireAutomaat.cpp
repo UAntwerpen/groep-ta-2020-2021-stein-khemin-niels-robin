@@ -241,30 +241,6 @@ std::map<EStates, int> CellulaireAutomaat::count_all() const {
         return height;
     }
 
-    void CellulaireAutomaat::draw() {
-        /*for (int col = 0; col < width; col++){
-            for (int row = 0; row < height; row++){
-                switch ((*this)(row, col)->getState()) {
-                    case 1:
-                        std::cout << "r ";
-                    case 2:
-                        std::cout << "R ";
-                        break;
-                    case 3:
-                        std::cout << "I ";
-                        break;
-                    case 4:
-                        std::cout << "S ";
-                    case 0:
-                    default:
-                        std::cout << "V ";
-                        break;
-                }
-            }
-            std::cout << std::endl;
-        }*/
-    }
-
 void CellulaireAutomaat::addMainStreet(int row, int col) {
     REQUIRE(0 <= row && row < height, "Row is out of bounds!");
     REQUIRE(0 <= col && col < width, "Column is out of bounds!");
@@ -278,7 +254,6 @@ void CellulaireAutomaat::addMainStreet(int row, int col) {
 float CellulaireAutomaat::getScore() const {
     std::map<EStates, int> count_ = count_all();
     static float total = width * height;
-//    std::cout << (count_[EIndustrialZone] / total) * (total / 5) << " " << (count_[EStoreZone] / total) * (total / 5) << " " << (count_[EResidentialZone] / total) * (total / 2) << " " << (count_[ERoad] / total) * (total / 3) << " " << (count_[EVegetation] / total) * (total / 5) << std::endl;
     return (count_[EIndustrialZone] / total * 0.1) + (count_[EStoreZone] / total * 0.1) + (count_[EResidentialZone] / total * 0.5) + (count_[ERoad] / total * 0.3) + (count_[EVegetation] / total * 0.2);
 }
 

@@ -112,11 +112,6 @@ public:
     int getHeight() const;
 
     /*!
-     * tekent de automaat op het scherm
-     */
-    void draw();
-
-    /*!
      * adds a main street that can't be changed
      * @param row int
      * @param col int
@@ -150,6 +145,11 @@ private:
     */
     static int getNeighbourhoodValue(int row, int col, const std::vector<std::vector<EStates>>& map);
 
+    /*!
+     * updates 3x3 squares around the given cell
+     * @param row: int row of center cell
+     * @param col : int column of center cell
+     */
     void updateRulesHelper(int row, int col);
 
     int width;

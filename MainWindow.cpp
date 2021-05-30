@@ -12,10 +12,10 @@ using namespace std;
 
 
 MainWindow::MainWindow(int w, int h, CellulaireAutomaat *cellulaireAutomaat) {
+    REQUIRE(1 < w, "Width is too small(must be at least 2)!");
+    REQUIRE(1 < h, "Height is too small(must be at least 2)!");
     width = w;
     height = h;
-    REQUIRE(1 < width, "Width is too small(must be at least 2)!");
-    REQUIRE(1 < height, "Height is too small(must be at least 2)!");
     c = cellulaireAutomaat;
     scene = new QGraphicsScene();
     drawGrid(w, h);
@@ -119,7 +119,9 @@ MainWindow::~MainWindow() {
     clearWalls();
 }
 
-void MainWindow::drawTile(int row, int col, int rot, const std::string pixelart) {
+void MainWindow::drawTile(int row, int col, int rot, const std::string& pixelart) {
+    REQUIRE(0 <= row && row < height, "Row with is out of bounds!");
+    REQUIRE(0 <= col && col < width, "Column is out of bounds!");
     QString filename = pixelart.c_str();
     QGraphicsPixmapItem *item = new QGraphicsPixmapItem(QPixmap(filename));
     item->setPixmap(QPixmap(filename));
@@ -145,7 +147,9 @@ void MainWindow::drawTile(int row, int col, int rot, const std::string pixelart)
     }
 }
 
-void MainWindow::addCar(int row, int col, int rot, const std::string pixelart) {
+void MainWindow::addCar(int row, int col, int rot, const std::string& pixelart) {
+    REQUIRE(0 <= row && row < height, "Row with is out of bounds!");
+    REQUIRE(0 <= col && col < width, "Column is out of bounds!");
     QString filename = pixelart.c_str();
     QGraphicsPixmapItem *item = new QGraphicsPixmapItem(QPixmap(filename));
     item->setCacheMode(QGraphicsItem::NoCache);
@@ -166,7 +170,9 @@ void MainWindow::addCar(int row, int col, int rot, const std::string pixelart) {
     roadUsers.push_back(item);
 }
 
-void MainWindow::addPedestrian(int row, int col, int rot, const std::string pixelart) {
+void MainWindow::addPedestrian(int row, int col, int rot, const std::string& pixelart) {
+    REQUIRE(0 <= row && row < height, "Row with is out of bounds!");
+    REQUIRE(0 <= col && col < width, "Column is out of bounds!");
     QString filename = pixelart.c_str();
 
     QGraphicsPixmapItem *item = new QGraphicsPixmapItem(QPixmap(filename));

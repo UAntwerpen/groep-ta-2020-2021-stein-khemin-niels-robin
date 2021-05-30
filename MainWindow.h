@@ -57,8 +57,10 @@ private:
      * @param col: kolom positie
      * @param rotation: geeft hoeveel graden de afbeelding gedraaid moet worden
      * @param pixelart: verwijzing naar afbeelding
+     * REQUIRE(0 <= row && row < height, "Row with is out of bounds!");
+     * REQUIRE(0 <= col && col < width, "Column is out of bounds!");
      */
-    void drawTile(int row, int col, int rotation, const std::string pixelart);
+    void drawTile(int row, int col, int rotation, const std::string& pixelart);
 
     /*!
      * plaatst een auto op de weg
@@ -66,8 +68,10 @@ private:
      * @param col: kolom positie
      * @param rotation: geeft hoeveel graden de afbeelding gedraaid moet worden
      * @param pixelart: verwijzing naar afbeelding
+     * REQUIRE(0 <= row && row < height, "Row with is out of bounds!");
+     * REQUIRE(0 <= col && col < width, "Column is out of bounds!");
      */
-    void addCar(int row, int col, int rotation, const std::string pixelart);
+    void addCar(int row, int col, int rotation, const std::string& pixelart);
 
     /*!
      * plaatste een voetganger op de weg
@@ -75,8 +79,10 @@ private:
      * @param col: kolom positie
      * @param rotation: geeft hoeveel graden de afbeelding gedraaid moet worden
      * @param pixelart: verwijzing naar afbeelding
+     * REQUIRE(0 <= row && row < height, "Row with is out of bounds!");
+     * REQUIRE(0 <= col && col < width, "Column is out of bounds!");
      */
-    void addPedestrian(int row, int col, int rotation, const std::string pixelart);
+    void addPedestrian(int row, int col, int rotation, const std::string& pixelart);
 
     /*!
      * functie die wordt aangeroepen als er op de pauseknop wordt gedrukt, zet variabele pause op true
