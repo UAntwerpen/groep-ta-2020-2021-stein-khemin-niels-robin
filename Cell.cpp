@@ -7,7 +7,6 @@
 
 #include "Cell.h"
 #include "lib/DesignByContract.h"
-#include "MainWindow.h"
 #include "CellulaireAutomaat.h"
 
 Cell::~Cell() {

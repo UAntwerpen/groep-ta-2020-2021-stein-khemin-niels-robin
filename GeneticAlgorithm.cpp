@@ -1,6 +1,5 @@
 #include <ctime>
 #include "GeneticAlgorithm.h"
-#include "Utils.h"
 #include "CitySimulation.h"
 
 

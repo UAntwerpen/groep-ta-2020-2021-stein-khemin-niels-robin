@@ -248,7 +248,6 @@ void CellulaireAutomaat::addMainStreet(int row, int col) {
     main_street = {row, col};
     branches.emplace_back(std::make_pair(row, col));
     seen_cells.emplace_back(std::make_pair(row, col));
-    draw();
 }
 
 float CellulaireAutomaat::getScore() const {
@@ -261,7 +260,7 @@ float CellulaireAutomaat::getScore() const {
             if ((*this)(row, col)->getState() == ERoad) {
                 int count;
                 for (const auto& cell: getNeighbourhood(row, col)){
-                    if (cell->getState() == ERoad) ++count;
+                    if (cell != nullptr && cell->getState() == ERoad) ++count;
                 }
                 if (count > 3) score -= 0.1;
             }

@@ -11,7 +11,6 @@
 #include <queue>
 
 #include "Cell.h"
-#include "MainWindow.h"
 
 class CellulaireAutomaat {
 public:
