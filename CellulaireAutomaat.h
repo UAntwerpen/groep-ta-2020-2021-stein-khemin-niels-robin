@@ -52,7 +52,7 @@ public:
      * REQUIRE(0 <= row && row < width, "Row is out of bounds!");
      * REQUIRE(0 <= column && column < height, "Column is out of bounds!");
      */
-    std::vector<Cell*> getNeighbourhood(int row, int col);
+    std::vector<Cell*> getNeighbourhood(int row, int col) const;
 
     /*!
      * veranderd de cell naar een nieuwe cell
@@ -151,6 +151,8 @@ private:
      * @param col : int column of center cell
      */
     void updateRulesHelper(int row, int col);
+
+    float scoreHelper(int count, double percentage) const;
 
     int width;
     int height;

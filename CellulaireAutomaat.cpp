@@ -92,7 +92,7 @@ Cell* CellulaireAutomaat::operator()(int row, int column) const {
     return ret;
 }
 
-std::vector<Cell *> CellulaireAutomaat::getNeighbourhood(int row, int col) {
+std::vector<Cell *> CellulaireAutomaat::getNeighbourhood(int row, int col) const {
     REQUIRE(0 <= row && row < height, "Row is out of bounds!");
     REQUIRE(0 <= col && col < width, "Column is out of bounds!");
     std::vector<Cell *> neighbourhood(8);
@@ -253,8 +253,28 @@ void CellulaireAutomaat::addMainStreet(int row, int col) {
 
 float CellulaireAutomaat::getScore() const {
     std::map<EStates, int> count_ = count_all();
+
+    float score = scoreHelper(count_[EIndustrialZone], 0.1) + scoreHelper(count_[EStoreZone], 0.1) + scoreHelper(count_[EResidentialZone], 0.4)
+    + scoreHelper(count_[ERoad], 0.3) + scoreHelper(count_[EVegetation], 0.1);
+    for (int col = 0; col < width; col++) {
+        for (int row = 0; row < height; row++) {
+            if ((*this)(row, col)->getState() == ERoad) {
+                int count;
+                for (const auto& cell: getNeighbourhood(row, col)){
+                    if (cell->getState() == ERoad) ++count;
+                }
+                if (count > 3) score -= 0.1;
+            }
+        }
+    }
+    return score;
+}
+float CellulaireAutomaat::scoreHelper(int count, double percentage) const{
     static float total = width * height;
-    return (count_[EIndustrialZone] / total * 0.1) + (count_[EStoreZone] / total * 0.1) + (count_[EResidentialZone] / total * 0.5) + (count_[ERoad] / total * 0.3) + (count_[EVegetation] / total * 0.2);
+    if (count == 0) return 0;
+    float x = count / total * percentage;
+    if (x == 1.25) return x;
+    return ((1.25 - x) * (1.25 - x) / (2 * abs(1.25 - x))) + (-x / 2) + (1.25 / 2);
 }
 
 void CellulaireAutomaat::updateRulesHelper(int row, int col) {
