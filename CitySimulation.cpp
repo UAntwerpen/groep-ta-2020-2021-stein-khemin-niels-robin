@@ -26,9 +26,8 @@ float CitySimulation::runSimulationGUI(int width, int height, const std::string 
         it++;
         }
     }
-
     while (window->isVisible()) {
-        delay(1000);
+        delay(500);
         automaat.updateCells();
     }
 
