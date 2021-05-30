@@ -29,6 +29,8 @@ public:
      */
     void updateRoadUsers();
 
+    void moveCars();
+
     /*!
      * update de stad
      */

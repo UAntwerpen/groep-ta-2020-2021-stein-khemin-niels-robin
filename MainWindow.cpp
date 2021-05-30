@@ -98,6 +98,24 @@ void MainWindow::updateRoadUsers() {
     }
 }
 
+void MainWindow::moveCars(){
+    for(auto it = roadUsers.begin(); it != roadUsers.end(); it++){
+        int rot = (*it)->rotation();
+        if(rot == 0){
+            (*it)->setY((*it)->y()-(zoomTile*8));
+        }
+        else if(rot == 90){
+            (*it)->setX((*it)->x()+(zoomTile*8));
+        }
+        else if(rot == 180){
+            (*it)->setY((*it)->y()+(zoomTile*8));
+        }
+        else if(rot == 270){
+            (*it)->setX((*it)->x()-(zoomTile*8));
+        }
+    }
+}
+
 int MainWindow::getRotation(char direction){
     switch(direction){
         case('N'):
@@ -175,8 +193,8 @@ void MainWindow::addCar(int row, int col, int rot, const std::string pixelart) {
     item->setCacheMode(QGraphicsItem::NoCache);
     qreal scale = qMax(zoomTile/2, zoomTile/2);
     item->setScale(scale);
-    item->setRotation(rot * 90);
     rot = rot % 4;
+    item->setRotation(rot * 90);
     int ofsetx = 0;
     int ofsety = 0;
     if (rot == 1 || rot == 2) {

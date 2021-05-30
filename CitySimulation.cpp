@@ -68,6 +68,7 @@ void CitySimulation::runTransportSimulation(CellulaireAutomaat& map, int steps) 
             }
         }
     }
+    w.updateAll();
     while(currentStep < steps){
         for (int row = 0; row < rowDim; row++){
             for (int col = 0; col < colDim; col++){
@@ -143,7 +144,13 @@ void CitySimulation::runTransportSimulation(CellulaireAutomaat& map, int steps) 
 //                }
             }
         }
-        w.updateAll();
+        w.updateRoadUsers();
+        delay(1);
+        w.moveCars();
+        delay(1);
+        w.moveCars();
+        delay(1);
+        w.moveCars();
         delay(1);
         while(w.getPause()){
             delay(1);
