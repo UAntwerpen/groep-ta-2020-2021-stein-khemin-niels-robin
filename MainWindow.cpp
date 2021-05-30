@@ -76,18 +76,32 @@ void MainWindow::updateRoadUsers() {
             Cell *cell = c->operator()(x,y);
             if(cell->getState() == ERoad){
                 vector<Vehicle*> vehicles = cell->getVehicles();
-                //TODO
                 for(auto it = vehicles.begin(); it != vehicles.end(); it++){
-                    addCar(x,y,0,(*it)->getPixelart());
+                    addCar(x,y,getRotation((*it)->getDirection()),(*it)->getPixelart());
                 }
                 vector<Citizen*> citizen = cell->getCitizen();
                 for(auto it = citizen.begin(); it != citizen.end(); it++){
-                    addPedestrian(x,y,0,(*it)->getPixelart());
+                    addPedestrian(x,y,getRotation((*it)->getDirection()),(*it)->getPixelart());
                 }
             }
         }
     }
 }
+
+int MainWindow::getRotation(char direction){
+    switch(direction){
+        case('N'):
+            return 0;
+        case('E'):
+            return 1;
+        case('S'):
+            return 2;
+        case('W'):
+            return 3;
+        default:
+            return 0;
+    }
+};
 
 void MainWindow::updateAll() {
     clearWalls();

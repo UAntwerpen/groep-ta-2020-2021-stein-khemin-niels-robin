@@ -5,6 +5,8 @@
 #include "CitySimulation.h"
 #include "lib/DesignByContract.h"
 
+#include <omp.h>
+
 float CitySimulation::runSimulationGUI(int width, int height, const std::string &rules){
     REQUIRE(1 < width, "Width is too small(must be at least 2)!");
     REQUIRE(1 < height, "Height is too small(must be at least 2)!");
@@ -12,8 +14,6 @@ float CitySimulation::runSimulationGUI(int width, int height, const std::string 
     CellulaireAutomaat automaat(width, height, rules, true);
     automaat.addMainStreet(0, width / 2);
     window = new MainWindow(width, height, &automaat);
-    window->isEnabled();
-    window->isVisible();
     window->show();
     float prev_score = automaat.getScore();
     while (!it || prev_score != automaat.getScore()){
