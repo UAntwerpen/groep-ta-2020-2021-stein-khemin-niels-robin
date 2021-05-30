@@ -50,7 +50,6 @@ float CitySimulation::runSimulation(int width, int height, const std::string &ru
     while (!it || prev_score != automaat.getScore()){
         prev_score = automaat.getScore();
         automaat.updateRules();
-        automaat.updateCells();
         it++;
     }
     return automaat.getScore();

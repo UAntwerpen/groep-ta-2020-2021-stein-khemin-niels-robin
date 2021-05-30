@@ -141,7 +141,7 @@ int CellulaireAutomaat::getNeighbourhoodValue(int row, int col, const std::vecto
         REQUIRE(col < c.size(), "Column is out of bounds!");
     }
     int value = 0;
-    static int powers[8] = {static_cast<int>(pow(5, 7)), static_cast<int>(pow(5, 6)), static_cast<int>(pow(5, 5)),
+    const static int powers[8] = {static_cast<int>(pow(5, 7)), static_cast<int>(pow(5, 6)), static_cast<int>(pow(5, 5)),
                             static_cast<int>(pow(5, 4)), static_cast<int>(pow(5, 3)),
                             static_cast<int>(pow(5, 2)), 5, 1};
     if (0 <= row - 1 && 0 <= col - 1)
