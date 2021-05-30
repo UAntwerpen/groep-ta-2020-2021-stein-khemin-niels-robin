@@ -48,9 +48,7 @@ void Citizen::update(CellulaireAutomaat& city) {
 
     pair<int, int> currPos = this->getLocation()->getPos();
     pair<int, int> newPos = pair<int, int>(currPos.first + dy, currPos.second + dx);
-    std::cout << "newPos: " << newPos.first << ' ' << newPos.second << " currPos: " << currPos.first << ' ' << currPos.second << " progress: " << this->getProgress() << " route: " << this->getRoute()  << " goal: " << this->getGoal()->getPos().first << ' ' << this->getGoal()->getPos().second;
     Cell* newLoc = city(newPos.first, newPos.second);
-    std::cout << " newLoc:" << newLoc->getPos().first << ' ' << newLoc->getPos().second << std::endl;
 
     this->setLocation(newLoc);
     this->increaseProgress();
