@@ -83,23 +83,20 @@ void MainWindow::updateRoadUsers() {
                 if (car->getStatus()){
                     addCar(carPos.first, carPos.second, getRotation(car->getDirection()), car->getPixelart());
                 }
+                vector<Citizen*> citizen = cell->getCitizen();
+                for(auto it = citizen.begin(); it != citizen.end(); it++){
+                    pair<int, int> pedestrianPos = (*it)->getLocation()->getPos();
+                    if((*it)->getStatus()){
+                        addPedestrian(pedestrianPos.first, pedestrianPos.second, getRotation((*it)->getDirection()), (*it)->getPixelart());
+                    }
+                }
             }
-//            if(cell->getState() == ERoad){
-//                vector<Vehicle*> vehicles = cell->getVehicles();
-//                for(auto it = vehicles.begin(); it != vehicles.end(); it++){
-//                    addCar(x,y,getRotation((*it)->getDirection()),(*it)->getPixelart());
-//                }
-//                vector<Citizen*> citizen = cell->getCitizen();
-//                for(auto it = citizen.begin(); it != citizen.end(); it++){
-//                    addPedestrian(x,y,getRotation((*it)->getDirection()),(*it)->getPixelart());
-//                }
-//            }
         }
     }
 }
 
 void MainWindow::moveCars(){
-    for(auto it = roadUsers.begin(); it != roadUsers.end(); it++){
+    for(auto it = vehicles.begin(); it != vehicles.end(); it++){
         int rot = (*it)->rotation();
         if(rot == 0){
             (*it)->setY((*it)->y()-(zoomTile*8));
@@ -115,6 +112,9 @@ void MainWindow::moveCars(){
         }
     }
 }
+
+
+
 
 int MainWindow::getRotation(char direction){
     switch(direction){
@@ -205,7 +205,7 @@ void MainWindow::addCar(int row, int col, int rot, const std::string pixelart) {
     }
     item->setPos(col * (32*zoomTile) + ofsetx, row * (32*zoomTile) + ofsety);
     scene->addItem(item);
-    roadUsers.push_back(item);
+    vehicles.push_back(item);
 }
 
 void MainWindow::addPedestrian(int row, int col, int rot, const std::string pixelart) {
@@ -233,7 +233,7 @@ void MainWindow::addPedestrian(int row, int col, int rot, const std::string pixe
     }
     item->setPos(col * (32*zoomTile) + ofsetx, row * (32*zoomTile) + ofsety);
     scene->addItem(item);
-    roadUsers.push_back(item);
+    pedestrians.push_back(item);
 }
 
 void MainWindow::pressedPause(){
@@ -258,10 +258,14 @@ void MainWindow::clearBuildings() {
 }
 
 void MainWindow::clearRoadUsers() {
-    for (auto it = roadUsers.begin(); it != roadUsers.end(); it++) {
+    for (auto it = vehicles.begin(); it != vehicles.end(); it++) {
         delete *it;
     }
-    roadUsers = {};
+    vehicles = {};
+    for (auto it = pedestrians.begin(); it != pedestrians.end(); it++) {
+        delete *it;
+    }
+    pedestrians = {};
 }
 
 void MainWindow::clearWalls() {
