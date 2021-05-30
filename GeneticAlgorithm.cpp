@@ -41,6 +41,7 @@ Genome GeneticAlgorith::run(int max_gen) {
         begin = std::chrono::system_clock::now();
 #pragma omp parallel for if (PARALLELISM_ENABLED)
         for (int i = 0; i < population_size; i++){
+            std::cout << i << std::endl;
             fitness[i] = calc_fitness(*population[i]);
         }
         std::sort(indices.begin(), indices.end(), [this](int first, int second){return fitness[first] > fitness[second];});
