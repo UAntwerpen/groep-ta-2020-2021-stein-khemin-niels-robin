@@ -8,7 +8,7 @@
 CellulaireAutomaat::CellulaireAutomaat(int width, int height, const std::string& rules, bool save_rules) : width(width), height(height), rules(rules), save_rules(save_rules) {
     REQUIRE(1 < width, "Width is too small(must be at least 2)!");
     REQUIRE(1 < height, "Height is too small(must be at least 2)!");
-    matrix = std::vector<Cell*>(width * height);
+    matrix.resize(width * height);
     for (int row = 0; row < height; row++){
         for (int col = 0; col < width; col++){
             changeCell(row, col, new Vegetation(row, col, this));

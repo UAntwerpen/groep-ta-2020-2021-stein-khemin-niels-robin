@@ -26,20 +26,11 @@ float CitySimulation::runSimulationGUI(int width, int height, const std::string 
         it++;
         }
     }
-#pragma omp parallel sections
-    {
-#pragma omp section
-    {
-        while (window->isVisible()){
-            QCoreApplication::processEvents(QEventLoop::AllEvents);
-        }
+    while (window->isVisible()) {
+        delay(500);
+        automaat.updateCells();
     }
-#pragma omp section
-        {
-            while (window->isVisible())
-                automaat.updateCells();
-        }
-    }
+
     return automaat.getScore();
 }
 
