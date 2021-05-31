@@ -97,23 +97,41 @@ void MainWindow::updateRoadUsers() {
 
 void MainWindow::moveCars(){
     for(auto it = vehicles.begin(); it != vehicles.end(); it++){
-        int rot = (*it)->rotation();
+        QGraphicsPixmapItem* vehicle = (*it);
+        int rot = vehicle->rotation();
         if(rot == 0){
-            (*it)->setY((*it)->y()-(zoomTile*8));
+            vehicle->setY(vehicle->y()-(zoomTile*2));
         }
         else if(rot == 90){
-            (*it)->setX((*it)->x()+(zoomTile*8));
+            vehicle->setX(vehicle->x()+(zoomTile*2));
         }
         else if(rot == 180){
-            (*it)->setY((*it)->y()+(zoomTile*8));
+            vehicle->setY(vehicle->y()+(zoomTile*2));
         }
         else if(rot == 270){
-            (*it)->setX((*it)->x()-(zoomTile*8));
+            vehicle->setX(vehicle->x()-(zoomTile*2));
         }
     }
 }
 
-
+void MainWindow::movePedestrians(){
+    for(auto it = pedestrians.begin(); it != pedestrians.end(); it++) {
+        QGraphicsPixmapItem *pedestrian = it->first;
+        int rot = it->second;
+        if(rot == 0){
+            pedestrian->setY(pedestrian->y()-(zoomTile*2));
+        }
+        else if(rot == 1){
+            pedestrian->setX(pedestrian->x()+(zoomTile*2));
+        }
+        else if(rot == 2){
+            pedestrian->setY(pedestrian->y()+(zoomTile*2));
+        }
+        else if(rot == 3){
+            pedestrian->setX(pedestrian->x()-(zoomTile*2));
+        }
+    }
+}
 
 
 int MainWindow::getRotation(char direction){
@@ -233,7 +251,7 @@ void MainWindow::addPedestrian(int row, int col, int rot, const std::string pixe
     }
     item->setPos(col * (32*zoomTile) + ofsetx, row * (32*zoomTile) + ofsety);
     scene->addItem(item);
-    pedestrians.push_back(item);
+    pedestrians.push_back(make_pair(item,rot));
 }
 
 void MainWindow::pressedPause(){
@@ -263,7 +281,7 @@ void MainWindow::clearRoadUsers() {
     }
     vehicles = {};
     for (auto it = pedestrians.begin(); it != pedestrians.end(); it++) {
-        delete *it;
+        delete it->first;
     }
     pedestrians = {};
 }

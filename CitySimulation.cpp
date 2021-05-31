@@ -142,12 +142,12 @@ void CitySimulation::runTransportSimulation(CellulaireAutomaat& map, int steps) 
         }
         w.updateRoadUsers();
         delay(1);
-        w.moveCars();
-        delay(1);
-        w.moveCars();
-        delay(1);
-        w.moveCars();
-        delay(1);
+
+        for(int i = 0; i<15; i++){
+            w.moveCars();
+            w.movePedestrians();
+            delay(1);
+        }
         while(w.getPause()){
             delay(1);
         }

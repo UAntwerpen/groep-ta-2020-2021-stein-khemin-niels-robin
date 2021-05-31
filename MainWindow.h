@@ -9,6 +9,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QtWidgets>
+#include <utility>
 #include "Cell.h"
 #include "CellulaireAutomaat.h"
 
@@ -30,6 +31,8 @@ public:
     void updateRoadUsers();
 
     void moveCars();
+
+    void movePedestrians();
 
     /*!
      * update de stad
@@ -128,7 +131,7 @@ private:
     void drawGrid(int width, int height);
 
     CellulaireAutomaat* c;
-    std::vector<QGraphicsPixmapItem*> pedestrians;
+    std::vector<std::pair<QGraphicsPixmapItem*,int>> pedestrians;
     std::vector<QGraphicsPixmapItem*> vehicles;
     std::vector<QGraphicsPixmapItem*> buildings;
     std::vector<QGraphicsPixmapItem*> walls;
