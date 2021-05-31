@@ -28,8 +28,8 @@ float CitySimulation::runSimulationGUI(const std::string &rules){
     return automaat.getScore();
 }
 
-void CitySimulation::delay(double time) {
-    QTime dieTime = QTime::currentTime().addSecs(std::round(time));
+void CitySimulation::delay(int time) {
+    QTime dieTime = QTime::currentTime().addMSecs(time);
     while (QTime::currentTime() < dieTime)
         QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
 }
@@ -100,45 +100,52 @@ void CitySimulation::runTransportSimulation(CellulaireAutomaat& map, int steps) 
                             car->update(map);
                         }
                     }
-                    for (int i = 0; i < map(row, col)->getPersons().size(); i++) {
-                        Citizen* person = map(row, col)->getPersons()[i];
-                        pair<int, int> personPos = person->getLocation()->getPos();
+                    if(currentStep%4 ==0){
+                        for (int i = 0; i < map(row, col)->getPersons().size(); i++) {
+                            Citizen* person = map(row, col)->getPersons()[i];
+                            pair<int, int> personPos = person->getLocation()->getPos();
 
-                        if (person->getStatus()) {
-                            person->update(map);
-                        } else if (!person->getInCar() && (rand() % 100) <= pedestrianChance
-                                        && abs(randRow - personPos.first) < pedestrianRange
-                                            && abs(randCol - personPos.second) < pedestrianRange) {
-
-                            Cell* goal = nullptr;
-                            if (pair<int, int>(randRow, randCol) != person->getLocation()->getPos()) {
-                                goal = map(randRow, randCol);
-                            }
-
-                            person->setGoal(goal);
-                            if (person->getGoal() != nullptr) {
-                                auto* mask = new PFMask(map, person->getGoal(), false);
-                                mask->generateMask();
-
-                                person->setMask(mask);
-                                person->calculateRoute();
+                            if (person->getStatus()) {
                                 person->update(map);
+                            } else if (!person->getInCar() && (rand() % 100) <= pedestrianChance
+                                       && abs(randRow - personPos.first) < pedestrianRange
+                                       && abs(randCol - personPos.second) < pedestrianRange) {
+
+                                Cell* goal = nullptr;
+                                if (pair<int, int>(randRow, randCol) != person->getLocation()->getPos()) {
+                                    goal = map(randRow, randCol);
+                                }
+
+                                person->setGoal(goal);
+                                if (person->getGoal() != nullptr) {
+                                    auto* mask = new PFMask(map, person->getGoal(), false);
+                                    mask->generateMask();
+
+                                    person->setMask(mask);
+                                    person->calculateRoute();
+                                    person->update(map);
+                                }
                             }
                         }
                     }
                 }
             }
         }
-        w.updateRoadUsers();
-        delay(1);
+        w.updateVehicles();
+        if(currentStep%4 ==0){
+            w.updatePedestrians();
+        }else{
+            w.movePedestrians();
+        }
+        delay(200);
 
-        for(int i = 0; i<15; i++){
+        for(int i = 0; i<7; i++){
             w.moveCars();
             w.movePedestrians();
-            delay(1);
+            delay(200);
         }
         while(w.getPause()){
-            delay(1);
+            delay(200);
         }
         currentStep += 1;
         if (currentStep % 10 == 0) {

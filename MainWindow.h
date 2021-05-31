@@ -28,7 +28,9 @@ public:
     /*!
      * update alle wegggebruikers
      */
-    void updateRoadUsers();
+    void updateVehicles();
+
+    void updatePedestrians();
 
     void moveCars();
 
@@ -98,7 +100,10 @@ private:
     /*!
      * verwijdert alle weggebruikers
      */
-    void clearRoadUsers();
+    void clearVehicles();
+
+
+    void clearPedestrians();
 
     /*!
      * verwijdert alle gebouwen/wegen

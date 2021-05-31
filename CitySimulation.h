@@ -10,7 +10,7 @@
 
 class CitySimulation {
 public:
-    void delay(double time);
+    void delay(int time);
     float runSimulationGUI(const std::string &rules);
     float runSimulation(const std::string &rules);
     void runTransportSimulation(CellulaireAutomaat& map, int steps);
