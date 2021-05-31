@@ -7,6 +7,7 @@
 #include <QTime>
 #include "CellulaireAutomaat.h"
 #include <iostream>
+#include "MainWindow.h"
 
 class CitySimulation {
 public:

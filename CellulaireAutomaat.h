@@ -11,7 +11,6 @@
 #include <queue>
 
 #include "Cell.h"
-#include "MainWindow.h"
 
 class CellulaireAutomaat {
 public:
@@ -52,7 +51,7 @@ public:
      * REQUIRE(0 <= row && row < width, "Row is out of bounds!");
      * REQUIRE(0 <= column && column < height, "Column is out of bounds!");
      */
-    std::vector<Cell*> getNeighbourhood(int row, int col);
+    std::vector<Cell*> getNeighbourhood(int row, int col) const;
 
     /*!
      * veranderd de cell naar een nieuwe cell
@@ -112,11 +111,6 @@ public:
     int getHeight() const;
 
     /*!
-     * tekent de automaat op het scherm
-     */
-    void draw();
-
-    /*!
      * adds a main street that can't be changed
      * @param row int
      * @param col int
@@ -127,6 +121,8 @@ public:
      * @return returns the score of the city
      */
     float getScore() const;
+
+    void removeUnconnectedRoads();
 
 private:
     /*!
@@ -150,7 +146,14 @@ private:
     */
     static int getNeighbourhoodValue(int row, int col, const std::vector<std::vector<EStates>>& map);
 
+    /*!
+     * updates 3x3 squares around the given cell
+     * @param row: int row of center cell
+     * @param col : int column of center cell
+     */
     void updateRulesHelper(int row, int col);
+
+    float scoreHelper(int count, float percentage) const;
 
     int width;
     int height;

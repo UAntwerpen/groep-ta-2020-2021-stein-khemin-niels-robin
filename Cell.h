@@ -12,7 +12,6 @@
 
 class Citizen;
 class Vehicle;
-class MainWindow;
 class CellulaireAutomaat;
 
 class Cell {

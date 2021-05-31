@@ -1,6 +1,6 @@
 #include <ctime>
+#include <chrono>
 #include "GeneticAlgorithm.h"
-#include "Utils.h"
 #include "CitySimulation.h"
 
 
@@ -36,11 +36,12 @@ Genome *GeneticAlgorith::generateGenome() {
 }
 
 Genome GeneticAlgorith::run(int max_gen) {
+    auto begin = std::chrono::system_clock::now();
     for (int _ = 0; _ < max_gen; _++){
         std::cout << "Running Generation: " << _ << std::endl;
+        begin = std::chrono::system_clock::now();
 #pragma omp parallel for if (PARALLELISM_ENABLED)
         for (int i = 0; i < population_size; i++){
-//            std::cout << "Running Simulation: " << i << std::endl;
             fitness[i] = calc_fitness(*population[i]);
         }
         std::sort(indices.begin(), indices.end(), [this](int first, int second){return fitness[first] > fitness[second];});
@@ -52,35 +53,40 @@ Genome GeneticAlgorith::run(int max_gen) {
         next_gen[1] = population[indices[1]];
 
         std::cout << fitness[indices[0]] << std::endl;
-        int index = 2;
-        while (index < population_size){
+        // generate new genomes
+#pragma omp parallel for simd if (PARALLELISM_ENABLED)
+        for (int index = 2; index < population_size; ++index){
 //            std::pair<Genome*, Genome*> parents = parent_selection(population, fitness);
-            std::pair<Genome*, Genome*> children = Genome::crossover(*next_gen[0], *next_gen[1], *mt);
+            std::poisson_distribution<int> parent_1(0.5);
+            int dad = parent_1(*mt);
+            std::poisson_distribution<int> parent_2(1);
+            int mom = parent_2(*mt);
+            while (dad == mom){
+                mom = parent_2(*mt);
+            }
+            std::pair<Genome*, Genome*> children = Genome::crossover(*population[indices[dad]], *population[indices[mom]], *mt);
             children.first->mutate(*mt);
             children.second->mutate(*mt);
 
             next_gen[index] = children.first;
-            index++;
+            ++index;
             if (index < population_size) {
                 next_gen[index] = children.second;
             }
-            index++;
         }
         for (int i = 2; i < population_size;i++){
             delete population[indices[i]];
         }
         population = next_gen;
+        std::chrono::duration<double> dur = std::chrono::system_clock::now() - begin;
+        std::cout << "Took: " << dur.count() << "s" << std::endl;
     }
     return *(population[0]);
 }
 
 float GeneticAlgorith::calc_fitness(Genome &G) {
-    std::string rules;
-    for (char c: G){
-        rules += c;
-    }
     CitySimulation city;
-    return city.runSimulation(25, 25, rules);
+    return city.runSimulation(10, 10, G.to_string());
 }
 
 GeneticAlgorith::~GeneticAlgorith() {
