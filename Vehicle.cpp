@@ -52,8 +52,8 @@ void Vehicle::addPerson(Citizen *person) {
 }
 
 void Vehicle::update(CellulaireAutomaat &city) {
-    int dx = 0;
-    int dy = 0;
+//    int dx = 0;
+//    int dy = 0;
 
 //    if (this->getDirection() == 'N') { dx = 0; dy = -1; }
 //    if (this->getDirection() == 'E') { dx = 1; dy = 0; }

@@ -153,7 +153,7 @@ void Transport::changeDirection() {
 
     int index = this->getProgress() + 1;
 
-    if (0 <= index && index < this->getRoute().size()) {
+    if (0 <= index && index < (int) this->getRoute().size()) {
         this->setDirection(this->getRoute()[index]);
         ENSURE(this->getDirection() == this->getRoute()[index], "chanceDirection did not change direction correctly.");
     } else {
@@ -167,7 +167,7 @@ pair<int, int> Transport::getNextStep() {
     int dx;
     int dy;
 
-    if (index < this->getRoute().size()) {
+    if (index < (int) this->getRoute().size()) {
         nextDirection = this->getRoute()[index];
     } else {
         nextDirection = ' ';
