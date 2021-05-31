@@ -10,17 +10,17 @@
 
 using namespace std;
 int main(int argc, char *argv[]){
-//    QApplication a(argc, argv);
-    GeneticAlgorith algo(390624, 100);
+    QApplication a(argc, argv);
+    GeneticAlgorith algo(390624, 250);
 
-    Genome rule = algo.run(100);
+    Genome rule = algo.run(1000);
 //    string s;
 //    std::ifstream file("latest001.txt", std::ifstream::binary);
 //    while (file.good()){
 //        s += file.get();
 //    }
 
-//    CitySimulation city;
-//    city.runSimulationGUI(20, 20, rule.to_string());
+    CitySimulation city;
+    city.runSimulationGUI(20, 20, rule.to_string());
     return 0;
 }

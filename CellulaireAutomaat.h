@@ -122,6 +122,8 @@ public:
      */
     float getScore() const;
 
+    void removeUnconnectedRoads();
+
 private:
     /*!
     * geeft de neighbourhood van een cell terug
@@ -151,7 +153,7 @@ private:
      */
     void updateRulesHelper(int row, int col);
 
-    float scoreHelper(int count, double percentage) const;
+    float scoreHelper(int count, float percentage) const;
 
     int width;
     int height;

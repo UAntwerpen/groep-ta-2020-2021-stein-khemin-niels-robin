@@ -21,6 +21,7 @@ float CitySimulation::runSimulationGUI(int width, int height, const std::string 
         if(!window->getPause()){
             prev_score = automaat.getScore();
             automaat.updateRules();
+            automaat.removeUnconnectedRoads();
             window->addDay();
             window->updateAll();
         it++;
@@ -47,9 +48,10 @@ float CitySimulation::runSimulation(int width, int height, const std::string &ru
     CellulaireAutomaat automaat(width, height, rules, false);
     automaat.addMainStreet(0, width / 2);
     float prev_score = automaat.getScore();
-    while (!it || prev_score != automaat.getScore()){
+    while ((!it || prev_score != automaat.getScore())){
         prev_score = automaat.getScore();
         automaat.updateRules();
+        automaat.removeUnconnectedRoads();
         it++;
     }
     return automaat.getScore();

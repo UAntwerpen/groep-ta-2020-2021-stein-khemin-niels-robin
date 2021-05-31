@@ -23,7 +23,7 @@ public:
     void mutate(std::mt19937& mt){
         std::uniform_int_distribution<int> dist_pos(0, size() - 1);
         std::uniform_int_distribution<int> dist_switch(0, 4);
-        std::poisson_distribution<int> dist_times(size() * 0.00001);
+        std::poisson_distribution<int> dist_times(size() * 0.001);
 
         for (int _ = 0, end = dist_times(mt); _ < end; _++){
             (*this)[dist_pos(mt)] = static_cast<EStates>(dist_switch(mt));
@@ -42,7 +42,7 @@ public:
         std::uniform_int_distribution<int> dist_pos(0, size());
         for (int _ = 0; _ < 2; _++) {
             int crossover_point = dist_pos(mt);
-            if (crossover_point < size() / 2) {
+            if (crossover_point < (int)size() / 2) {
                 #pragma omp parallel for simd if (PARALLELISM_ENABLED)
                 for (int i = 0; i < crossover_point; i++) {
                     EStates temp = (*G1_cross)[i];
@@ -51,7 +51,7 @@ public:
                 }
             } else {
                 #pragma omp parallel for simd if (PARALLELISM_ENABLED)
-                for (int i = crossover_point; i < size(); i++) {
+                for (unsigned int i = crossover_point; i < size(); i++) {
                     EStates temp = (*G1_cross)[i];
                     (*G1_cross)[i] = (*G2_cross)[i];
                     (*G2_cross)[i] = temp;
@@ -126,8 +126,8 @@ private:
     Population population;
     Weights fitness;
     std::vector<int> indices;
-    int population_size;
     int genome_size;
+    int population_size;
     std::mt19937* mt;
 };
 
