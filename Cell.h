@@ -116,8 +116,6 @@ public:
 
     virtual void setCar(Vehicle* vehicle);
 
-    void removeCitizen();
-
 protected:
     int row = 0;
     int col = 0;
@@ -190,7 +188,7 @@ private:
 class ResidentialZone : public Cell{
 private:
     House building;
-    Vehicle* car{};
+    Vehicle* car;
 public:
     ResidentialZone(const Cell &p2);
 

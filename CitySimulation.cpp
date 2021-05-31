@@ -61,17 +61,6 @@ void CitySimulation::runTransportSimulation(CellulaireAutomaat& map, int steps) 
     int rowDim = map.getHeight();
     int colDim = map.getWidth();
 
-    for (int row = 0; row < rowDim; row++){
-        for (int col = 0; col < colDim; col++){
-            Cell* currCell = map(row, col);
-
-            // Voegt auto per huis toe.
-            if (currCell->getState() == EResidentialZone){
-                Vehicle* car = new Vehicle(currCell);
-                currCell->setCar(car);
-            }
-        }
-    }
     w.updateAll();
     while(currentStep < steps){
         for (int row = 0; row < rowDim; row++){

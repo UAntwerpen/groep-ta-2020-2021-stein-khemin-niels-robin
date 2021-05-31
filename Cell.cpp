@@ -10,6 +10,7 @@
 #include "MainWindow.h"
 #include "CellulaireAutomaat.h"
 #include "Citizen.h"
+#include "Vehicle.h"
 
 Cell::~Cell() {
 
@@ -331,6 +332,7 @@ ResidentialZone::ResidentialZone(int row, int col, CellulaireAutomaat *cellulair
         people.push_back(resident);
     }
     building = House();
+    car = new Vehicle(this);
 }
 
 std::pair<int, std::string> ResidentialZone::getPixelArt() {
@@ -350,6 +352,7 @@ ResidentialZone::ResidentialZone(const Cell &p2) : Cell(p2.getPos().first, p2.ge
         this->people = p2.getPersons();
     }
     building = House();
+    car = new Vehicle(this);
 }
 
 Vehicle *ResidentialZone::getCar() {

@@ -151,13 +151,11 @@ void Transport::setDirection(char c) {
 void Transport::changeDirection() {
 //    REQUIRE(not this->getRoute().empty(), "Route is empty when calling changeDirection");
 
-    int index = this->getProgress();
+    int index = this->getProgress() + 1;
 
     if (0 <= index && index < this->getRoute().size()) {
         this->setDirection(this->getRoute()[index]);
         ENSURE(this->getDirection() == this->getRoute()[index], "chanceDirection did not change direction correctly.");
-    } else if (index == -1) {
-        this->setDirection(this->getRoute()[0]);
     } else {
         this->setDirection(' ');
     }
