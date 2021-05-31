@@ -135,10 +135,10 @@ int CellulaireAutomaat::getNeighbourhoodValue(int row, int col) {
 }
 
 int CellulaireAutomaat::getNeighbourhoodValue(int row, int col, const std::vector<std::vector<EStates>>& map) {
-    REQUIRE(0 <= row && row < map.size(), "Row is out of bounds!");
+    REQUIRE(0 <= row && row < (int)map.size(), "Row is out of bounds!");
     REQUIRE(0 <= col, "Column is out of bounds!");
     for (const auto & c : map) {
-        REQUIRE(col < c.size(), "Column is out of bounds!");
+        REQUIRE(col < (int)c.size(), "Column is out of bounds!");
     }
     int value = 0;
     const static int powers[8] = {static_cast<int>(pow(5, 7)), static_cast<int>(pow(5, 6)), static_cast<int>(pow(5, 5)),
@@ -148,15 +148,15 @@ int CellulaireAutomaat::getNeighbourhoodValue(int row, int col, const std::vecto
         value += map[row - 1][col - 1] * powers[0];
     if (0 <= row - 1)
         value += map[row - 1][col] * powers[1];
-    if (0 <= row - 1 && col + 1 < map[0].size())
+    if (0 <= row - 1 && col + 1 < (int)map[0].size())
         value += map[row - 1][col + 1] * powers[2];
-    if (col + 1 < map[0].size())
+    if (col + 1 < (int)map[0].size())
         value += map[row][col + 1] * powers[3];
-    if (row + 1 < map.size() && col + 1 < map[0].size())
+    if (row + 1 < (int)map.size() && col + 1 < (int)map[0].size())
         value += map[row + 1][col + 1] * powers[4];
-    if (row + 1 < map.size())
+    if (row + 1 < (int)map.size())
         value += map[row + 1][col] * powers[5];
-    if (row + 1 < map.size() && 0 <= col - 1)
+    if (row + 1 < (int)map.size() && 0 <= col - 1)
         value += map[row + 1][col - 1] * powers[6];
     if (0 <= col - 1)
         value += map[row][col - 1] * powers[7];
@@ -183,9 +183,6 @@ void CellulaireAutomaat::updateRules() {
 void CellulaireAutomaat::updateCells() {
     for (int col = 0; col < width; col++) {
         for (int row = 0; row < height; row++) {
-            if (!(*this)(row, col)->isConnectedTo(main_street.first, main_street.second) ){
-                changeCell(row, col, new Vegetation(*(*this)(row, col)));
-            }
             (*this)(row, col)->update();
         }
     }
@@ -254,30 +251,28 @@ float CellulaireAutomaat::getScore() const {
     std::map<EStates, int> count_ = count_all();
 
     float score = scoreHelper(count_[EIndustrialZone], 0.1) + scoreHelper(count_[EStoreZone], 0.1) + scoreHelper(count_[EResidentialZone], 0.4)
-    + scoreHelper(count_[ERoad], 0.3) + scoreHelper(count_[EVegetation], 0.1);
-    for (int col = 0; col < width; col++) {
-        for (int row = 0; row < height; row++) {
-            if ((*this)(row, col)->getState() == ERoad) {
-                int count;
-                for (const auto& cell: getNeighbourhood(row, col)){
-                    if (cell != nullptr && cell->getState() == ERoad) ++count;
-                }
-                if (count > 3) score -= 0.1;
-            }
-        }
-    }
+    + scoreHelper(count_[ERoad], 0.3) - count_[EVegetation] * 0.1;
+//    for (int col = 0; col < width; col++) {
+//        for (int row = 0; row < height; row++) {
+//            if ((*this)(row, col)->getState() == ERoad) {
+//                int count;
+//                for (const auto& cell: getNeighbourhood(row, col)){
+//                    if (cell != nullptr && cell->getState() == ERoad) ++count;
+//                }
+//                if (count > 3) score -= 0.1;
+//            }
+//        }
+//    }
     return score;
 }
-float CellulaireAutomaat::scoreHelper(int count, double percentage) const{
+float CellulaireAutomaat::scoreHelper(int count, float percentage) const{
     static float total = width * height;
-    if (count == 0) return 0;
-    float x = count / total * percentage;
-    if (x == 1.25) return x;
-    return ((1.25 - x) * (1.25 - x) / (2 * abs(1.25 - x))) + (-x / 2) + (1.25 / 2);
+    float x = (count / total) / percentage;
+    if (x > 1.25) return 0;
+    return x;
 }
 
 void CellulaireAutomaat::updateRulesHelper(int row, int col) {
-    CellFactorySingleton& factory = CellFactorySingleton::getInstance();
     std::vector<std::vector<EStates>> old;
     old.resize(3);
     for (int drow = 0; drow <= 2; ++drow) {
@@ -318,6 +313,16 @@ void CellulaireAutomaat::updateRulesHelper(int row, int col) {
                     break;
                 default:
                     break;
+            }
+        }
+    }
+}
+
+void CellulaireAutomaat::removeUnconnectedRoads() {
+    for (int col = 0; col < width; col++) {
+        for (int row = 0; row < height; row++) {
+            if (!(*this)(row, col)->isConnectedTo(main_street.first, main_street.second)) {
+                changeCell(row, col, new Vegetation(*(*this)(row, col)));
             }
         }
     }
