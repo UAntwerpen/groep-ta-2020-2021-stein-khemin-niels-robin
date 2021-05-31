@@ -23,7 +23,7 @@ public:
     void mutate(std::mt19937& mt){
         std::uniform_int_distribution<int> dist_pos(0, size() - 1);
         std::uniform_int_distribution<int> dist_switch(0, 4);
-        std::poisson_distribution<int> dist_times(size() * 0.001);
+        std::poisson_distribution<int> dist_times(size() * 0.005);
 
         for (int _ = 0, end = dist_times(mt); _ < end; _++){
             (*this)[dist_pos(mt)] = static_cast<EStates>(dist_switch(mt));
