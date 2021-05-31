@@ -140,7 +140,6 @@ void CitySimulation::runTransportSimulation(CellulaireAutomaat& map, int steps) 
                 }
             }
         }
-        std::cout << "" << std::endl;
         w.updateRoadUsers();
         delay(1);
         w.moveCars();

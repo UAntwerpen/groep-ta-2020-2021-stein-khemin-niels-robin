@@ -151,6 +151,12 @@ public:
     void changeDirection();
 
     /**
+     * Geeft de coordinaten terug van de cel waarnaar het transport zijn volgende stap zal zetten.
+     * @return pair of integers (row, col)
+     */
+    pair<int, int> getNextStep();
+
+    /**
      * Verplaatst het Transport 1 stap vooruit volgens zijn pad.
      * @param city : De cellulaire automaat waardoor het Tranport zich beweegt.
      */

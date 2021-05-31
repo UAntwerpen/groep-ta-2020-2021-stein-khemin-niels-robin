@@ -151,12 +151,36 @@ void Transport::setDirection(char c) {
 void Transport::changeDirection() {
 //    REQUIRE(not this->getRoute().empty(), "Route is empty when calling changeDirection");
 
-    int index = this->getProgress() + 1;
+    int index = this->getProgress();
 
-    if (index < this->getRoute().size()) {
+    if (0 <= index && index < this->getRoute().size()) {
         this->setDirection(this->getRoute()[index]);
         ENSURE(this->getDirection() == this->getRoute()[index], "chanceDirection did not change direction correctly.");
+    } else if (index == -1) {
+        this->setDirection(this->getRoute()[0]);
     } else {
-        this->setDirection('N');
+        this->setDirection(' ');
     }
+}
+
+pair<int, int> Transport::getNextStep() {
+    int index = this->getProgress() + 1;
+    char nextDirection;
+    int dx;
+    int dy;
+
+    if (index < this->getRoute().size()) {
+        nextDirection = this->getRoute()[index];
+    } else {
+        nextDirection = ' ';
+    }
+
+    if (nextDirection == 'N') { dx = 0; dy = -1; }
+    if (nextDirection == 'E') { dx = 1; dy = 0; }
+    if (nextDirection == 'S') { dx = 0; dy = 1; }
+    if (nextDirection == 'W') { dx = -1; dy = 0; }
+
+    pair<int, int> currPos = this->getLocation()->getPos();
+
+    return std::make_pair(currPos.first + dy, currPos.second + dx);
 }
