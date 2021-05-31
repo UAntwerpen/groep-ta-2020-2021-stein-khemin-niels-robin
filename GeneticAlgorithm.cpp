@@ -6,7 +6,7 @@
 
 
 GeneticAlgorith::GeneticAlgorith(int genomeSize, int populationSize): genome_size(genomeSize), population_size(populationSize) {
-    unsigned int seed = /*std::time(nullptr)*/1622400337;
+    unsigned int seed = std::time(nullptr);
     std::cout << seed << std::endl;
     std::srand(seed);
     mt = new std::mt19937(std::rand());
@@ -53,10 +53,18 @@ Genome GeneticAlgorith::run(int max_gen) {
         next_gen[1] = population[indices[1]];
 
         std::cout << fitness[indices[0]] << std::endl;
+        // generate new genomes
 #pragma omp parallel for simd if (PARALLELISM_ENABLED)
         for (int index = 2; index < population_size; ++index){
 //            std::pair<Genome*, Genome*> parents = parent_selection(population, fitness);
-            std::pair<Genome*, Genome*> children = Genome::crossover(*next_gen[0], *next_gen[1], *mt);
+            std::poisson_distribution<int> parent_1(0.5);
+            int dad = parent_1(*mt);
+            std::poisson_distribution<int> parent_2(1);
+            int mom = parent_2(*mt);
+            while (dad == mom){
+                mom = parent_2(*mt);
+            }
+            std::pair<Genome*, Genome*> children = Genome::crossover(*population[indices[dad]], *population[indices[mom]], *mt);
             children.first->mutate(*mt);
             children.second->mutate(*mt);
 
