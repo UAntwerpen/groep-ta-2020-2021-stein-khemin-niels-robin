@@ -50,6 +50,16 @@ public:
      */
     virtual ~MainWindow();
 
+    /*!
+     * Pause simulation
+     */
+    void pauseSimulation();
+
+    /*!
+     * Resume simulation
+     */
+    void resumeSimulation();
+
 private:
     int getRotation(char direction);
 

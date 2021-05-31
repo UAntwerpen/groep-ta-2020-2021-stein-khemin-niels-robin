@@ -66,7 +66,6 @@ MainWindow::MainWindow(int w, int h, CellulaireAutomaat *cellulaireAutomaat) {
     settingsDock->layout()->addWidget(pauseBtn);
     settingsDock->layout()->addWidget(zoomOutBtn);
     settingsDock->layout()->addWidget(zoomInBtn);
-    this->pause = true;
 }
 
 void MainWindow::updateRoadUsers() {
@@ -322,6 +321,14 @@ void MainWindow::drawGrid(int _width, int _height) {
             }*/
         }
     }
+}
+
+void MainWindow::pauseSimulation() {
+    pressedPause();
+}
+
+void MainWindow::resumeSimulation() {
+    pressedResume();
 }
 
 

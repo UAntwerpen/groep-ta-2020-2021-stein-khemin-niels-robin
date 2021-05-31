@@ -15,8 +15,9 @@ float CitySimulation::runSimulationGUI(int width, int height, const std::string 
     automaat.addMainStreet(0, width / 2);
     window = new MainWindow(width, height, &automaat);
     window->show();
+    window->pauseSimulation();
     float prev_score = automaat.getScore();
-    while (!it || prev_score != automaat.getScore()){
+    while ((!it || prev_score != automaat.getScore()) && window->isVisible()){
         delay(500);
         if(!window->getPause()){
             prev_score = automaat.getScore();
@@ -27,8 +28,8 @@ float CitySimulation::runSimulationGUI(int width, int height, const std::string 
             it++;
         }
     }
-    std::cout << "test" << std::endl;
-    while(true){
+    window->pauseSimulation();
+    while(window->isVisible()){
         delay(500);
         if(!window->getPause()){
             automaat.updateCells();
@@ -37,11 +38,6 @@ float CitySimulation::runSimulationGUI(int width, int height, const std::string 
             it++;
         }
     }
-    while (window->isVisible()) {
-        delay(500);
-        automaat.updateCells();
-    }
-
     return automaat.getScore();
 }
 

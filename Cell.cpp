@@ -233,17 +233,17 @@ Cell *Cell::bestAlternativeCell() {
 }
 
 float Vegetation::getHappiness() const {
-    float value = 10;
+    float value = 0;
     //check for workplaces in radius
 
     int vegitation = this->getCellulaireAutomaat()->count(EVegetation, row, col, 10);
     int stores = this->getCellulaireAutomaat()->count(EStoreZone, row, col, 10);
     int workplaces = this->getCellulaireAutomaat()->count(EIndustrialZone, row, col, 10);
     int houses = this->getCellulaireAutomaat()->count(EResidentialZone, row, col, 10);
-    value += workplaces * 0.2;
+    value += workplaces * 0.01;
     value += stores * 0.01;
-    value += houses * 0.2;
-    value -= vegitation * 0.5;
+    value += houses * 0.01;
+    value -= vegitation * 0.15;
 
     //check for road in neighbourhood
     std::vector<Cell *> neighbourhood = this->getCellulaireAutomaat()->getNeighbourhood(row, col);
@@ -420,7 +420,7 @@ float IndustrialZone::getHappiness() const {
     //check for houses and other Industrial zones in radius
     int workplaces = this->getCellulaireAutomaat()->count(EIndustrialZone, row, col, 10) - 1;
     int houses = this->getCellulaireAutomaat()->count(EResidentialZone, row, col, 10);
-    value -= workplaces * 0.2;
+    value -= workplaces * 0.4;
     value += houses * 0.2;
     if (houses == 0) value -= 0.5;
     if (workplaces == 0) value += 0.5;
