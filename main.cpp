@@ -21,6 +21,6 @@ int main(int argc, char *argv[]){
     }
 
     CitySimulation city;
-    city.runSimulationGUI(40, 40, s);
+    city.runSimulationGUI(20, 20, s);
     return 0;
 }
