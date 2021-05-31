@@ -68,24 +68,81 @@ MainWindow::MainWindow(int w, int h, CellulaireAutomaat *cellulaireAutomaat) {
     settingsDock->layout()->addWidget(zoomInBtn);
 }
 
-void MainWindow::updateRoadUsers() {
-    clearRoadUsers();
+void MainWindow::updateVehicles() {
+    clearVehicles();
     for (int x = 0; x < width; x++) {
         for (int y = 0; y < height; y++) {
-            Cell *cell = c->operator()(x,y);
-            if(cell->getState() == ERoad){
-                vector<Vehicle*> vehicles = cell->getVehicles();
-                for(auto it = vehicles.begin(); it != vehicles.end(); it++){
-                    addCar(x,y,getRotation((*it)->getDirection()),(*it)->getPixelart());
-                }
-                vector<Citizen*> citizen = cell->getCitizen();
-                for(auto it = citizen.begin(); it != citizen.end(); it++){
-                    addPedestrian(x,y,getRotation((*it)->getDirection()),(*it)->getPixelart());
+            Cell *cell = (*c)(x,y);
+
+            if (cell->getState() == EResidentialZone) {
+                Vehicle* car = cell->getCar();
+                pair<int, int> carPos = car->getLocation()->getPos();
+                // enkel auto afbeelden als die onderweg is.
+                if (car->getStatus()){
+                    addCar(carPos.first, carPos.second, getRotation(car->getDirection()), car->getPixelart());
                 }
             }
         }
     }
 }
+
+
+void MainWindow::updatePedestrians() {
+    clearPedestrians();
+    for (int x = 0; x < width; x++) {
+        for (int y = 0; y < height; y++) {
+            Cell *cell = (*c)(x,y);
+            if (cell->getState() == EResidentialZone) {
+                vector<Citizen*> citizens = cell->getPersons();
+                for(auto it = citizens.begin(); it != citizens.end(); it++){
+                    pair<int, int> pedestrianPos = (*it)->getLocation()->getPos();
+                    if((*it)->getStatus()){
+                        addPedestrian(pedestrianPos.first, pedestrianPos.second, getRotation((*it)->getDirection()), (*it)->getPixelart());
+                    }
+                }
+            }
+        }
+    }
+}
+
+void MainWindow::moveCars(){
+    for(auto it = vehicles.begin(); it != vehicles.end(); it++){
+        QGraphicsPixmapItem* vehicle = (*it);
+        int rot = vehicle->rotation();
+        if(rot == 0){
+            vehicle->setY(vehicle->y()-(zoomTile*4));
+        }
+        else if(rot == 90){
+            vehicle->setX(vehicle->x()+(zoomTile*4));
+        }
+        else if(rot == 180){
+            vehicle->setY(vehicle->y()+(zoomTile*4));
+        }
+        else if(rot == 270){
+            vehicle->setX(vehicle->x()-(zoomTile*4));
+        }
+    }
+}
+
+void MainWindow::movePedestrians(){
+    for(auto it = pedestrians.begin(); it != pedestrians.end(); it++) {
+        QGraphicsPixmapItem *pedestrian = it->first;
+        int rot = it->second;
+        if(rot == 0){
+            pedestrian->setY(pedestrian->y()-(zoomTile));
+        }
+        else if(rot == 1){
+            pedestrian->setX(pedestrian->x()+(zoomTile));
+        }
+        else if(rot == 2){
+            pedestrian->setY(pedestrian->y()+(zoomTile));
+        }
+        else if(rot == 3){
+            pedestrian->setX(pedestrian->x()-(zoomTile));
+        }
+    }
+}
+
 
 int MainWindow::getRotation(char direction){
     switch(direction){
@@ -112,7 +169,8 @@ void MainWindow::updateAll() {
             drawTile(x,y,pixart.first, pixart.second);
         }
     }
-    updateRoadUsers();
+    updateVehicles();
+    updatePedestrians();
 }
 
 void MainWindow::addDay() {
@@ -128,7 +186,8 @@ bool MainWindow::getPause(){
 
 MainWindow::~MainWindow() {
     clearBuildings();
-    clearRoadUsers();
+    clearVehicles();
+    clearPedestrians();
     clearWalls();
 }
 
@@ -168,8 +227,8 @@ void MainWindow::addCar(int row, int col, int rot, const std::string& pixelart) 
     item->setCacheMode(QGraphicsItem::NoCache);
     qreal scale = qMax(zoomTile/2, zoomTile/2);
     item->setScale(scale);
-    item->setRotation(rot * 90);
     rot = rot % 4;
+    item->setRotation(rot * 90);
     int ofsetx = 0;
     int ofsety = 0;
     if (rot == 1 || rot == 2) {
@@ -180,7 +239,7 @@ void MainWindow::addCar(int row, int col, int rot, const std::string& pixelart) 
     }
     item->setPos(col * (32*zoomTile) + ofsetx, row * (32*zoomTile) + ofsety);
     scene->addItem(item);
-    roadUsers.push_back(item);
+    vehicles.push_back(item);
 }
 
 void MainWindow::addPedestrian(int row, int col, int rot, const std::string& pixelart) {
@@ -210,7 +269,7 @@ void MainWindow::addPedestrian(int row, int col, int rot, const std::string& pix
     }
     item->setPos(col * (32*zoomTile) + ofsetx, row * (32*zoomTile) + ofsety);
     scene->addItem(item);
-    roadUsers.push_back(item);
+    pedestrians.push_back(make_pair(item,rot));
 }
 
 void MainWindow::pressedPause(){
@@ -234,11 +293,18 @@ void MainWindow::clearBuildings() {
     buildings = {};
 }
 
-void MainWindow::clearRoadUsers() {
-    for (auto it = roadUsers.begin(); it != roadUsers.end(); it++) {
+void MainWindow::clearVehicles() {
+    for (auto it = vehicles.begin(); it != vehicles.end(); it++) {
         delete *it;
     }
-    roadUsers = {};
+    vehicles = {};
+}
+
+void MainWindow::clearPedestrians(){
+    for (auto it = pedestrians.begin(); it != pedestrians.end(); it++) {
+        delete it->first;
+    }
+    pedestrians = {};
 }
 
 void MainWindow::clearWalls() {

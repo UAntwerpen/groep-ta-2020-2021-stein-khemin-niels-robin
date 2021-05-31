@@ -73,6 +73,9 @@ CellulaireAutomaat::CellulaireAutomaat(const std::string &filename) {
             }
             ++row;
         }
+        if (line.empty()){
+            break;
+        }
         std::cout << line << std::endl;
     }
 
@@ -85,7 +88,7 @@ CellulaireAutomaat::~CellulaireAutomaat() {
 }
 
 Cell* CellulaireAutomaat::operator()(int row, int column) const {
-    REQUIRE(0 <= row && row < height, "Row with is out of bounds!");
+    REQUIRE(0 <= row && row < height, "Row is out of bounds!");
     REQUIRE(0 <= column && column < width, "Column is out of bounds!");
     Cell* ret = matrix[row * width + column];
     ENSURE(ret != nullptr, "returned cell is a nullptr!");

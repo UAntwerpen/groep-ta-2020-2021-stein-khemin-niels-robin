@@ -22,13 +22,13 @@ protected:
     int maxPeopleAmount;
     int verval;
     std::string pixelart;
-    std::vector<Citizen*> residents;
+//    std::vector<Citizen*> residents;
 };
 
 class House : public Building{
 public:
-    void addResident(Citizen* resident);
-    void removeResident(Citizen* resident);
+//    void addResident(Citizen* resident);
+//    void removeResident(Citizen* resident);
     House();
 };
 

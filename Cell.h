@@ -112,6 +112,10 @@ public:
      */
     virtual std::pair<int, std::string> getPixelArt(){return std::pair<int, std::string>(0, "../PixelArt/Default.png");};
 
+    virtual Vehicle* getCar();
+
+    virtual void setCar(Vehicle* vehicle);
+
 protected:
     int row = 0;
     int col = 0;
@@ -171,12 +175,6 @@ public:
      */
     void addVehicle(Vehicle*);
 
-    /*!
-     * voeg voetganger toe aan cell
-     * @return
-     */
-    void addCitizen(Vehicle*);
-
     void updateDaysUntilExpired() override;
 
 private:
@@ -192,6 +190,7 @@ private:
 class ResidentialZone : public Cell{
 private:
     House building;
+    Vehicle* car;
 public:
     ResidentialZone(const Cell &p2);
 
@@ -204,6 +203,10 @@ public:
     float getHappiness() const override;
 
     std::pair<int, std::string> getPixelArt() override;
+
+    Vehicle* getCar() override;
+
+    void setCar(Vehicle* vehicle) override;
 };
 
 class IndustrialZone : public Cell{

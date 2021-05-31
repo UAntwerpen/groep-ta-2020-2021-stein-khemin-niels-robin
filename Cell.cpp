@@ -8,6 +8,8 @@
 #include "Cell.h"
 #include "lib/DesignByContract.h"
 #include "CellulaireAutomaat.h"
+#include "Citizen.h"
+#include "Vehicle.h"
 
 Cell::~Cell() {
 
@@ -232,6 +234,12 @@ Cell *Cell::bestAlternativeCell() {
     return newGround;
 }
 
+Vehicle *Cell::getCar() {
+    return nullptr;
+}
+
+void Cell::setCar(Vehicle *vehicle) {}
+
 float Vegetation::getHappiness() const {
     float value = 0;
     //check for workplaces in radius
@@ -393,7 +401,12 @@ float ResidentialZone::getHappiness() const {
 
 ResidentialZone::ResidentialZone(int row, int col, CellulaireAutomaat *cellulaireAutomaat) : Cell(row, col,
                                                                                                   cellulaireAutomaat) {
+    for (int i = 0; i < 4; i++) {
+        Citizen* resident = new Citizen(this);
+        people.push_back(resident);
+    }
     building = House();
+    car = new Vehicle(this);
 }
 std::pair<int, std::string> ResidentialZone::getPixelArt() {
     if (this->isExpired())
@@ -403,7 +416,24 @@ std::pair<int, std::string> ResidentialZone::getPixelArt() {
 
 ResidentialZone::ResidentialZone(const Cell &p2) : Cell(p2.getPos().first, p2.getPos().second,
                                                         p2.getCellulaireAutomaat()) {
-    this->people = p2.getPersons();
+    if (p2.getPersons().empty()) {
+        for (int i = 0; i < 4; i++) {
+            Citizen* resident = new Citizen(this);
+            people.push_back(resident);
+        }
+    } else {
+        this->people = p2.getPersons();
+    }
+    building = House();
+    car = new Vehicle(this);
+}
+
+Vehicle *ResidentialZone::getCar() {
+    return car;
+}
+
+void ResidentialZone::setCar(Vehicle *vehicle) {
+    car = vehicle;
 }
 
 EStates IndustrialZone::getState() const {
