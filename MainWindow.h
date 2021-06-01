@@ -69,6 +69,7 @@ public:
 
     void setDayOrNight(int transparent);
 
+    int getDayLengthValue();
 
 private:
     int getRotation(char direction);
@@ -163,6 +164,7 @@ private:
     QGraphicsView *view;
     QVBoxLayout* boxLayout;
     QPushButton* button;
+    QSlider* dayLength;
     QDockWidget* cityDock;
     int height;
     int width;

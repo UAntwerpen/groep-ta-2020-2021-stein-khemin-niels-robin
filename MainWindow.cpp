@@ -36,7 +36,6 @@ MainWindow::MainWindow(int w, int h, CellulaireAutomaat *cellulaireAutomaat) {
                                  Qt::RightDockWidgetArea);
     addDockWidget(Qt::LeftDockWidgetArea, settingsDock);
     settingsDock->setFixedWidth(260);
-    //settingsDock->setStyleSheet("* { background-color: rgb(0, 0, 50); }");
 
 //    QVBoxLayout* boxLayout = new QVBoxLayout();
 
@@ -62,10 +61,18 @@ MainWindow::MainWindow(int w, int h, CellulaireAutomaat *cellulaireAutomaat) {
     zoomInBtn->setGeometry(140,140,90,50);
     connect(zoomInBtn, &QPushButton::released, this, &MainWindow::zoomIn);
 
+    QSlider* slider = new QSlider(Qt::Horizontal);
+    slider->setGeometry(30, 200, 200, 30);
+    slider->setMinimum(1);
+    slider->setMaximum(20);
+    slider->setValue(6);
+    dayLength = slider;
+
     settingsDock->layout()->addWidget(daytext);
     settingsDock->layout()->addWidget(pauseBtn);
     settingsDock->layout()->addWidget(zoomOutBtn);
     settingsDock->layout()->addWidget(zoomInBtn);
+    settingsDock->layout()->addWidget(slider);
 }
 
 void MainWindow::updateVehicles() {
@@ -85,7 +92,6 @@ void MainWindow::updateVehicles() {
         }
     }
 }
-
 
 void MainWindow::updatePedestrians() {
     clearPedestrians();
@@ -360,6 +366,9 @@ void MainWindow::setDayOrNight(int a) {
     view->setForegroundBrush(QBrush(QColor(0, 0, 70, a)));
 }
 
+int MainWindow::getDayLengthValue(){
+    return dayLength->value();
+}
 
 
 
