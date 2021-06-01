@@ -136,10 +136,10 @@ void PFMask::generateMask() {
 
 PFMask::~PFMask() {
 
-//    for (std::vector<PFCell*>& row : mask) {
-//        for (PFCell* cell : row) {
-//            delete cell;
-//        }
-//    }
+    for (std::vector<PFCell*>& row : mask) {
+        for (PFCell* cell : row) {
+            delete cell;
+        }
+    }
 
 }

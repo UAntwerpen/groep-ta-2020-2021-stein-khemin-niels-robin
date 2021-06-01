@@ -67,7 +67,7 @@ float CitySimulation::runSimulationGUI(int width, int height, const std::string 
 
                             car->setGoal(goal);
                             if (car->getGoal() != nullptr) {
-                                auto* mask = new PFMask(automaat, car->getGoal(), true);
+                                auto mask = new PFMask(automaat, car->getGoal(), true);
                                 mask->generateMask();
 
                                 car->setMask(mask);
@@ -93,7 +93,7 @@ float CitySimulation::runSimulationGUI(int width, int height, const std::string 
 
                                     person->setGoal(goal);
                                     if (person->getGoal() != nullptr) {
-                                        auto* mask = new PFMask(automaat, person->getGoal(), false);
+                                        auto mask = new PFMask(automaat, person->getGoal(), false);
                                         mask->generateMask();
 
                                         person->setMask(mask);
