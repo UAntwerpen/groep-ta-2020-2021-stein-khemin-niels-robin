@@ -25,7 +25,7 @@ public:
      * REQUIRE(transport->getLocation() != nullptr, "transport must exist in a loaction.")
      * REQUIRE(transport->getGoal() != nullptr, "transport must have a goal.")
      */
-    PFMask(CellulaireAutomaat& cellAutomaat, Cell* goal, bool isCar = false);
+    PFMask(CellulaireAutomaat& cellAutomaat, std::pair<int, int> goal, bool isCar = false);
 
     ~PFMask();
 

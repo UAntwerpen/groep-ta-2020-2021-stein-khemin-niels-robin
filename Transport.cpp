@@ -9,8 +9,8 @@
 
 Transport::Transport() {
 
-    location = nullptr;
-    goal = nullptr;
+    location = std::make_pair(-1,-1);
+    goal = std::make_pair(-1,-1);
     inTransit = false;
 
     mask = new PFMask(0, 0);
@@ -18,10 +18,10 @@ Transport::Transport() {
     progress = -1;
     direction = ' ';
 
-    home = nullptr;
+    home = std::make_pair(-1,-1);
 }
 
-Transport::Transport(Cell *loc, Cell *g) {
+Transport::Transport(pair<int, int> loc, pair<int, int> g) {
     location = loc;
     goal = g;
     inTransit = false;
@@ -34,22 +34,22 @@ Transport::Transport(Cell *loc, Cell *g) {
     home = loc;
 }
 
-Cell *Transport::getLocation() {
+pair<int, int> Transport::getLocation() {
     return location;
 }
 
-void Transport::setLocation(Cell *cell) {
-    location = cell;
-    ENSURE(this->getLocation() == cell, "setLoaction post condition failure");
+void Transport::setLocation(pair<int, int> l) {
+    location = l;
+    ENSURE(this->getLocation() == l, "setLoaction post condition failure");
 }
 
-Cell *Transport::getGoal() {
+pair<int, int> Transport::getGoal() {
     return goal;
 }
 
-void Transport::setGoal(Cell *cell) {
-    goal = cell;
-    ENSURE(this->getGoal() == cell, "setGoal post condition failure");
+void Transport::setGoal(pair<int, int> g) {
+    goal = g;
+    ENSURE(this->getGoal() == g, "setGoal post condition failure");
 }
 
 bool Transport::getStatus() {
@@ -81,12 +81,12 @@ void Transport::setRoute(string r) {
 }
 
 void Transport::calculateRoute() {
-    pair<int, int> goalPoss = this->getGoal()->getPos();
+    pair<int, int> goalPoss = this->getGoal();
     REQUIRE(this->getMask()->getCell(goalPoss.first, goalPoss.second)->getValue() == 0, "incompatible PFMask for this Transport.");
 
     string result;
 
-    pair<int, int> locCoord = this->getLocation()->getPos();
+    pair<int, int> locCoord = this->getLocation();
     PFCell* currCell = this->getMask()->getCell(locCoord.first, locCoord.second);
 
     while (currCell->getValue() != 0) {
@@ -182,7 +182,7 @@ pair<int, int> Transport::getNextStep() {
     if (nextDirection == 'S') { dx = 0; dy = 1; }
     if (nextDirection == 'W') { dx = -1; dy = 0; }
 
-    pair<int, int> currPos = this->getLocation()->getPos();
+    pair<int, int> currPos = this->getLocation();
 
     return std::make_pair(currPos.first + dy, currPos.second + dx);
 }
@@ -191,6 +191,6 @@ Transport::~Transport() {
 
 }
 
-Cell *Transport::getHome() {
+pair<int, int> Transport::getHome() {
     return home;
 }

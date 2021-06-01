@@ -22,7 +22,7 @@ public:
      * Initialiseert een Vehicle op de gegeven loactie en optioneel met een gegeven goal.
      * @param location
      */
-    Vehicle(Cell* location, Cell* g = nullptr);
+    Vehicle(pair<int, int> location, pair<int, int> g = std::make_pair(-1,-1));
 
     /**
      * Geeft personen in het Vehicle terug.

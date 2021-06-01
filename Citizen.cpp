@@ -12,7 +12,7 @@ Citizen::Citizen() : Transport() {
     pixelart = pixArt;
 }
 
-Citizen::Citizen(Cell *location, Cell *g) : Transport(location, g) {
+Citizen::Citizen(pair<int, int> location, pair<int, int> g) : Transport(location, g) {
     inCar = false;
     string pixArt = "../PixelArt/Pedestrian";
     int random = (rand()%3)+1;
@@ -52,20 +52,24 @@ void Citizen::update(CellulaireAutomaat& city) {
     // move is out of bounds TP home
     if (newPos.first < 0 || newPos.first >= city.getHeight() || newPos.second < 0 || newPos.second >= city.getWidth()) {
         this->setLocation(this->getHome());
-        this->setGoal(nullptr);
+        this->setGoal(std::make_pair(-1,-1));
         this->setProgress(-1);
         this->setRoute("");
         this->setStatus(false);
+
+        std::cout << "error";
+
+        return;
     }
 
     Cell* newLoc = city(newPos.first, newPos.second);
 
-    this->setLocation(newLoc);
+    this->setLocation(newLoc->getPos());
     this->increaseProgress();
 
     // Aangekomen op bestemming;
-    if (this->getLocation()->getPos() == this->getGoal()->getPos()){
-        this->setGoal(nullptr);
+    if (this->getLocation() == this->getGoal()){
+        this->setGoal(std::make_pair(-1,-1));
         this->setProgress(-1);
         this->setRoute("");
         this->setStatus(false);

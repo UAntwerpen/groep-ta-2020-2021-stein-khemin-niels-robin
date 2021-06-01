@@ -35,7 +35,6 @@ add_executable(TA
         Pathfinding.cpp Pathfinding.h
         Building.cpp Building.h
         MainWindow.cpp MainWindow.h
-        Template.cpp
         )
 
 qt5_use_modules(TA Core Widgets Gui)

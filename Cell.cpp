@@ -389,11 +389,11 @@ float ResidentialZone::getHappiness() const {
 ResidentialZone::ResidentialZone(int row, int col, CellulaireAutomaat *cellulaireAutomaat) : Cell(row, col,
                                                                                                   cellulaireAutomaat) {
     for (int i = 0; i < 4; i++) {
-        Citizen* resident = new Citizen(this);
+        Citizen* resident = new Citizen(this->getPos());
         people.push_back(resident);
     }
     building = House();
-    car = new Vehicle(this);
+    car = new Vehicle(this->getPos());
 }
 std::pair<int, std::string> ResidentialZone::getPixelArt() {
     if (this->isExpired())
@@ -405,14 +405,14 @@ ResidentialZone::ResidentialZone(const Cell &p2) : Cell(p2.getPos().first, p2.ge
                                                         p2.getCellulaireAutomaat()) {
     if (p2.getPersons().empty()) {
         for (int i = 0; i < 4; i++) {
-            Citizen* resident = new Citizen(this);
+            Citizen* resident = new Citizen(this->getPos());
             people.push_back(resident);
         }
     } else {
         this->people = p2.getPersons();
     }
     building = House();
-    car = new Vehicle(this);
+    car = new Vehicle(this->getPos());
 }
 
 Vehicle *ResidentialZone::getCar() {

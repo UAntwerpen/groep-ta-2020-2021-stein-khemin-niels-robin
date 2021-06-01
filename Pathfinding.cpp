@@ -17,8 +17,8 @@ PFMask::PFMask(int width, int height) : width(width), height(height) {
     }
 }
 
-PFMask::PFMask(CellulaireAutomaat& cellAutomaat, Cell* goal, bool isCar) : width(cellAutomaat.getWidth()), height(cellAutomaat.getHeight()) {
-    REQUIRE(goal != nullptr, "Mask must have a non nullptr goal.");
+PFMask::PFMask(CellulaireAutomaat& cellAutomaat, std::pair<int, int> goal, bool isCar) : width(cellAutomaat.getWidth()), height(cellAutomaat.getHeight()) {
+    REQUIRE(goal != std::make_pair(-1,-1), "Mask must have a non nullptr goal.");
 
     mask = std::vector<std::vector<PFCell*>>(height);
     for (int i = 0; i < height; i++){
@@ -31,12 +31,12 @@ PFMask::PFMask(CellulaireAutomaat& cellAutomaat, Cell* goal, bool isCar) : width
 
             if (cellAutomaat(row, col)->getState() == ERoad ||
                 (cellAutomaat(row, col)->getState() == EVegetation && !isCar) ||
-                    goal->getPos() == std::pair<int, int>(row, col)) {
+                    goal == std::pair<int, int>(row, col)) {
                 passable = true;
             } else {
                 passable = false;
             }
-            bool isGoal = goal->getPos() == std::pair<int, int>(row, col);
+            bool isGoal = goal == std::pair<int, int>(row, col);
 
             mask[row][col] = new PFCell(passable, row, col, isGoal);
         }
@@ -52,6 +52,9 @@ int PFMask::getHeight() const {
 }
 
 PFCell *PFMask::getCell(int row, int col) {
+
+    if (row < 0 || row >= height || col < 0 || col >= width)
+        std::cout << "error";
     REQUIRE(0 <= row && row < width, "Row is out of bounds!");
     REQUIRE(0 <= col && col < height, "Column is out of bounds!");
     return mask[row][col];

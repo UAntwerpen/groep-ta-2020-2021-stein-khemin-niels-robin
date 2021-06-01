@@ -8,8 +8,6 @@
 #include "Citizen.h"
 #include "Pathfinding.h"
 
-#include <omp.h>
-
 float CitySimulation::runSimulationGUI(int width, int height, const std::string &rules){
     REQUIRE(1 < width, "Width is too small(must be at least 2)!");
     REQUIRE(1 < height, "Height is too small(must be at least 2)!");
@@ -65,15 +63,15 @@ float CitySimulation::runSimulationGUI(int width, int height, const std::string 
                                 }
                             }
 
-                            Cell* goal = nullptr;
-                            if (automaat(row, col) != car->getHome() && !car->getPeople().empty()) {
+                            pair<int, int> goal = std::make_pair(-1,-1);
+                            if (automaat(row, col)->getPos() != car->getHome() && !car->getPeople().empty()) {
                                 goal = car->getHome();
-                            } else if (pair<int, int>(randRow, randCol) != car->getLocation()->getPos()&& !car->getPeople().empty()) {
-                                goal = automaat(randRow, randCol);
+                            } else if (pair<int, int>(randRow, randCol) != car->getLocation() && !car->getPeople().empty()) {
+                                goal = automaat(randRow, randCol)->getPos();
                             }
 
                             car->setGoal(goal);
-                            if (car->getGoal() != nullptr) {
+                            if (car->getGoal() != std::make_pair(-1,-1)) {
                                 auto mask = new PFMask(automaat, car->getGoal(), true);
                                 mask->generateMask();
 
@@ -85,7 +83,7 @@ float CitySimulation::runSimulationGUI(int width, int height, const std::string 
                         if(currentStep%4 ==0){
                             for (int i = 0; i < (int) automaat(row, col)->getPersons().size(); i++) {
                                 Citizen* person = automaat(row, col)->getPersons()[i];
-                                pair<int, int> personPos = person->getLocation()->getPos();
+                                pair<int, int> personPos = person->getLocation();
 
                                 if (person->getStatus()) {
                                     person->update(automaat);
@@ -93,13 +91,13 @@ float CitySimulation::runSimulationGUI(int width, int height, const std::string 
                                            && abs(randRow - personPos.first) < pedestrianRange
                                            && abs(randCol - personPos.second) < pedestrianRange) {
 
-                                    Cell* goal = nullptr;
-                                    if (pair<int, int>(randRow, randCol) != person->getLocation()->getPos()) {
-                                        goal = automaat(randRow, randCol);
+                                    pair<int, int> goal = std::make_pair(-1,-1);
+                                    if (pair<int, int>(randRow, randCol) != person->getLocation()) {
+                                        goal = automaat(randRow, randCol)->getPos();
                                     }
 
                                     person->setGoal(goal);
-                                    if (person->getGoal() != nullptr) {
+                                    if (person->getGoal() != std::make_pair(-1,-1)) {
                                         auto mask = new PFMask(automaat, person->getGoal(), false);
                                         mask->generateMask();
 

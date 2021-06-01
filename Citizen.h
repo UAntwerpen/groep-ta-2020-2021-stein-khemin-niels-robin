@@ -19,7 +19,7 @@ public:
      * Initialiseert een Citizen op de gegeven loactie en optioneel met een gegeven goal.
      * @param location
      */
-    Citizen(Cell* location, Cell* g = nullptr);
+    Citizen(pair<int, int> location, pair<int, int> g = std::make_pair(-1,-1));
 
     /**
      * Geeft de happiness van de Citizen terug adv een float.

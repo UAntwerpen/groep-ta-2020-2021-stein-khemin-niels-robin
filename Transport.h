@@ -27,14 +27,14 @@ public:
      * @param location : Cell pointer : Locatie waar transport geinitialiseerd wordt.
      * @param goal : Cell pointer : De goal van het transport. Het transport zal naar deze cel verplaatsen met het Pathfinding algoritme.
      */
-    Transport(Cell* location, Cell* goal = nullptr);
+    Transport(pair<int, int> loc, pair<int, int> goal = std::make_pair(-1,-1));
 
     /**
      * Geeft een pointer terug naar de huidige locatie van het Transport.
      *
      * @return Pointer naar de Cell die het Transport bevat.
      */
-    Cell* getLocation();
+    pair<int, int> getLocation();
 
     /**
      * Zet het location attribuut van het Transport gelijk aan de gegeven waarde.
@@ -43,14 +43,14 @@ public:
      *
      * ENSURE(this->getLocation() == cell, "setLoaction post condition failure")
      */
-    void setLocation(Cell* cell);
+    void setLocation(pair<int, int> l);
 
     /**
      * Geeft een pointer terug naar de bestemming van het Transport.
      *
      * @return Cell Pointer naar bestemming van het Transport.
      */
-    Cell* getGoal();
+    pair<int, int> getGoal();
 
     /**
      * Stelt een nieuwe bestemming in voor het Transport.
@@ -59,7 +59,7 @@ public:
      *
      * ENSURE(this->getGoal() == cell, "setGoal post condition failure")
      */
-    void setGoal(Cell* cell);
+    void setGoal(pair<int, int> g);
 
     /**
      * Geeft de status van het voertuig terug.
@@ -156,7 +156,7 @@ public:
     * Geeft de thuislocatie van het voertuig terug.
     * @return Cell class pointer
     */
-    Cell* getHome();
+    pair<int, int> getHome();
 
     /**
      * Geeft de coordinaten terug van de cel waarnaar het transport zijn volgende stap zal zetten.
@@ -178,9 +178,9 @@ public:
 
 private:
     // not owner of cell, Don't delete!
-    Cell* location;
+    pair<int, int> location;
 
-    Cell* goal;
+    pair<int, int> goal;
     bool inTransit;
     PFMask* mask;
     string route;
@@ -188,7 +188,7 @@ private:
     int progress;
     char direction;
 
-    Cell* home;
+    pair<int, int> home;
 
 //    int speed;
 };

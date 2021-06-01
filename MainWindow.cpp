@@ -80,7 +80,7 @@ void MainWindow::updateVehicles() {
 
             if (cell->getState() == EResidentialZone) {
                 Vehicle* car = cell->getCar();
-                pair<int, int> carPos = car->getLocation()->getPos();
+                pair<int, int> carPos = car->getLocation();
                 // enkel auto afbeelden als die onderweg is.
                 if (car->getStatus()){
                     addVehicle(carPos.first, carPos.second, getRotation(car->getDirection()), car->getPixelart());
@@ -98,7 +98,7 @@ void MainWindow::updatePedestrians() {
             if (cell->getState() == EResidentialZone) {
                 vector<Citizen*> citizens = cell->getPersons();
                 for(auto it = citizens.begin(); it != citizens.end(); it++){
-                    pair<int, int> pedestrianPos = (*it)->getLocation()->getPos();
+                    pair<int, int> pedestrianPos = (*it)->getLocation();
                     if((*it)->getStatus()){
                         addPedestrian(pedestrianPos.first, pedestrianPos.second, getRotation((*it)->getDirection()), (*it)->getPixelart());
                     }
