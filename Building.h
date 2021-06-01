@@ -12,9 +12,24 @@ class Citizen;
 
 class Building {
 public:
+    /*!
+     * zet en pixel art op het gebouw
+     */
     void setPixelArt(std::string path);
+
+    /*!
+     * geeft de pixel art terug
+     */
     std::string getPixelArt();
+
+    /*!
+     * geeft de vervallen pixel art terug
+     */
     std::string getExpiredPixelArt();
+
+    /*!
+     * geeft het aantal dagen tot verval terug
+     */
     int getVerval();
 
 protected:
@@ -22,13 +37,10 @@ protected:
     int maxPeopleAmount;
     int verval;
     std::string pixelart;
-//    std::vector<Citizen*> residents;
 };
 
 class House : public Building{
 public:
-//    void addResident(Citizen* resident);
-//    void removeResident(Citizen* resident);
     House();
 };
 

@@ -21,7 +21,6 @@ MainWindow::MainWindow(int w, int h, CellulaireAutomaat *cellulaireAutomaat) {
     drawGrid(w, h);
     view = new QGraphicsView(scene);
 
-//    QDockWidget *cityDock;
     cityDock = new QDockWidget(tr("City"), this);
     cityDock->setAllowedAreas(Qt::LeftDockWidgetArea |
                                 Qt::RightDockWidgetArea);
@@ -36,8 +35,6 @@ MainWindow::MainWindow(int w, int h, CellulaireAutomaat *cellulaireAutomaat) {
                                  Qt::RightDockWidgetArea);
     addDockWidget(Qt::LeftDockWidgetArea, settingsDock);
     settingsDock->setFixedWidth(260);
-
-//    QVBoxLayout* boxLayout = new QVBoxLayout();
 
     QLabel* daytext = new QLabel("day: 0");
     daytext->setGeometry(30,30,200,50);
@@ -149,7 +146,6 @@ void MainWindow::movePedestrians(){
     }
 }
 
-
 int MainWindow::getRotation(char direction){
     switch(direction){
         case('N'):
@@ -198,8 +194,8 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::drawTile(int row, int col, int rot, const std::string& pixelart) {
-//    REQUIRE(0 <= row && row < height, "Row with is out of bounds!");
-//    REQUIRE(0 <= col && col < width, "Column is out of bounds!");
+    REQUIRE(0 <= row && row < height, "Row with is out of bounds!");
+    REQUIRE(0 <= col && col < width, "Column is out of bounds!");
     QString filename = pixelart.c_str();
     QGraphicsPixmapItem *item = new QGraphicsPixmapItem(QPixmap(filename));
     item->setPixmap(QPixmap(filename));
