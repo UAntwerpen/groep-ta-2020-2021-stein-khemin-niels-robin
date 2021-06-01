@@ -2,17 +2,12 @@
 
 #ifndef TA_CITYSIMULATION_H
 #define TA_CITYSIMULATION_H
-#include <QApplication>
 #include <string>
-#include <QTime>
 #include "CellulaireAutomaat.h"
 #include <iostream>
-#include "MainWindow.h"
 
 class CitySimulation {
 public:
-    float runSimulationGUI(const std::string &rules);
-    float runSimulation(const std::string &rules);
     virtual ~CitySimulation();
 
     CitySimulation();
@@ -40,13 +35,6 @@ public:
     float runSimulation(int width, int height, const std::string &rules);
 
 private:
-    /*!
-     * pauzes the simulation for a given time length
-     * @param time how long the simulation is pauzes (in micro secs)
-     */
-    void delay(int time);
-
-    MainWindow* window;
 };
 
 #endif //TA_CITYSIMULATION_H

@@ -1,8 +1,6 @@
 #include <iomanip>
-#include <QApplication>
 #include <array>
 
-#include "MainWindow.h"
 #include "CellulaireAutomaat.h"
 #include "GeneticAlgorithm.h"
 #include "Pathfinding.h"
@@ -10,7 +8,6 @@
 
 using namespace std;
 int main(int argc, char *argv[]){
-    QApplication a(argc, argv);
 //    GeneticAlgorith algo(390624, 500);
 //
 //    Genome rule = algo.run(200);
@@ -19,7 +16,7 @@ int main(int argc, char *argv[]){
     while (file.good()){
         s += file.get();
     }
-
+    std::cout << "run" << std::endl;
     CitySimulation city;
     city.runSimulationGUI(20, 20, s);
     return 0;

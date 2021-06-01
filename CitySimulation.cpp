@@ -20,24 +20,24 @@ float CitySimulation::runSimulationGUI(int width, int height, const std::string 
     int it = 0;
     CellulaireAutomaat automaat(width, height, rules, true);
     automaat.addMainStreet(0, width / 2);
-    window = new MainWindow(width, height, &automaat);
-    window->show();
-    window->pauseSimulation();
+//    window = new MainWindow(width, height, &automaat);
+//    window->show();
+//    window->pauseSimulation();
     float prev_score = automaat.getScore();
-    while ((!it || prev_score != automaat.getScore()) && window->isVisible()){
-        delay(500);
-        if(!window->getPause()){
+    while ((!it || prev_score != automaat.getScore())){
+        if(/*!window->getPause()*/true){
             prev_score = automaat.getScore();
             automaat.updateRules();
             automaat.removeUnconnectedRoads();
-            window->addDay();
-            window->updateAll();
+//            window->addDay();
+//            window->updateAll();
             it++;
         }
     }
-    window->pauseSimulation();
-    while(window->isVisible()){
-        delay(500);
+//    window->pauseSimulation();
+    for (int _ = 0; _ < 2; ++_){
+        std::cout << _ << std::endl;
+//        delay(500);
         for(int currentStep = 0; currentStep < 4; currentStep++){
             for (int row = 0; row < height; row++){
                 for (int col = 0; col < width; col++){
@@ -67,7 +67,7 @@ float CitySimulation::runSimulationGUI(int width, int height, const std::string 
 
                             car->setGoal(goal);
                             if (car->getGoal() != nullptr) {
-                                auto* mask = new PFMask(automaat, car->getGoal(), true);
+                                auto mask = new PFMask(automaat, car->getGoal(), true);
                                 mask->generateMask();
 
                                 car->setMask(mask);
@@ -106,36 +106,29 @@ float CitySimulation::runSimulationGUI(int width, int height, const std::string 
                     }
                 }
             }
-            window->updateVehicles();
+//            window->updateVehicles();
             if(currentStep%4 ==0){
-                window->updatePedestrians();
+//                window->updatePedestrians();
             }else{
-                window->movePedestrians();
+//                window->movePedestrians();
             }
-            delay(100);
-            for(int i = 0; i<7; i++){
-                while(window->getPause()){
-                    delay(100);
-                }
-                window->moveCars();
-                window->movePedestrians();
-                delay(100);
-            }
+//            delay(100);
+//            for(int i = 0; i<7; i++){
+//                while(window->getPause()){
+//                    delay(100);
+//                }
+//                window->moveCars();
+//                window->movePedestrians();
+//                delay(100);
+//            }
         }
 
         automaat.updateCells();
-        window->addDay();
+//        window->addDay();
         it++;
     }
     return automaat.getScore();
 }
-
-void CitySimulation::delay(int time) {
-    QTime dieTime = QTime::currentTime().addMSecs(time);
-    while (QTime::currentTime() < dieTime)
-        QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
-}
-
 float CitySimulation::runSimulation(int width, int height, const std::string &rules) {
     REQUIRE(1 < width, "Width is too small(must be at least 2)!");
     REQUIRE(1 < height, "Height is too small(must be at least 2)!");
@@ -153,9 +146,8 @@ float CitySimulation::runSimulation(int width, int height, const std::string &ru
     return automaat.getScore();
 }
 
-CitySimulation::CitySimulation(): window(nullptr) {}
+CitySimulation::CitySimulation() {}
 
 CitySimulation::~CitySimulation() {
-    delete window;
 }
 

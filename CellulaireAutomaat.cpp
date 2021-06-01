@@ -88,6 +88,9 @@ CellulaireAutomaat::~CellulaireAutomaat() {
 }
 
 Cell* CellulaireAutomaat::operator()(int row, int column) const {
+    if (row < 0 || row >= height || column < 0 || column >= width) {
+        std::cout << "error";
+    }
     REQUIRE(0 <= row && row < height, "Row is out of bounds!");
     REQUIRE(0 <= column && column < width, "Column is out of bounds!");
     Cell* ret = matrix[row * width + column];
