@@ -17,7 +17,7 @@ int main(int argc, char *argv[]){
     string s;
     std::ifstream file("../Maps/rule001.txt", std::ifstream::binary);
     while (file.good()){
-        s += std::to_string(file.get());
+        s += file.get();
     }
 
     CitySimulation city;
