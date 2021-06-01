@@ -194,8 +194,6 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::drawTile(int row, int col, int rot, const std::string& pixelart) {
-    REQUIRE(0 <= row && row < height, "Row with is out of bounds!");
-    REQUIRE(0 <= col && col < width, "Column is out of bounds!");
     QString filename = pixelart.c_str();
     QGraphicsPixmapItem *item = new QGraphicsPixmapItem(QPixmap(filename));
     item->setPixmap(QPixmap(filename));
