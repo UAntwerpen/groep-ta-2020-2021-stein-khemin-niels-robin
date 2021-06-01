@@ -5,7 +5,7 @@
 #include "Lib.h"
 #include "Cell.h"
 
-CellulaireAutomaat::CellulaireAutomaat(int width, int height, const std::string& rules, bool save_rules) : width(width), height(height), rules(rules), save_rules(save_rules) {
+CellulaireAutomaat::CellulaireAutomaat(int width, int height, const std::string& rules, bool save_rules) : width(width), height(height), rules(rules) {
     REQUIRE(1 < width, "Width is too small(must be at least 2)!");
     REQUIRE(1 < height, "Height is too small(must be at least 2)!");
     matrix.resize(width * height);

@@ -18,7 +18,7 @@ find_package( Qt5Core REQUIRED )
 find_package( Qt5Widgets REQUIRED )
 find_package( Qt5Gui REQUIRED )
 
-set(CMAKE_CXX_FLAGS "-Wall -Werror -fopenmp -O3")
+set(CMAKE_CXX_FLAGS "-Wall -Werror -fopenmp")
 set(CMAKE_EXE_LINKER_FLAGS -pthread)
 
 add_executable(TA

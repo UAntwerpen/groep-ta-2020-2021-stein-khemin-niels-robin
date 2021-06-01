@@ -21,7 +21,6 @@ MainWindow::MainWindow(int w, int h, CellulaireAutomaat *cellulaireAutomaat) {
     drawGrid(w, h);
     view = new QGraphicsView(scene);
 
-//    QDockWidget *cityDock;
     cityDock = new QDockWidget(tr("City"), this);
     cityDock->setAllowedAreas(Qt::LeftDockWidgetArea |
                                 Qt::RightDockWidgetArea);
@@ -36,9 +35,6 @@ MainWindow::MainWindow(int w, int h, CellulaireAutomaat *cellulaireAutomaat) {
                                  Qt::RightDockWidgetArea);
     addDockWidget(Qt::LeftDockWidgetArea, settingsDock);
     settingsDock->setFixedWidth(260);
-    //settingsDock->setStyleSheet("* { background-color: rgb(0, 0, 50); }");
-
-//    QVBoxLayout* boxLayout = new QVBoxLayout();
 
     QLabel* daytext = new QLabel("day: 0");
     daytext->setGeometry(30,30,200,50);
@@ -62,10 +58,18 @@ MainWindow::MainWindow(int w, int h, CellulaireAutomaat *cellulaireAutomaat) {
     zoomInBtn->setGeometry(140,140,90,50);
     connect(zoomInBtn, &QPushButton::released, this, &MainWindow::zoomIn);
 
+    QSlider* slider = new QSlider(Qt::Horizontal);
+    slider->setGeometry(30, 200, 200, 30);
+    slider->setMinimum(1);
+    slider->setMaximum(20);
+    slider->setValue(6);
+    dayLength = slider;
+
     settingsDock->layout()->addWidget(daytext);
     settingsDock->layout()->addWidget(pauseBtn);
     settingsDock->layout()->addWidget(zoomOutBtn);
     settingsDock->layout()->addWidget(zoomInBtn);
+    settingsDock->layout()->addWidget(slider);
 }
 
 void MainWindow::updateVehicles() {
@@ -85,7 +89,6 @@ void MainWindow::updateVehicles() {
         }
     }
 }
-
 
 void MainWindow::updatePedestrians() {
     clearPedestrians();
@@ -143,7 +146,6 @@ void MainWindow::movePedestrians(){
     }
 }
 
-
 int MainWindow::getRotation(char direction){
     switch(direction){
         case('N'):
@@ -192,8 +194,6 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::drawTile(int row, int col, int rot, const std::string& pixelart) {
-//    REQUIRE(0 <= row && row < height, "Row with is out of bounds!");
-//    REQUIRE(0 <= col && col < width, "Column is out of bounds!");
     QString filename = pixelart.c_str();
     QGraphicsPixmapItem *item = new QGraphicsPixmapItem(QPixmap(filename));
     item->setPixmap(QPixmap(filename));
@@ -360,6 +360,9 @@ void MainWindow::setDayOrNight(int a) {
     view->setForegroundBrush(QBrush(QColor(0, 0, 70, a)));
 }
 
+int MainWindow::getDayLengthValue(){
+    return dayLength->value();
+}
 
 
 

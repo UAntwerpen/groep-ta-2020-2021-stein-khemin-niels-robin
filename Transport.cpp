@@ -16,7 +16,9 @@ Transport::Transport() {
     mask = new PFMask(0, 0);
     route = "";
     progress = -1;
-    direction = 'N';
+    direction = ' ';
+
+    home = nullptr;
 }
 
 Transport::Transport(Cell *loc, Cell *g) {
@@ -27,7 +29,9 @@ Transport::Transport(Cell *loc, Cell *g) {
     mask = new PFMask(0, 0);
     route = "";
     progress = -1;
-    direction = 'N';
+    direction = ' ';
+
+    home = loc;
 }
 
 Cell *Transport::getLocation() {
@@ -185,4 +189,8 @@ pair<int, int> Transport::getNextStep() {
 
 Transport::~Transport() {
 
+}
+
+Cell *Transport::getHome() {
+    return home;
 }

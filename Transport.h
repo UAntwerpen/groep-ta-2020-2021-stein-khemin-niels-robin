@@ -153,6 +153,12 @@ public:
     void changeDirection();
 
     /**
+    * Geeft de thuislocatie van het voertuig terug.
+    * @return Cell class pointer
+    */
+    Cell* getHome();
+
+    /**
      * Geeft de coordinaten terug van de cel waarnaar het transport zijn volgende stap zal zetten.
      * @return pair of integers (row, col)
      */
@@ -181,6 +187,8 @@ private:
 
     int progress;
     char direction;
+
+    Cell* home;
 
 //    int speed;
 };

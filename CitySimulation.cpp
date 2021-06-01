@@ -40,8 +40,9 @@ float CitySimulation::runSimulationGUI(int width, int height, const std::string 
         int transparent = 120;
         carChance = 20;
         delay(500);
-        for(int currentStep = 0; currentStep < 6; currentStep++){
-            if(currentStep == 3){
+        int dayLength = window->getDayLengthValue();
+        for(int currentStep = 0; currentStep < dayLength; currentStep++){
+            if(currentStep == (int) dayLength/2){
                 carChance = 5;
                 transparent = 0;
             }
@@ -123,7 +124,7 @@ float CitySimulation::runSimulationGUI(int width, int height, const std::string 
                 while(window->getPause()){
                     delay(100);
                 }
-                if(currentStep == 3){
+                if(currentStep == dayLength/2){
                     transparent += 15;
                     window->setDayOrNight(transparent);
                 }

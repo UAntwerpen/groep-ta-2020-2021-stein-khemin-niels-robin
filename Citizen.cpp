@@ -48,6 +48,16 @@ void Citizen::update(CellulaireAutomaat& city) {
 //
 //    pair<int, int> currPos = this->getLocation()->getPos();
     pair<int, int> newPos = this->getNextStep();
+
+    // move is out of bounds TP home
+    if (newPos.first < 0 || newPos.first >= city.getHeight() || newPos.second < 0 || newPos.second >= city.getWidth()) {
+        this->setLocation(this->getHome());
+        this->setGoal(nullptr);
+        this->setProgress(-1);
+        this->setRoute("");
+        this->setStatus(false);
+    }
+
     Cell* newLoc = city(newPos.first, newPos.second);
 
     this->setLocation(newLoc);
