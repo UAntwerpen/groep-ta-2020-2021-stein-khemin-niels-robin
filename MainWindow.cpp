@@ -30,13 +30,13 @@ MainWindow::MainWindow(int w, int h, CellulaireAutomaat *cellulaireAutomaat) {
     view->setDragMode(QGraphicsView::DragMode::ScrollHandDrag);
     view->setBackgroundBrush(QColor("#4CAF50"));
 
-
     QDockWidget *settingsDock;
     settingsDock = new QDockWidget(tr("Settings"), this);
     settingsDock->setAllowedAreas(Qt::LeftDockWidgetArea |
                                  Qt::RightDockWidgetArea);
     addDockWidget(Qt::LeftDockWidgetArea, settingsDock);
     settingsDock->setFixedWidth(260);
+    //settingsDock->setStyleSheet("* { background-color: rgb(0, 0, 50); }");
 
 //    QVBoxLayout* boxLayout = new QVBoxLayout();
 
@@ -79,7 +79,7 @@ void MainWindow::updateVehicles() {
                 pair<int, int> carPos = car->getLocation()->getPos();
                 // enkel auto afbeelden als die onderweg is.
                 if (car->getStatus()){
-                    addCar(carPos.first, carPos.second, getRotation(car->getDirection()), car->getPixelart());
+                    addVehicle(carPos.first, carPos.second, getRotation(car->getDirection()), car->getPixelart());
                 }
             }
         }
@@ -105,7 +105,7 @@ void MainWindow::updatePedestrians() {
     }
 }
 
-void MainWindow::moveCars(){
+void MainWindow::moveVehicles(){
     for(auto it = vehicles.begin(); it != vehicles.end(); it++){
         QGraphicsPixmapItem* vehicle = (*it);
         int rot = vehicle->rotation();
@@ -219,7 +219,7 @@ void MainWindow::drawTile(int row, int col, int rot, const std::string& pixelart
     }
 }
 
-void MainWindow::addCar(int row, int col, int rot, const std::string& pixelart) {
+void MainWindow::addVehicle(int row, int col, int rot, const std::string& pixelart) {
     REQUIRE(0 <= row && row < height, "Row with is out of bounds!");
     REQUIRE(0 <= col && col < width, "Column is out of bounds!");
     QString filename = pixelart.c_str();
@@ -343,48 +343,7 @@ void MainWindow::drawGrid(int _width, int _height) {
     addWalls(_width, _height);
     for (int i = 0; i < _width; i++) {
         for (int j = 0; j < _height; j++) {
-            drawTile(i, j, 0, "../PixelArt/Default.png");
-            /*int random = rand() % 14;
-            int randomangle = rand() % 4;
-            if (random == 0) {
-                drawTile(i, j, 0, "../PixelArt/Store.png");
-            } else if (random == 1) {
-                drawTile(i, j, 0, "../PixelArt/House.png");
-            } else if (random == 2) {
-                drawTile(i, j, 0, "../PixelArt/Workplace.png");
-            } else if (random == 3) {
-                drawTile(i,j,0,"../PixelArt/Park.png");
-            } else if (random == 4) {
-                drawTile(i, j, randomangle, "../PixelArt/Road_T_Kruispunt.png");
-                addPedestrian(i, j, randomangle + 2, "../PixelArt/Pedestrian2.png");
-                addCar(i, j, randomangle, "../PixelArt/Car2.png");
-            } else if (random == 5) {
-                drawTile(i, j, randomangle, "../PixelArt/Road_Kruispunt.png");
-                addPedestrian(i, j, randomangle + 2, "../PixelArt/Pedestrian3.png");
-                addCar(i, j, randomangle, "../PixelArt/Car3.png");
-            } else if (random == 6) {
-                drawTile(i, j, randomangle, "../PixelArt/Road_Doodlopend.png");
-                addPedestrian(i, j, randomangle + 2, "../PixelArt/Pedestrian1.png");
-                addCar(i, j, randomangle + 2, "../PixelArt/Car2.png");
-            } else if(random == 7) {
-                drawTile(i, j, randomangle, "../PixelArt/Road_Bocht.png");
-                addPedestrian(i, j, randomangle + 2, "../PixelArt/Pedestrian2.png");
-                addCar(i, j, randomangle + 2, "../PixelArt/Car2.png");
-            } else if(random == 8){
-                drawTile(i, j, randomangle, "../PixelArt/Road_Recht.png");
-                addPedestrian(i, j, randomangle + 2, "../PixelArt/Pedestrian1.png");
-                addCar(i, j, randomangle, "../PixelArt/Car1.png");
-            } else if(random == 9){
-                drawTile(i, j, 0, "../PixelArt/House_Broken.png");
-            } else if(random == 10){
-                drawTile(i, j, 0, "../PixelArt/Store_Broken.png");
-            } else if(random == 11){
-                drawTile(i, j, 0, "../PixelArt/WorkPlace_Broken.png");
-            } else if(random == 12){
-                drawTile(i, j, 0, "../PixelArt/Road_Broken.png");
-            }  else if(random == 13){
-                drawTile(i, j, 0, "../PixelArt/Park_Broken.png");
-            }*/
+            drawTile(i, j, 0, "../PixelArt/Park.png");
         }
     }
 }
@@ -397,7 +356,9 @@ void MainWindow::resumeSimulation() {
     pressedResume();
 }
 
-
+void MainWindow::setDayOrNight(int a) {
+    view->setForegroundBrush(QBrush(QColor(0, 0, 70, a)));
+}
 
 
 
