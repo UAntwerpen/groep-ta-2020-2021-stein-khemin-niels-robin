@@ -65,6 +65,8 @@ void Vehicle::update(CellulaireAutomaat &city) {
         this->setRoute("");
         this->setStatus(false);
         this->removePassengers();
+
+        return;
     }
 
     Cell* newLoc = city(newPos.first, newPos.second);

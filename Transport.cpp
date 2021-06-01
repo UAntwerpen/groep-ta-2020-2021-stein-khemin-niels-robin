@@ -168,8 +168,8 @@ void Transport::changeDirection() {
 pair<int, int> Transport::getNextStep() {
     int index = this->getProgress() + 1;
     char nextDirection;
-    int dx;
-    int dy;
+    int dx = 0;
+    int dy = 0;
 
     if (index < (int) this->getRoute().size()) {
         nextDirection = this->getRoute()[index];

@@ -15,9 +15,9 @@ int main(int argc, char *argv[]){
 //
 //    Genome rule = algo.run(200);
     string s;
-    std::ifstream file("../Maps/rule008.txt", std::ifstream::binary);
+    std::ifstream file("../Maps/rule001.txt", std::ifstream::binary);
     while (file.good()){
-        s += file.get();
+        s += std::to_string(file.get());
     }
 
     CitySimulation city;
