@@ -319,14 +319,6 @@ std::pair<int, std::string> Road::getCorrectRoad(std::vector<bool> &roadConnectP
     }
 }
 
-std::vector<Vehicle *> Road::getVehicles() const {
-    return this->vehicles;
-}
-
-std::vector<Citizen *> Road::getCitizen() const {
-    return this->citizen;
-}
-
 void Road::addVehicle(Vehicle * v) {
     this->vehicles.push_back(v);
 }
@@ -506,33 +498,4 @@ std::pair<int, std::string> StoreZone::getPixelArt() {
 
 StoreZone::StoreZone(const Cell &p2) : Cell(p2.getPos().first, p2.getPos().second, p2.getCellulaireAutomaat()) {
     this->people = p2.getPersons();
-}
-
-Cell *CellFactorySingleton::getCell(EStates state, Cell *old) {
-    Cell *ret;
-
-    switch (state) {
-        case 1:
-            ret = new Road(*old);
-            break;
-        case 2:
-            ret = new ResidentialZone(*old);
-            break;
-        case 3:
-            ret = new IndustrialZone(*old);
-            break;
-        case 4:
-            ret = new StoreZone(*old);
-        case 0:
-        default:
-            ret = new Vegetation(*old);
-            break;
-    }
-
-    ret->setPos(old->getPos());
-    for (const auto &ped: old->getPersons()) {
-        ret->addPerson(ped);
-    }
-    //        objects.emplace_back(ret);
-    return ret;
 }
