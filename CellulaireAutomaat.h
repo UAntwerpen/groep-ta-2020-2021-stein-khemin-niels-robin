@@ -160,7 +160,6 @@ private:
     std::vector<Cell*> matrix;
     std::string rules;
     std::pair<int, int> main_street;
-    bool save_rules;
     std::vector<std::pair<int, int>> seen_cells;
     std::vector<std::pair<int, int>> branches;
 };

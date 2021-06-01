@@ -26,14 +26,23 @@ public:
     MainWindow(int width, int height, CellulaireAutomaat *cellulaireAutomaat);
 
     /*!
-     * update alle wegggebruikers
+     * update alle voertuigen
      */
     void updateVehicles();
 
+    /*!
+     * update alle voetgangers
+     */
     void updatePedestrians();
 
+    /*!
+     * zet voertuigen vooruit
+     */
     void moveVehicles();
 
+    /*!
+     * zet voetganger vooruit
+     */
     void movePedestrians();
 
     /*!
@@ -67,11 +76,20 @@ public:
      */
     void resumeSimulation();
 
+    /*!
+     * maakt view donker of lichter
+     */
     void setDayOrNight(int transparent);
 
+    /*!
+     * geeft lengte van stad terug
+     */
     int getDayLengthValue();
 
 private:
+    /*!
+     * geeft rotatie van voetganger terug
+     */
     int getRotation(char direction);
 
     /*!
@@ -122,7 +140,9 @@ private:
      */
     void clearVehicles();
 
-
+    /*!
+     * verwijdert alle voetgangers
+     */
     void clearPedestrians();
 
     /*!
