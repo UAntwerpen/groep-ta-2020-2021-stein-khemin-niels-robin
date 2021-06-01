@@ -182,3 +182,7 @@ pair<int, int> Transport::getNextStep() {
 
     return std::make_pair(currPos.first + dy, currPos.second + dx);
 }
+
+Transport::~Transport() {
+
+}

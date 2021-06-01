@@ -190,8 +190,10 @@ private:
 class ResidentialZone : public Cell{
 private:
     House building;
-    Vehicle* car;
+    Vehicle* car = nullptr;
 public:
+    ~ResidentialZone();
+
     ResidentialZone(const Cell &p2);
 
     ResidentialZone(int row, int col, CellulaireAutomaat *cellulaireAutomaat);

@@ -74,10 +74,6 @@ Cell::Cell(const Cell &p2) : Cell(p2.row, p2.col, p2.cellulaireAutomaat) {
 }
 
 std::vector<bool> Cell::getNeighborsRoads() {
-    int row = this->getPos().first;
-    int col = this->getPos().second;
-    CellulaireAutomaat *cellulaireAutomaat = this->getCellulaireAutomaat();
-
     /*
      * Geeft aan welke zijde verbonden moet worden;
      *  [0]: links        [0]
@@ -146,8 +142,8 @@ float StoreZone::getHappiness() const {
     return value;
 }
 
-bool Cell::isConnectedTo(int row, int col, std::vector<std::pair<int, int>> *roads, bool main) {
-    if (this->row == row && this->col == col) {
+bool Cell::isConnectedTo(int rowTo, int colTo, std::vector<std::pair<int, int>> *roads, bool main) {
+    if (this->row == rowTo && this->col == colTo) {
         return true;
     }
 
@@ -171,10 +167,9 @@ bool Cell::isConnectedTo(int row, int col, std::vector<std::pair<int, int>> *roa
         neighborsRoad.push_back((*cellulaireAutomaat)(this->row, this->col - 1));
 
     for (auto it = neighborsRoad.begin(); it != neighborsRoad.end(); it++) {
-//        std::cout << "check: " << row << " (+,-1):" << (*it)->row << "," <<  col << " (+,-1): "<<  (*it)->col <<std::endl;
         if (std::find(roads->begin(), roads->end(), std::pair<int, int>((*it)->row, (*it)->col)) == roads->end()) {
             roads->push_back(std::pair<int, int>((*it)->row, (*it)->col));
-            if ((*it)->isConnectedTo(row, col, roads, false)) {
+            if ((*it)->isConnectedTo(rowTo, colTo, roads, false)) {
                 if (main)
                     delete roads;
                 return true;
@@ -434,6 +429,13 @@ Vehicle *ResidentialZone::getCar() {
 
 void ResidentialZone::setCar(Vehicle *vehicle) {
     car = vehicle;
+}
+
+ResidentialZone::~ResidentialZone() {
+    delete car;
+    for(auto it = this->people.begin(); it != this->people.end(); it++){
+        delete (*it);
+    }
 }
 
 EStates IndustrialZone::getState() const {
