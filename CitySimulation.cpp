@@ -37,8 +37,14 @@ float CitySimulation::runSimulationGUI(int width, int height, const std::string 
     }
     window->pauseSimulation();
     while(window->isVisible()){
+        int transparent = 120;
+        carChance = 20;
         delay(500);
-        for(int currentStep = 0; currentStep < 4; currentStep++){
+        for(int currentStep = 0; currentStep < 6; currentStep++){
+            if(currentStep == 3){
+                carChance = 5;
+                transparent = 0;
+            }
             for (int row = 0; row < height; row++){
                 for (int col = 0; col < width; col++){
                     int randRow = rand() % height;
@@ -117,7 +123,15 @@ float CitySimulation::runSimulationGUI(int width, int height, const std::string 
                 while(window->getPause()){
                     delay(100);
                 }
-                window->moveCars();
+                if(currentStep == 3){
+                    transparent += 15;
+                    window->setDayOrNight(transparent);
+                }
+                if(currentStep == 0){
+                    transparent -= 15;
+                    window->setDayOrNight(transparent);
+                }
+                window->moveVehicles();
                 window->movePedestrians();
                 delay(100);
             }

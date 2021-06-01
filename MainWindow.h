@@ -32,7 +32,7 @@ public:
 
     void updatePedestrians();
 
-    void moveCars();
+    void moveVehicles();
 
     void movePedestrians();
 
@@ -67,6 +67,9 @@ public:
      */
     void resumeSimulation();
 
+    void setDayOrNight(int transparent);
+
+
 private:
     int getRotation(char direction);
 
@@ -90,7 +93,7 @@ private:
      * REQUIRE(0 <= row && row < height, "Row with is out of bounds!");
      * REQUIRE(0 <= col && col < width, "Column is out of bounds!");
      */
-    void addCar(int row, int col, int rotation, const std::string& pixelart);
+    void addVehicle(int row, int col, int rotation, const std::string& pixelart);
 
     /*!
      * plaatste een voetganger op de weg

@@ -20,6 +20,8 @@ public:
      */
     Transport();
 
+    virtual ~Transport();
+
     /**
      * Initialiseert een Transport object met gegeven locatie en optioneel een gegeven goal.
      * @param location : Cell pointer : Locatie waar transport geinitialiseerd wordt.
