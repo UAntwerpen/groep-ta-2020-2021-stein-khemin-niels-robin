@@ -137,6 +137,7 @@ float CitySimulation::runSimulationGUI(int width, int height, const std::string 
         }
 
         automaat.updateCells();
+        window->updateAll();
         window->addDay();
         it++;
     }
