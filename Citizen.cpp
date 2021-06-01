@@ -57,8 +57,6 @@ void Citizen::update(CellulaireAutomaat& city) {
         this->setRoute("");
         this->setStatus(false);
 
-        std::cout << "error";
-
         return;
     }
 

@@ -66,8 +66,6 @@ void Vehicle::update(CellulaireAutomaat &city) {
         this->setStatus(false);
         this->removePassengers();
 
-        std::cout << "error";
-
         return;
     }
 

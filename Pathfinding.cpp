@@ -52,9 +52,6 @@ int PFMask::getHeight() const {
 }
 
 PFCell *PFMask::getCell(int row, int col) {
-
-    if (row < 0 || row >= height || col < 0 || col >= width)
-        std::cout << "error";
     REQUIRE(0 <= row && row < width, "Row is out of bounds!");
     REQUIRE(0 <= col && col < height, "Column is out of bounds!");
     return mask[row][col];
